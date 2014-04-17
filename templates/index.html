@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+{% block body %}
+<body>
+
+    <div class="header-wrapper">
+        <div class="header">
+            <!-- <div class="logo">Web AHN</div> -->
+     <!--        <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
+                <a class="pure-menu-heading" href="">Your Site</a>
+
+                <ul>
+                    <li class="pure-menu-selected"><a href="#">Home</a></li>
+                    <li><a href="#">Tour</a></li>
+                    <li><a href="#">Sign Up</a></li>
+                </ul>
+            </div> -->
+
+            <!-- <div class="header-block">
+                
+            </div> -->
+
+            <!-- <div class="header-block"> -->
+                <form class="pure-form pure-form-aligned">
+                    <fieldset>
+                        <!-- <div class="pure-control-group"> -->
+                        <label for="basemap">Basemap</label>
+                        <select id="BaseLayerSelector" name="basemap" onchange="changeBaseLayer()">
+                            <option value="Luchtfoto">Luchtfoto</option>
+                            <option value="BRT">BRT</option>
+                            <option value="OSM">OSM</option>
+                        </select>
+                        <!-- </div> -->
+
+                        <!-- <div class="pure-control-group"> -->
+                        <label for="OverlayToggle">AHN overlay</label>
+                        <input id="OverlayToggle" onchange="toggleOverlay()" type="checkbox"> 
+                        <!-- </div> -->
+
+                        <!-- <div style="display:inline"> -->
+                        <a id="olZoomOutLink" class="pure-button zoom-button" href="#">-</a>
+                        <a id="olZoomInLink" class="pure-button zoom-button" href="#">+</a>
+                        <!-- </div> -->
+                    </fieldset>
+                </form>
+            <!-- </div> -->
+            <!-- <div style="clear:both;height:1px"></div> -->
+        </div>
+    </div>
+
+    <div id="map-canvas">
+        <!-- <div class="splash">
+            <h1 class="splash-head">Big Bold Text</h1>
+            <p class="splash-subhead">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            </p>
+            <p>
+                <a href="http://purecss.io" class="pure-button pure-button-primary">Get Started</a>
+            </p>
+        </div> -->
+    </div>
+
+    <div class="overlay-wrapper">
+        <div class="overlay">
+            <!-- <a class="pure-button pure-button-primary" style="font-size:120%" onclick="drawRectangle()" href="#">Draw selection</a> -->
+
+            <form class="pure-form">
+                <fieldset>
+
+                    <!-- <button class="pure-button pure-button-primary" style="font-size:120%" onclick="drawRectangle()">Draw selection</button> -->
+                    <a class="pure-button pure-button-primary" onclick="drawRectangle()" href="#">Draw selection</a>
+
+                    <!-- <div class="pure-control-group">                     -->
+                    <label style="margin-left:8px" for="filterTypeSelector">Filter type</label>
+                    <select name="filterTypeSelector">
+                        <option value="g">Gefilterd</option>
+                        <option value="u">Uitgefilterd</option>
+                        <option value="ug">Both</option>
+                    </select>
+                    <!-- </div> -->
+
+                    <!-- <div class="pure-control-group"> -->
+                    <!-- <label for="email">Your Email</label> -->
+                    <input id="email" type="email" placeholder="Your Email">
+                    <!-- </div> -->
+
+                    <!-- <div class="pure-controls"> -->
+                    <button type="submit" class="pure-button">Submit</button>
+                    <!-- </div> -->
+                </fieldset>
+            </form>
+
+        </div>
+
+<!--         <div class="footer l-box is-center">
+            View the source of this layout to learn more. Made with love by the YUI Team.
+        </div> -->
+
+    </div>
+
+    <script src="http://yui.yahooapis.com/3.14.1/build/yui/yui.js"></script>
+    <script src="http://tiles.geocoders.nl/api/ol/2.12/OpenLayers.js"></script>
+    <script src="http://tiles.geocoders.nl/lib/proj4js/proj4js-compressed.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+{% endblock %}

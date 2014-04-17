@@ -1,0 +1,125 @@
+html, body {
+    padding: 0;
+    height: 100%;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+.overlay-wrapper, .header-wrapper {
+    width: 100%;
+    position: fixed;
+    left: 0;
+    z-index: 9999;
+    pointer-events:none;
+}
+
+.overlay-wrapper {
+    bottom: 0px;
+    /*transition: bottom 0.5s ease;*/
+}
+
+.overlay, .header {
+    width: 700px;
+    margin: 0 auto;
+    pointer-events: auto;
+}
+
+.overlay {
+    /*width: 500px;*/
+    padding: 0;
+    background-color: #eee;
+}
+
+.overlay fieldset {
+    padding: 0;
+}
+.overlay fieldset .pure-button {
+    font-size: 120%;
+}
+
+.header-wrapper {
+    top: 0; /*-58px;*/
+    transition: top 0.1s ease;
+}
+
+/*.header-wrapper:hover {
+    top: 0;
+}*/
+
+.header {
+    /*padding: 20px 15px 10px 15px;*/
+    /*height: 100px;*/
+    background-color: #111;
+    opacity: 0.8;
+    color: #fff;
+    text-align: right;
+}
+
+.logo {
+    float: left;
+    font-size: 200%;
+    margin: .3em 0;
+}
+
+.zoom-button {
+    font-size: 110%;
+    font-family: monospace;
+    font-weight: bolder;
+    /*margin-bottom: .5em;*/
+    /*display: block;*/
+}
+
+.header-block {
+    float: right;
+    /*margin: 20px*/
+}
+.header .pure-form fieldset {
+    padding: 0;
+}
+
+#map-canvas {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background: url("http://www.webmapper.net/theme/img/mapbg.png") repeat scroll 0 0 #f9f9f9;
+    z-index: 0;
+}
+
+#map-canvas div.olControlZoom {
+    top: 108px;
+    /*left: 8px;*/
+}
+
+/*.olHandlerBoxZoomBox {
+    border: 3px dashed blue;
+    position: absolute;
+    background-color: white;
+    opacity: 0.20;
+    font-size: 1px;
+    filter: alpha(opacity=20);
+}*/
+
+@media all and (max-width: 739px) {
+    .overlay-wrapper {
+        /*bottom: -140px;*/
+    }
+/*    .overlay-wrapper:hover {
+        bottom: 0px;
+    }*/
+    .overlay, .header {
+        width: 100%;
+    }
+
+    .header label, .overlay .pure-form label, .overlay .pure-form select, .overlay .pure-form input {
+        display: none;
+    }
+    .header-block {
+        /*margin: 4px 5px 0px 5px;*/
+    }
+/*
+    .overlay .pure-form input, .overlay .pure-form select, .overlay .pure-form label, .overlay .pure-form button {
+        display: block;
+        margin: .25em 0;
+    }*/
+
+}
