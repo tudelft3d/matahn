@@ -123,5 +123,16 @@ function drawRectangle()
     }
   );
   box.activate();
-
 }
+
+// $(function() {
+//   $('button[name="submit"').bind('click', function() {
+//     $.getJSON($SCRIPT_ROOT + '/_newjob', {
+//       a: $('input[name="a"]').val(),
+//       b: $('input[name="b"]').val()
+//     }, function(data) {
+//       $("#result").text(data.result);
+//     });
+//     return false;
+//   });
+// });

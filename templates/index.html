@@ -5,19 +5,6 @@
     <div class="header-wrapper">
         <div class="header">
             <!-- <div class="logo">Web AHN</div> -->
-     <!--        <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
-                <a class="pure-menu-heading" href="">Your Site</a>
-
-                <ul>
-                    <li class="pure-menu-selected"><a href="#">Home</a></li>
-                    <li><a href="#">Tour</a></li>
-                    <li><a href="#">Sign Up</a></li>
-                </ul>
-            </div> -->
-
-            <!-- <div class="header-block">
-                
-            </div> -->
 
             <!-- <div class="header-block"> -->
                 <form class="pure-form pure-form-aligned">
@@ -48,15 +35,6 @@
     </div>
 
     <div id="map-canvas">
-        <!-- <div class="splash">
-            <h1 class="splash-head">Big Bold Text</h1>
-            <p class="splash-subhead">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            </p>
-            <p>
-                <a href="http://purecss.io" class="pure-button pure-button-primary">Get Started</a>
-            </p>
-        </div> -->
     </div>
 
     <div class="overlay-wrapper">
@@ -84,22 +62,20 @@
                     <!-- </div> -->
 
                     <!-- <div class="pure-controls"> -->
-                    <button type="submit" class="pure-button">Submit</button>
+                    <button name="submit" type="submit" class="pure-button">Submit</button>
                     <!-- </div> -->
                 </fieldset>
             </form>
 
         </div>
 
-<!--         <div class="footer l-box is-center">
-            View the source of this layout to learn more. Made with love by the YUI Team.
-        </div> -->
-
     </div>
-
-    <script src="http://yui.yahooapis.com/3.14.1/build/yui/yui.js"></script>
+    <script type=text/javascript>
+      $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
     <script src="http://tiles.geocoders.nl/api/ol/2.12/OpenLayers.js"></script>
     <script src="http://tiles.geocoders.nl/lib/proj4js/proj4js-compressed.js"></script>
+    <script src="{{ url_for('static', filename='js/third_party/jquery-1.11.0.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
