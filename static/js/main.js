@@ -114,10 +114,16 @@ function drawRectangle()
       "done": function RectangleDrawn(bounds) {
       var ll = map.getLonLatFromPixel(new OpenLayers.Pixel(bounds.left, bounds.bottom)); 
       var ur = map.getLonLatFromPixel(new OpenLayers.Pixel(bounds.right, bounds.top)); 
-      alert(ll.lon.toFixed(4) + ", " + 
-            ll.lat.toFixed(4) + ", " + 
-            ur.lon.toFixed(4) + ", " + 
-            ur.lat.toFixed(4));
+      
+      $.getJSON($SCRIPT_ROOT + '/_getPointCountEstimate', {
+        ll_x: ll.lon.toFixed(1),
+        ll_y: ll.lat.toFixed(1),
+        ur_x: ur.lon.toFixed(1),
+        ur_y: ur.lat.toFixed(1)
+      }, function(data) {
+        $(".ptcountest").text(data.result);
+      });
+
       box.deactivate()
       }
     }
@@ -125,14 +131,7 @@ function drawRectangle()
   box.activate();
 }
 
-// $(function() {
-//   $('button[name="submit"').bind('click', function() {
-//     $.getJSON($SCRIPT_ROOT + '/_newjob', {
-//       a: $('input[name="a"]').val(),
-//       b: $('input[name="b"]').val()
-//     }, function(data) {
-//       $("#result").text(data.result);
-//     });
-//     return false;
-//   });
-// });
+function toggleDrawer()
+{
+  $('.overlay-wrapper').toggleClass('up');
+}
