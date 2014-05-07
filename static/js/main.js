@@ -131,7 +131,7 @@ function drawRectangle()
   box.activate();
 }
 
-function toggleDrawer()
-{
-  $('.overlay-wrapper').toggleClass('up');
-}
+$('.menu-link').click(function() {
+  $( 'body' ).toggleClass( "close-menu" );
+});
+
