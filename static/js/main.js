@@ -95,17 +95,6 @@ window.onload = function() {
     map.setCenter(lonlat,8);
 }
 
-function changeBaseLayer()
-{
-  value = document.getElementById("BaseLayerSelector").value;
-  map.setBaseLayer(map.getLayersByName(value)[0]);
-}
-
-function toggleOverlay()
-{
-  value = document.getElementById("OverlayToggle").checked;
-  map.getLayersByName("AHN2")[0].setVisibility(value);
-}
 
 function drawRectangle()
 {
@@ -131,7 +120,24 @@ function drawRectangle()
   box.activate();
 }
 
-$('.menu-link').click(function() {
-  $( 'body' ).toggleClass( "close-menu" );
+$('#menuLink').click(function() {
+  $('body').toggleClass( "open-menu" );
+});
+
+$('#overlay-button').click(function(){
+  var visible = ! map.getLayersByName("AHN2")[0].getVisibility();
+  map.getLayersByName("AHN2")[0].setVisibility(visible);
+});
+
+$('#baselayer-button').click(function(){
+  var baseLayers = map.getLayersBy('isBaseLayer',true);
+  var index;
+  $.each(baseLayers, function(i){
+    if (baseLayers[i].visibility == true) index = i;
+  })
+  if (index == baseLayers.length-1) index=0;
+  else index+=1;
+
+  map.setBaseLayer(baseLayers[index]);
 });
 

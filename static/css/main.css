@@ -4,14 +4,6 @@ html, body {
     font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 
-.header-wrapper {
-    width: 100%;
-    position: fixed;
-    left: 0;
-    z-index: 9999;
-    pointer-events:none;
-}
-
 .overlay-wrapper {
     width: 300px;
     height: 100%;
@@ -23,11 +15,9 @@ html, body {
 }
 
 
-.menu-link {
+.square-button {
     position: fixed;
     display: block; /* show this only on small screens */
-    top: 0;
-    left: 300px; /* "#menu width" */
     background: #000;
     background: rgba(0,0,0,0.7);
     font-size: 10px; /* change this value to increase/decrease button size */
@@ -35,6 +25,32 @@ html, body {
     width: 2em;
     height: auto;
     padding: 2.1em 1.6em;
+}
+
+.zoomin-button {
+    top: 50px;
+    right: 0px;
+}
+
+.zoomout-button {
+    top: 100px;
+    right: 0px;
+}
+
+.baselayer-button {
+    top: 180px;
+    right: 0px;
+}
+
+.overlay-button {
+    top: 230px;
+    right: 0px;
+}
+
+.menu-link {
+    top: 0;
+    left: 300px; /* "#menu width" */
+    display: none;
 }
 
     .menu-link:hover,
@@ -70,12 +86,12 @@ html, body {
     transition: left 0.2s ease;
 }
 
-body.close-menu .overlay-wrapper {
-    left: -300px;
+body.open-menu .overlay-wrapper {
+    left: 0px;
 }
 
-body.close-menu .menu-link {
-    left: 0px;
+body.open-menu .menu-link {
+    left: 300px;
 }
 
 .up {
@@ -93,24 +109,6 @@ body.close-menu .menu-link {
     font-size: 120%;
 }
 
-.header-wrapper {
-    top: 0; /*-58px;*/
-    transition: top 0.1s ease;
-}
-
-/*.header-wrapper:hover {
-    top: 0;
-}*/
-
-.header {
-    /*padding: 20px 15px 10px 15px;*/
-    /*height: 100px;*/
-    background-color: #111;
-    opacity: 0.8;
-    color: #fff;
-    text-align: right;
-}
-
 .logo {
     float: left;
     font-size: 200%;
@@ -125,13 +123,6 @@ body.close-menu .menu-link {
     /*display: block;*/
 }
 
-.header-block {
-    float: right;
-    /*margin: 20px*/
-}
-.header .pure-form fieldset {
-    padding: 0;
-}
 
 #map-canvas {
     margin: 0;
@@ -159,25 +150,13 @@ body.close-menu .menu-link {
 
 @media all and (max-width: 739px) {
     .overlay-wrapper {
-        /*bottom: -140px;*/
+        left: -300px;
     }
-/*    .overlay-wrapper:hover {
-        bottom: 0px;
-    }*/
-    .overlay, .header {
-        width: 100%;
+    .menu-link {
+        left: 0px;
     }
 
-    .header label, .overlay .pure-form label, .overlay .pure-form select, .overlay .pure-form input {
-        display: none;
-    }
-    .header-block {
-        /*margin: 4px 5px 0px 5px;*/
-    }
-/*
-    .overlay .pure-form input, .overlay .pure-form select, .overlay .pure-form label, .overlay .pure-form button {
+    .menu-link {
         display: block;
-        margin: .25em 0;
-    }*/
-
+    }
 }

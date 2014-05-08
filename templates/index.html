@@ -2,42 +2,23 @@
 {% block body %}
 <body>
 
-    <div class="header-wrapper">
-        <div class="header">
-            <!-- <div class="logo">Web AHN</div> -->
-
-            <!-- <div class="header-block"> -->
-                <form class="pure-form pure-form-aligned">
-                    <fieldset>
-                        <!-- <div class="pure-control-group"> -->
-                        <label for="basemap">Basemap</label>
-                        <select id="BaseLayerSelector" name="basemap" onchange="changeBaseLayer()">
-                            <option value="Luchtfoto">Luchtfoto</option>
-                            <option value="BRT">BRT</option>
-                            <option value="OSM">OSM</option>
-                        </select>
-                        <!-- </div> -->
-
-                        <!-- <div class="pure-control-group"> -->
-                        <label for="OverlayToggle">AHN overlay</label>
-                        <input id="OverlayToggle" onchange="toggleOverlay()" type="checkbox"> 
-                        <!-- </div> -->
-
-                        <!-- <div style="display:inline"> -->
-                        <a id="olZoomOutLink" class="pure-button zoom-button" href="#">-</a>
-                        <a id="olZoomInLink" class="pure-button zoom-button" href="#">+</a>
-                        <!-- </div> -->
-                    </fieldset>
-                </form>
-            <!-- </div> -->
-            <!-- <div style="clear:both;height:1px"></div> -->
-        </div>
-    </div>
-
     <div id="map-canvas">
     </div>
+    <a href="#menu" id="olZoomInLink" class="square-button zoomin-button">
+        <span></span>
+    </a>
+    <a href="#menu" id="olZoomOutLink" class="square-button zoomout-button">
+        <span></span>
+    </a>
 
-    <a href="#menu" id="menuLink" class="menu-link">
+    <a href="#menu" id="baselayer-button" class="square-button baselayer-button">
+        <span></span>
+    </a>
+    <a href="#menu" id="overlay-button" class="square-button overlay-button">
+        <span></span>
+    </a>
+
+    <a href="#menu" id="menuLink" class="square-button menu-link">
         <!-- Hamburger icon -->
         <span></span>
     </a>
