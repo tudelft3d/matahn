@@ -21,4 +21,4 @@ def getPointCountEstimate():
 	return jsonify(result="You selected about {:.0f} points!".format(d_x*d_y*density))
 
 if __name__ == "__main__":
-	app.run(debug=True)
+	app.run(host='0.0.0.0',debug=True)
