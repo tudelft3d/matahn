@@ -29,12 +29,12 @@ html, body {
 }
 
 .zoomin-button {
-    top: 0px;
+    top: 150px;
     right: 0px;
 }
 
 .zoomout-button {
-    top: 50px;
+    top: 200px;
     right: 0px;
 }
 
@@ -88,8 +88,6 @@ html, body {
 /*    transition: left 0.2s ease;*/
 }
 
-
-
 .up {
     bottom: 0px;
 }
@@ -102,7 +100,7 @@ html, body {
     margin: 2em;
 }
 .overlay fieldset .pure-button {
-    font-size: 120%;
+    font-size: 110%;
 }
 
 .logo {
