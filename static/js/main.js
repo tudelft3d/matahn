@@ -98,6 +98,7 @@ window.onload = function() {
 
 function drawRectangle()
 {
+  $('body').removeClass('open-menu');
   box = new OpenLayers.Handler.Box( control,
     {
       "done": function RectangleDrawn(bounds) {
@@ -114,6 +115,7 @@ function drawRectangle()
       });
 
       box.deactivate()
+      $('body').addClass('open-menu');
       }
     }
   );
