@@ -4,19 +4,19 @@
 
     <div id="map-canvas">
     </div>
-    <a href="#menu" id="olZoomInLink" onclick="map.zoomIn()" class="square-button zoomin-button">
+    <a href="#menu" id="olZoomInLink" class="square-button zoomin-button">
         <span></span>
     </a>
-    <a href="#menu" id="olZoomOutLink" onClick="map.zoomOut()" class="square-button zoomout-button">
+    <a href="#menu" id="olZoomOutLink" class="square-button zoomout-button">
         <span></span>
     </a>
 
-<!--     <a href="#menu" id="baselayer-button" class="square-button baselayer-button">
+    <a href="#menu" id="baselayer-button" class="square-button baselayer-button">
         <span></span>
     </a>
     <a href="#menu" id="overlay-button" class="square-button overlay-button">
         <span></span>
-    </a> -->
+    </a>
 
     <a href="#menu" id="menuLink" class="square-button menu-link">
         <!-- Hamburger icon -->
@@ -25,28 +25,32 @@
 
     <div class="overlay-wrapper">
         <div class="overlay">
+            <a class="pure-button pure-button-primary" style="font-size:120%" onclick="drawRectangle()" href="#">Draw selection</a>
             <p class='ptcountest'></p>
 
             <form class="pure-form pure-form-stacked">
                 <fieldset>
-                    <!-- <legend>Request data</legend> -->
 
-                    <label>Your Selection</label>
-                    <a class="pure-button pure-button-primary" onclick="drawRectangle()" href="#">Draw</a>
-                    <a class="pure-button" onclick="drawRectangle()" href="#">Edit</a>
+                    <!-- <button class="pure-button pure-button-primary" style="font-size:120%" onclick="drawRectangle()">Draw selection</button> -->
                     <!-- <a class="pure-button pure-button-primary" onclick="drawRectangle()" href="#">Draw selection</a> -->
 
-                    <label for="filterTypeSelector">Filter type</label>
+                    <!-- <div class="pure-control-group">                     -->
+                    <label style="margin-left:8px" for="filterTypeSelector">Filter type</label>
                     <select name="filterTypeSelector">
                         <option value="g">Gefilterd</option>
                         <option value="u">Uitgefilterd</option>
                         <option value="ug">Both</option>
                     </select>
+                    <!-- </div> -->
 
-                    <label for="email">Your Email</label>
+                    <!-- <div class="pure-control-group"> -->
+                    <!-- <label for="email">Your Email</label> -->
                     <input id="email" type="email" placeholder="Your Email">
+                    <!-- </div> -->
 
+                    <!-- <div class="pure-controls"> -->
                     <button name="submit" type="submit" class="pure-button">Submit</button>
+                    <!-- </div> -->
                 </fieldset>
             </form>
 
@@ -56,41 +60,10 @@
     <script type=text/javascript>
       $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
     </script>
-    <!-- <script src="http://tiles.geocoders.nl/api/ol/2.12/OpenLayers.js"></script> -->
-    <!-- <script src="http://tiles.geocoders.nl/lib/proj4js/proj4js-compressed.js"></script> -->
+    <script src="http://tiles.geocoders.nl/api/ol/2.12/OpenLayers.js"></script>
+    <script src="http://tiles.geocoders.nl/lib/proj4js/proj4js-compressed.js"></script>
     <script src="{{ url_for('static', filename='js/third_party/jquery-1.11.0.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/interface.js') }}"></script>
-    
-    <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
-    <!-- stuff to draw/edit -->
-    <script src="{{ url_for('static', filename='js/third_party/Leaflet.draw.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/edit/handler/Edit.Poly.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/edit/handler/Edit.SimpleShape.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/edit/handler/Edit.Circle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/edit/handler/Edit.Rectangle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/draw/handler/Draw.Feature.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/draw/handler/Draw.Polyline.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/draw/handler/Draw.Polygon.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/draw/handler/Draw.SimpleShape.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/draw/handler/Draw.Rectangle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/draw/handler/Draw.Circle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/draw/handler/Draw.Marker.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/ext/LatLngUtil.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/ext/GeometryUtil.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/ext/LineUtil.Intersect.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/ext/Polyline.Intersect.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/ext/Polygon.Intersect.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/Control.Draw.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/Tooltip.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/Toolbar.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/draw/DrawToolbar.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/edit/EditToolbar.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/edit/handler/EditToolbar.Edit.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/edit/handler/EditToolbar.Delete.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/proj4js-compressed.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/third_party/proj4leaflet.js') }}"></script>
-    
-    <script src="{{ url_for('static', filename='js/myscript.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
 {% endblock %}
