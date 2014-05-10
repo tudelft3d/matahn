@@ -1,6 +1,5 @@
 var map;
-var boxControl;
-var boxLayer;
+var control;
 OpenLayers.IMAGE_RELOAD_ATTEMPTS = 3;
 OpenLayers.Util.onImageLoadErrorColor = "transparent";
 
@@ -51,20 +50,20 @@ window.onload = function() {
         transitionEffect: 'resize'
         }
     );
-    // var osm_nb_rd_tms_layer = new OpenLayers.Layer.TMS( "OSM",
-    //     "http://www.openbasiskaart.nl/mapcache/tms/",
-    //     { //attribution: 'Kaartgegevens: &copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    //       layername: 'osm@rd', type: "png", serviceVersion:"1.0.0",
-    //       gutter:0,buffer:0,isBaseLayer:true,transitionEffect:'resize',
-    //       tileOrigin: new OpenLayers.LonLat(-285401.920000,22598.080000),
-    //       resolutions:[3440.64, 1720.32, 860.16, 430.08, 215.04, 107.52, 53.76, 26.88, 13.44, 6.72, 3.36, 1.68, 0.84, 0.42],
-    //       zoomOffset:0,
-    //       units:"m",
-    //       maxExtent: new OpenLayers.Bounds(-285401.920000,22598.080000,595401.920000,903401.920000),
-    //       projection: new OpenLayers.Projection("EPSG:28992".toUpperCase()),
-    //       sphericalMercator: false
-    //     }
-    // );
+    var osm_nb_rd_tms_layer = new OpenLayers.Layer.TMS( "OSM",
+        "http://www.openbasiskaart.nl/mapcache/tms/",
+        { //attribution: 'Kaartgegevens: &copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          layername: 'osm@rd', type: "png", serviceVersion:"1.0.0",
+          gutter:0,buffer:0,isBaseLayer:true,transitionEffect:'resize',
+          tileOrigin: new OpenLayers.LonLat(-285401.920000,22598.080000),
+          resolutions:[3440.64, 1720.32, 860.16, 430.08, 215.04, 107.52, 53.76, 26.88, 13.44, 6.72, 3.36, 1.68, 0.84, 0.42],
+          zoomOffset:0,
+          units:"m",
+          maxExtent: new OpenLayers.Bounds(-285401.920000,22598.080000,595401.920000,903401.920000),
+          projection: new OpenLayers.Projection("EPSG:28992".toUpperCase()),
+          sphericalMercator: false
+        }
+    );
     var tiledLayer_lf = new OpenLayers.Layer.TMS( "Luchtfoto",
         "http://geodata1.nationaalgeoregister.nl/luchtfoto/tms/",
         {
@@ -80,21 +79,13 @@ window.onload = function() {
         }
     );
     
-    boxLayer = new OpenLayers.Layer.Vector("Box layer");
+    // var boxLayer = new OpenLayers.Layer.Vector("Box layer");
 
-    boxControl =  new OpenLayers.Control.DrawFeature(boxLayer,
-                        OpenLayers.Handler.RegularPolygon, {
-                            handlerOptions: {
-                                sides: 4,
-                                irregular: true
-                            },
-                            featureAdded: boxDrawn
-                        }
-                    )
-    map.addControl(boxControl);
+    control = new OpenLayers.Control();
 
+    map.addControl(control)
     // map.addControl(new OpenLayers.Control.LayerSwitcher());
-    map.addLayers([tiledLayer_lf, tiledLayer_brt, tiledLayer_ahn2, boxLayer]);
+    map.addLayers([tiledLayer_lf, tiledLayer_brt, osm_nb_rd_tms_layer, tiledLayer_ahn2]);
     // map.addControl(new OpenLayers.Control.Attribution({div:document.getElementById('map-attribution')}));
 
     // Het kaartbeeld wordt gecentreerd op basis van een locatie die is gedefinieerd in lengte- en breedtegraden (WGS-84):
@@ -104,28 +95,31 @@ window.onload = function() {
     map.setCenter(lonlat,8);
 }
 
-var showPointcountEstimate = function(left, bottom, right, top) {
-  $.getJSON($SCRIPT_ROOT + '/_getPointCountEstimate', {
-    ll_x: left,
-    ll_y: bottom,
-    ur_x: right,
-    ur_y: top
-  }, function(data) {
-    $(".ptcountest").text(data.result);
-  });
-};
 
 function drawRectangle()
 {
-  boxLayer.removeAllFeatures();
   $('body').removeClass('open-menu');
-  boxControl.activate();
-}
+  box = new OpenLayers.Handler.Box( control,
+    {
+      "done": function RectangleDrawn(bounds) {
+      var ll = map.getLonLatFromPixel(new OpenLayers.Pixel(bounds.left, bounds.bottom)); 
+      var ur = map.getLonLatFromPixel(new OpenLayers.Pixel(bounds.right, bounds.top)); 
+      
+      $.getJSON($SCRIPT_ROOT + '/_getPointCountEstimate', {
+        ll_x: ll.lon.toFixed(1),
+        ll_y: ll.lat.toFixed(1),
+        ur_x: ur.lon.toFixed(1),
+        ur_y: ur.lat.toFixed(1)
+      }, function(data) {
+        $(".ptcountest").text(data.result);
+      });
 
-function boxDrawn(box) {
-  showPointcountEstimate(box.geometry.bounds.left,box.geometry.bounds.bottom,box.geometry.bounds.right,box.geometry.bounds.top);
-  boxControl.deactivate();
-  $('body').addClass('open-menu');
+      box.deactivate()
+      $('body').addClass('open-menu');
+      }
+    }
+  );
+  box.activate();
 }
 
 $('#menuLink').click(function() {
