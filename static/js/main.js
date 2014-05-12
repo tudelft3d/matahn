@@ -115,14 +115,14 @@ var showPointcountEstimate = function(left, bottom, right, top) {
   });
 };
 
-function drawRectangle()
-{
+$('#draw-rectangle').click(function(event){
+  event.preventDefault();
   boxLayer.removeAllFeatures();
   $('body').removeClass('open-menu');
   $('.menu-link i').addClass("fa-chevron-right")
   $('.menu-link i').removeClass("fa-chevron-left")
   boxControl.activate();
-}
+});
 
 function boxDrawn(box) {
   showPointcountEstimate(box.geometry.bounds.left,box.geometry.bounds.bottom,box.geometry.bounds.right,box.geometry.bounds.top);

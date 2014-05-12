@@ -68,15 +68,20 @@ html, body {
     bottom: 0px;
 }
 
-.header {
-    pointer-events: auto;
-}
-
 .overlay {
     margin: 2em;
 }
-.overlay fieldset .pure-button {
-    font-size: 110%;
+.overlay .pure-button {
+    font-size: 120%;
+    padding: 0.5em 0.7em;
+    width: 100%;
+}
+.pure-form-stacked fieldset input,
+.pure-form-stacked fieldset select, 
+.pure-form-stacked fieldset label,
+.pure-form-stacked fieldset button {
+    margin: .7em 0;
+    width: 100%;
 }
 
 .logo {
@@ -125,5 +130,11 @@ html, body {
 
     body.open-menu .menu-link {
         left: 300px;
+    }
+}
+
+@media all and (max-width: 420px) {
+    .overlay {
+        margin-right: 4em;
     }
 }
