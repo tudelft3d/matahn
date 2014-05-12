@@ -12,7 +12,8 @@ html, body {
     top: 0;
     z-index: 9998;
     background-color: #eee;
-    overflow: scroll
+    overflow: scroll;
+    box-shadow: 1px 0px 30px #777;
 }
 
 
@@ -21,7 +22,6 @@ html, body {
     display: block; /* show this only on small screens */
     background: #000;
     background: rgba(0,0,0,0.7);
-    /*font-size: 10px;  change this value to increase/decrease button size */
     z-index: 9998;
     height: auto;
     font-style: normal;
@@ -30,6 +30,11 @@ html, body {
     text-align: center;
     width: 2em;
     padding: 0.3em 0;
+}
+
+.square-button:hover
+{
+    background: rgba(0,0,0,1);
 }
 
 .zoomin-button {
@@ -80,15 +85,6 @@ html, body {
     margin: .3em 0;
 }
 
-.zoom-button {
-    font-size: 110%;
-    font-family: monospace;
-    font-weight: bolder;
-    /*margin-bottom: .5em;*/
-    /*display: block;*/
-}
-
-
 #map-canvas {
     margin: 0;
     padding: 0;
@@ -97,20 +93,6 @@ html, body {
     background: url("http://www.webmapper.net/theme/img/mapbg.png") repeat scroll 0 0 #f9f9f9;
     z-index: 0;
 }
-
-#map-canvas div.olControlZoom {
-    top: 108px;
-    /*left: 8px;*/
-}
-
-/*.olHandlerBoxZoomBox {
-    border: 3px dashed blue;
-    position: absolute;
-    background-color: white;
-    opacity: 0.20;
-    font-size: 1px;
-    filter: alpha(opacity=20);
-}*/
 
 
 @media all and (max-width: 800px) {
