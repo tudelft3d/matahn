@@ -46,25 +46,25 @@ window.onload = function() {
         matrixSet: 'EPSG:28992',
         matrixIds: epsg28992matrixids,
         format: 'image/png8',
-        isBaseLayer: false,
+        isBaseLayer: true,
         // attribution: 'Kaartgegevens: &copy; <a href="http://www.cbs.nl">CBS</a>, <a href="http://www.kadaster.nl">Kadaster</a>, <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         transitionEffect: 'resize'
         }
     );
-    // var osm_nb_rd_tms_layer = new OpenLayers.Layer.TMS( "OSM",
-    //     "http://www.openbasiskaart.nl/mapcache/tms/",
-    //     { //attribution: 'Kaartgegevens: &copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    //       layername: 'osm@rd', type: "png", serviceVersion:"1.0.0",
-    //       gutter:0,buffer:0,isBaseLayer:true,transitionEffect:'resize',
-    //       tileOrigin: new OpenLayers.LonLat(-285401.920000,22598.080000),
-    //       resolutions:[3440.64, 1720.32, 860.16, 430.08, 215.04, 107.52, 53.76, 26.88, 13.44, 6.72, 3.36, 1.68, 0.84, 0.42],
-    //       zoomOffset:0,
-    //       units:"m",
-    //       maxExtent: new OpenLayers.Bounds(-285401.920000,22598.080000,595401.920000,903401.920000),
-    //       projection: new OpenLayers.Projection("EPSG:28992".toUpperCase()),
-    //       sphericalMercator: false
-    //     }
-    // );
+    var osm_nb_rd_tms_layer = new OpenLayers.Layer.TMS( "OSM",
+        "http://www.openbasiskaart.nl/mapcache/tms/",
+        { //attribution: 'Kaartgegevens: &copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          layername: 'osm@rd', type: "png", serviceVersion:"1.0.0",
+          gutter:0,buffer:0,isBaseLayer:true,transitionEffect:'resize',
+          tileOrigin: new OpenLayers.LonLat(-285401.920000,22598.080000),
+          resolutions:[3440.64, 1720.32, 860.16, 430.08, 215.04, 107.52, 53.76, 26.88, 13.44, 6.72, 3.36, 1.68, 0.84, 0.42],
+          zoomOffset:0,
+          units:"m",
+          maxExtent: new OpenLayers.Bounds(-285401.920000,22598.080000,595401.920000,903401.920000),
+          projection: new OpenLayers.Projection("EPSG:28992".toUpperCase()),
+          sphericalMercator: false
+        }
+    );
     var tiledLayer_lf = new OpenLayers.Layer.TMS( "Luchtfoto",
         "http://geodata1.nationaalgeoregister.nl/luchtfoto/tms/",
         {
@@ -94,7 +94,7 @@ window.onload = function() {
     map.addControl(boxControl);
 
     // map.addControl(new OpenLayers.Control.LayerSwitcher());
-    map.addLayers([tiledLayer_lf, tiledLayer_brt, tiledLayer_ahn2, boxLayer]);
+    map.addLayers([tiledLayer_lf, osm_nb_rd_tms_layer, tiledLayer_ahn2, boxLayer]);
     // map.addControl(new OpenLayers.Control.Attribution({div:document.getElementById('map-attribution')}));
 
     // Het kaartbeeld wordt gecentreerd op basis van een locatie die is gedefinieerd in lengte- en breedtegraden (WGS-84):
@@ -119,6 +119,8 @@ function drawRectangle()
 {
   boxLayer.removeAllFeatures();
   $('body').removeClass('open-menu');
+  $('.menu-link i').addClass("fa-chevron-right")
+  $('.menu-link i').removeClass("fa-chevron-left")
   boxControl.activate();
 }
 
@@ -126,10 +128,14 @@ function boxDrawn(box) {
   showPointcountEstimate(box.geometry.bounds.left,box.geometry.bounds.bottom,box.geometry.bounds.right,box.geometry.bounds.top);
   boxControl.deactivate();
   $('body').addClass('open-menu');
+  $('.menu-link i').removeClass("fa-chevron-right")
+  $('.menu-link i').addClass("fa-chevron-left")
 }
 
 $('#menuLink').click(function() {
   $('body').toggleClass( "open-menu" );
+  $('.menu-link i').toggleClass("fa-chevron-right")
+  $('.menu-link i').toggleClass("fa-chevron-left")
 });
 
 $('#overlay-button').click(function(){

@@ -5,52 +5,49 @@
     <div id="map-canvas">
     </div>
     <a href="#menu" id="olZoomInLink" class="square-button zoomin-button">
-        <span></span>
+        <span><i class="fa fa-plus"></i></span>
     </a>
     <a href="#menu" id="olZoomOutLink" class="square-button zoomout-button">
-        <span></span>
+        <span><i class="fa fa-minus"></i></span>
     </a>
 
     <a href="#menu" id="baselayer-button" class="square-button baselayer-button">
-        <span></span>
+        <span><i class="fa fa-retweet"></i></span>
     </a>
-    <a href="#menu" id="overlay-button" class="square-button overlay-button">
+<!--     <a href="#menu" id="overlay-button" class="square-button overlay-button">
         <span></span>
-    </a>
+    </a> -->
 
     <a href="#menu" id="menuLink" class="square-button menu-link">
-        <!-- Hamburger icon -->
-        <span></span>
+        <span><i class="fa fa-chevron-right"></i></span>
     </a>
 
     <div class="overlay-wrapper">
         <div class="overlay">
-            <a class="pure-button pure-button-primary" style="font-size:120%" onclick="drawRectangle()" href="#">Draw selection</a>
-            <p class='ptcountest'></p>
 
             <form class="pure-form pure-form-stacked">
                 <fieldset>
+                
+                    <a class="pure-button pure-button-primary" onclick="drawRectangle()" href="#">Draw your selection</a>
+                    <p class='ptcountest'></p>
 
-                    <!-- <button class="pure-button pure-button-primary" style="font-size:120%" onclick="drawRectangle()">Draw selection</button> -->
-                    <!-- <a class="pure-button pure-button-primary" onclick="drawRectangle()" href="#">Draw selection</a> -->
+                </fieldset>
 
-                    <!-- <div class="pure-control-group">                     -->
-                    <label style="margin-left:8px" for="filterTypeSelector">Filter type</label>
+                <fieldset>
+                    <legend>Make your request</legend>
+
+                    <label for="filterTypeSelector">Filter type</label>
                     <select name="filterTypeSelector">
                         <option value="g">Gefilterd</option>
                         <option value="u">Uitgefilterd</option>
                         <option value="ug">Both</option>
                     </select>
-                    <!-- </div> -->
 
-                    <!-- <div class="pure-control-group"> -->
-                    <!-- <label for="email">Your Email</label> -->
+                    <label for="email">Your Email</label>
                     <input id="email" type="email" placeholder="Your Email">
-                    <!-- </div> -->
 
-                    <!-- <div class="pure-controls"> -->
                     <button name="submit" type="submit" class="pure-button">Submit</button>
-                    <!-- </div> -->
+
                 </fieldset>
             </form>
 
