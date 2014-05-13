@@ -11,57 +11,58 @@ html, body {
     left: 0;
     top: 0;
     z-index: 9998;
-    background-color: #eee;
+    background-color: #fff;
     overflow: scroll;
     box-shadow: 1px 0px 30px #777;
 }
 
 
 .square-button {
-    position: fixed;
+    position: absolute;
     display: block; /* show this only on small screens */
-    background: #000;
-    background: rgba(0,0,0,0.7);
     z-index: 9998;
     height: auto;
     font-style: normal;
-    color: white;
-    font-size: 1.5em;
+    font-size: 1.4em;
     text-align: center;
     width: 2em;
     padding: 0.3em 0;
 }
 
-.square-button:hover
+.button-right {
+    background: #000;
+    background: rgba(0,0,0,0.7);
+    right: 0px;
+    color: #fff;
+}
+.button-right:hover
 {
     background: rgba(0,0,0,1);
 }
 
 .zoomin-button {
     top: 50px;
-    right: 0px;
 }
 
 .zoomout-button {
     top: 0px;
-    right: 0px;
 }
 
 .baselayer-button {
     top: 130px;
-    right: 0px;
 }
 
 .overlay-button {
     top: 180px;
-    right: 0px;
 }
 
 .menu-link {
     top: 0;
     left: 300px; /* "#menu width" */
+    background: #fff;
     display: none;
     z-index: 9999;
+    color: #000;
 }
 
 .up {
@@ -84,12 +85,6 @@ html, body {
     width: 100%;
 }
 
-.logo {
-    float: left;
-    font-size: 200%;
-    margin: .3em 0;
-}
-
 #map-canvas {
     margin: 0;
     padding: 0;
@@ -98,7 +93,6 @@ html, body {
     background: url("http://www.webmapper.net/theme/img/mapbg.png") repeat scroll 0 0 #f9f9f9;
     z-index: 0;
 }
-
 
 @media all and (max-width: 800px) {
     .overlay-wrapper {

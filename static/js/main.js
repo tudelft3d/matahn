@@ -118,6 +118,7 @@ var showPointcountEstimate = function(left, bottom, right, top) {
 $('#draw-rectangle').click(function(event){
   event.preventDefault();
   boxLayer.removeAllFeatures();
+  $(this).toggleClass('pure-button-active');
   $('body').removeClass('open-menu');
   $('.menu-link i').addClass("fa-chevron-right")
   $('.menu-link i').removeClass("fa-chevron-left")
@@ -127,6 +128,7 @@ $('#draw-rectangle').click(function(event){
 function boxDrawn(box) {
   showPointcountEstimate(box.geometry.bounds.left,box.geometry.bounds.bottom,box.geometry.bounds.right,box.geometry.bounds.top);
   boxControl.deactivate();
+  $('#draw-rectangle').removeClass('pure-button-active')
   $('body').addClass('open-menu');
   $('.menu-link i').removeClass("fa-chevron-right")
   $('.menu-link i').addClass("fa-chevron-left")
