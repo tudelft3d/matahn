@@ -105,7 +105,7 @@ window.onload = function() {
 }
 
 var showPointcountEstimate = function(left, bottom, right, top) {
-  $.getJSON($SCRIPT_ROOT + '/_getPointCountEstimate', {
+  $.getJSON($SCRIPT_ROOT + '/matahn/_getPointCountEstimate', {
     ll_x: left,
     ll_y: bottom,
     ur_x: right,
@@ -145,12 +145,17 @@ $('#overlay-button').click(function(){
   map.getLayersByName("AHN2")[0].setVisibility(visible);
 });
 
-$('#submit-button').click(function(){
-  // box.geometry.bounds.left
-  // box.geometry.bounds.bottom
-  // box.geometry.bounds.right
-  // box.geometry.bounds.top
-  alert('yo');
+
+$('#calculate').click(function(){
+  $.getJSON($SCRIPT_ROOT + '/matahn/_submit', {
+    ll_x:  boxControl.geometry.bounds.left,
+    ll_y:  boxControl.geometry.bounds.bottom,
+    ur_x:  boxControl.geometry.bounds.right,
+    ur_y:  boxControl.geometry.bounds.top,
+    email: $('input[name="useremail"]').val()
+  }, function(value) {
+    (".ptcountest").text(data.result);
+  });
 });
 
 $('#baselayer-button').click(function(){
