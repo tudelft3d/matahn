@@ -1,9 +1,25 @@
 from flask import Flask, jsonify, render_template, request
+import os
+import uuid
+import time
+
+ROOT_FOLDER        = '/Users/hugo/www/webahn/'
+TASKS_FOLDER       = ROOT_FOLDER + 'tasks/'
+RESULTS_FOLDER     = ROOT_FOLDER + 'results/'
+
+app = Flask(__name__, static_url_path='')
+app.config['TASKS_FOLDER']   = TASKS_FOLDER
+app.config['RESULTS_FOLDER'] = RESULTS_FOLDER
+
 app = Flask(__name__)
 
 @app.route("/")
 def index():
     return render_template("index.html")
+
+@app.route("/matahn")
+def matahn():
+    return render_template("matahn/index.html")
 
 @app.route("/_getPointCountEstimate")
 def getPointCountEstimate():
