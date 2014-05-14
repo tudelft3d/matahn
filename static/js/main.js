@@ -146,15 +146,15 @@ $('#overlay-button').click(function(){
 });
 
 
-$('#calculate').click(function(){
+$('#submit-button').click(function(){
   $.getJSON($SCRIPT_ROOT + '/matahn/_submit', {
-    ll_x:  boxControl.geometry.bounds.left,
-    ll_y:  boxControl.geometry.bounds.bottom,
-    ur_x:  boxControl.geometry.bounds.right,
-    ur_y:  boxControl.geometry.bounds.top,
+    ll_x:  boxControl.bounds,
+    // ll_y:  boxControl.bounds.bottom,
+    // ur_x:  boxControl.bounds.right,
+    // ur_y:  boxControl.bounds.top,
     email: $('input[name="useremail"]').val()
-  }, function(value) {
-    (".ptcountest").text(data.result);
+  }, function(data) {
+    $(".ptcountest").text(data.result);
   });
 });
 

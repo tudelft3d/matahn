@@ -50,8 +50,8 @@ def submitnewtask():
     ll_y = request.args.get('ll_y', type=float)
     ur_x = request.args.get('ur_x', type=float)
     ur_y = request.args.get('ur_y', type=float)
-    email = request.args.get('email', type=string)
-    return jsonify(result="potato")
+    email = request.args.get('email', '')
+    return jsonify(result="done")
 
 if __name__ == "__main__":
 	app.run(debug=True)
