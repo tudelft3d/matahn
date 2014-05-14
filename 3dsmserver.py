@@ -17,9 +17,16 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
-@app.route("/matahn")
+
+
+@app.route("/matahn", methods=['GET', 'POST'])
 def matahn():
+    if request.method == 'POST':
+        e = session['useremail']
+        print e
+        return redirect(url_for('/matahn'))
     return render_template("matahn/index.html")
+
 
 @app.route("/_getPointCountEstimate")
 def getPointCountEstimate():
@@ -28,12 +35,9 @@ def getPointCountEstimate():
 	ll_y = request.args.get('ll_y', type=float)
 	ur_x = request.args.get('ur_x', type=float)
 	ur_y = request.args.get('ur_y', type=float)
-
 	d_x = ur_x - ll_x
 	d_y = ur_y - ll_y
-
 	density = 15
-
 	return jsonify(result="You selected about {:.0f} points!".format(d_x*d_y*density))
 
 if __name__ == "__main__":

@@ -33,17 +33,18 @@
                 <fieldset>
                     <legend>Make your request</legend>
 
-                    <label for="filterTypeSelector">Filter type</label>
-                    <select name="filterTypeSelector">
-                        <option value="g">Gefilterd</option>
-                        <option value="u">Uitgefilterd</option>
-                        <option value="ug">Both</option>
-                    </select>
+                    <form action="" method="post">
+                        <label for="filterTypeSelector">Filter type</label>
+                        <select name="filterTypeSelector">
+                            <option value="g">Gefilterd</option>
+                            <option value="u">Uitgefilterd</option>
+                            <option value="ug">Both</option>
+                        </select>
+                        <!-- <label for="email">Your Email</label> -->
+                        <input name=useremail type=email placeholder="Your Email">
+                        <button id="submit-button" name="submit" type="submit" class="pure-button">Submit</button>
+                    </form>
 
-                    <label for="email">Your Email</label>
-                    <input id="email" type="email" placeholder="Your Email">
-
-                    <button name="submit" type="submit" class="pure-button">Submit</button>
 
                 </fieldset>
             </form>

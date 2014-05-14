@@ -145,6 +145,14 @@ $('#overlay-button').click(function(){
   map.getLayersByName("AHN2")[0].setVisibility(visible);
 });
 
+$('#submit-button').click(function(){
+  // box.geometry.bounds.left
+  // box.geometry.bounds.bottom
+  // box.geometry.bounds.right
+  // box.geometry.bounds.top
+  alert('yo');
+});
+
 $('#baselayer-button').click(function(){
   var baseLayers = map.getLayersBy('isBaseLayer',true);
   var index;
