@@ -79,9 +79,30 @@ window.onload = function() {
           sphericalMercator: false
         }
     );
-    
-    boxLayer = new OpenLayers.Layer.Vector("Box layer");
 
+  //-- for the layer that shows the download area
+    var myStyle = new OpenLayers.StyleMap(
+    {
+      "default": new OpenLayers.Style(
+      {
+        fillColor: "#32c137",
+        strokeColor: "#32c137",
+        fillOpacity: 0.05,
+        strokeWidth: 5
+      }
+      )
+    });
+    var geojson_format = new OpenLayers.Format.GeoJSON();
+    var downloadarea = new OpenLayers.Layer.Vector("downloadarea", {styleMap: myStyle}); 
+    $.getJSON($SCRIPT_ROOT + '/matahn/_getDownloadArea', {}, 
+      function(data) {
+        var fc = data.result;
+        downloadarea.addFeatures(geojson_format.read(fc));
+    });
+    map.addLayer(downloadarea);
+  //-- layer download area
+
+    boxLayer = new OpenLayers.Layer.Vector("Box layer");
     boxControl =  new OpenLayers.Control.DrawFeature(boxLayer,
                         OpenLayers.Handler.RegularPolygon, {
                             handlerOptions: {

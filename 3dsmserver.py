@@ -32,6 +32,16 @@ def matahn():
     return render_template("matahn/index.html")
 
 
+@app.route("/matahn/_getDownloadArea")
+def getDownloadArea():
+    f = open(ROOT_FOLDER + "downloadarea/area.geojson")
+    s = f.read()
+    # print jsonify(result=f.read())
+    return jsonify(result=s)
+    # return jsonify(result="You selected about {:.0f}k points!".format(d_x*d_y*density/1e3))
+
+
+
 @app.route("/matahn/_getPointCountEstimate")
 def getPointCountEstimate():
     """Gives an inaccurate estimate of the number of points in the query rectangle"""
