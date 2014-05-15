@@ -1,4 +1,4 @@
-POSTGIS_CONNECTIONSTRING = 'postgresql://ravi@localhost/testpy'
+POSTGIS_CONNECTIONSTRING = 'postgresql://hugo@localhost/test01'
 
 from sqlalchemy import create_engine
 engine = create_engine(POSTGIS_CONNECTIONSTRING, echo=True)
@@ -20,7 +20,7 @@ class Tile(Base):
     filename = Column(String, unique=True)
     active = Column(Boolean)
     pointcount = Column(Integer)
-    ahn2_type = String()
+    ahn2_class = String()
     geom = Column(Geometry('POLYGON', srid=28992))
 
     def __repr__(self):
@@ -44,6 +44,7 @@ def get_ewkt_from_bounds(x_min, y_min, x_max, y_max):
 #### Stuff to import tiles from file to db:
 
 import glob
+import os.path
 def load_tiles_into_db(session, glob_expression):
 	tile_files = glob.glob(glob_expression)
 
@@ -58,18 +59,19 @@ def load_tiles_into_db(session, glob_expression):
 from lastools import *
 def get_tile_from_file(filename):
 	info_txt = lasinfotxt(filename)
-	info_dict = read_lasinfotxt(lasinfo_txt)
+	info_dict = read_lasinfotxt(info_txt)
 
-	if filename.startswith('u'):
+	print filename
+	if os.path.basename(filename).startswith('u'):
 		ahn2_type = 'uitgefilterd'
-	elif filename.startswith('g'):
+	elif os.path.basename(filename).startswith('g'):
 		ahn2_type = 'gefilterd'
 
 	x_max, y_max, z_max = info_dict['max_xyz']
 	x_min, y_min, z_min = info_dict['min_xyz']
 	ewkt = get_ewkt_from_bounds(x_min, y_min, x_max, y_max)
 
-	tile = Tile(filename=filename, active=True, pointcount=info_dict['pointcount'], ahn2_type=ahn2_type, geom=ewkt)
+	tile = Tile(filename=filename, active=True, pointcount=info_dict['pointcount'], ahn2_class=ahn2_type, geom=ewkt)
 
 	return tile
 
@@ -108,4 +110,4 @@ def example_usage():
 	for tile in tiles:
 		print tile.filename, tile.pointcount
 	
-	
+
