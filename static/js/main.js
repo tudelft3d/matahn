@@ -173,10 +173,13 @@ $('#submit-button').click(function(){
       ll_y:  f.geometry.bounds.bottom,
       ur_x:  f.geometry.bounds.right,
       ur_y:  f.geometry.bounds.top,
-      filtered: $('select[name="classificationSelector"]').val(), 
+      classification: $('select[name="classificationSelector"]').val(), 
       email: $('input[name="useremail"]').val()
     }, function(data) {
-      $(".tasksubmitted").text("Thanks, your task has been submitted and is being processed. You'll soon get an email with a download link to your LAZ file.");
+      var s = "Thanks, your task (id= "
+      s += data.result
+      s+= ") has been submitted and is being processed. You'll soon get an email with a download link."
+      $(".tasksubmitted").text(s);
     });
     // boxLayer.removeAllFeatures();
     // $(".ptcountest").text("");

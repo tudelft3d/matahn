@@ -52,8 +52,18 @@ def submitnewtask():
     ur_x  = request.args.get('ur_x', type=float)
     ur_y  = request.args.get('ur_y', type=float)
     email = request.args.get('email', '')
-    filtered = request.args.get('filtered', '')
-    return jsonify(result="done")
+    classification = request.args.get('classification', '')
+    jid = str(uuid.uuid4()).split('-')[0]
+    fjob = open("%s%s.txt" % (TASKS_FOLDER, jid), 'w')
+    fjob.write("ll_x: %s\n" % ll_x)
+    fjob.write("ll_t: %s\n" % ll_y)
+    fjob.write("ur_x: %s\n" % ur_x)
+    fjob.write("ur_y: %s\n" % ur_y)
+    fjob.write("classification: %s\n" % classification)
+    fjob.write("%s\n" % email)
+    fjob.write("%s\n" % time.asctime())
+    fjob.close()
+    return jsonify(result=jid)
 
 if __name__ == "__main__":
 	app.run(debug=True)
