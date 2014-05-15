@@ -79,9 +79,30 @@ window.onload = function() {
           sphericalMercator: false
         }
     );
-    
-    boxLayer = new OpenLayers.Layer.Vector("Box layer");
 
+  //-- for the layer that shows the download area
+    var myStyle = new OpenLayers.StyleMap(
+    {
+      "default": new OpenLayers.Style(
+      {
+        fillColor: "#32c137",
+        strokeColor: "#32c137",
+        fillOpacity: 0.05,
+        strokeWidth: 5
+      }
+      )
+    });
+    var geojson_format = new OpenLayers.Format.GeoJSON();
+    var downloadarea = new OpenLayers.Layer.Vector("downloadarea", {styleMap: myStyle}); 
+    $.getJSON($SCRIPT_ROOT + '/matahn/_getDownloadArea', {}, 
+      function(data) {
+        var fc = data.result;
+        downloadarea.addFeatures(geojson_format.read(fc));
+    });
+    map.addLayer(downloadarea);
+  //-- layer download area
+
+    boxLayer = new OpenLayers.Layer.Vector("Box layer");
     boxControl =  new OpenLayers.Control.DrawFeature(boxLayer,
                         OpenLayers.Handler.RegularPolygon, {
                             handlerOptions: {
@@ -94,18 +115,18 @@ window.onload = function() {
     map.addControl(boxControl);
 
     // map.addControl(new OpenLayers.Control.LayerSwitcher());
-    map.addLayers([tiledLayer_lf, osm_nb_rd_tms_layer, tiledLayer_ahn2, boxLayer]);
+    map.addLayers([osm_nb_rd_tms_layer, tiledLayer_lf, tiledLayer_ahn2, boxLayer]);
     // map.addControl(new OpenLayers.Control.Attribution({div:document.getElementById('map-attribution')}));
 
     // Het kaartbeeld wordt gecentreerd op basis van een locatie die is gedefinieerd in lengte- en breedtegraden (WGS-84):
-    var lonlat = new OpenLayers.LonLat(94194.0138,431587.71576609);
+    var lonlat = new OpenLayers.LonLat(84440.00005662048, 447591.0404369122);
     // var wgs84 = new OpenLayers.Projection("EPSG:4326");
     // lonlat.transform(wgs84, map.baseLayer.projection);
-    map.setCenter(lonlat,8);
+    map.setCenter(lonlat,10);
 }
 
 var showPointcountEstimate = function(left, bottom, right, top) {
-  $.getJSON($SCRIPT_ROOT + '/_getPointCountEstimate', {
+  $.getJSON($SCRIPT_ROOT + '/matahn/_getPointCountEstimate', {
     ll_x: left,
     ll_y: bottom,
     ur_x: right,
@@ -128,21 +149,62 @@ $('#draw-rectangle').click(function(event){
 function boxDrawn(box) {
   showPointcountEstimate(box.geometry.bounds.left,box.geometry.bounds.bottom,box.geometry.bounds.right,box.geometry.bounds.top);
   boxControl.deactivate();
-  $('#draw-rectangle').removeClass('pure-button-active')
+  $('#draw-rectangle').removeClass('pure-button-active');
   $('body').addClass('open-menu');
-  $('.menu-link i').removeClass("fa-chevron-right")
-  $('.menu-link i').addClass("fa-chevron-left")
+  $('.menu-link i').removeClass("fa-chevron-right");
+  $('.menu-link i').addClass("fa-chevron-left");
+  $(".noselection").text("");
 }
 
 $('#menuLink').click(function() {
   $('body').toggleClass( "open-menu" );
-  $('.menu-link i').toggleClass("fa-chevron-right")
-  $('.menu-link i').toggleClass("fa-chevron-left")
+  $('.menu-link i').toggleClass("fa-chevron-right");
+  $('.menu-link i').toggleClass("fa-chevron-left");
 });
 
 $('#overlay-button').click(function(){
   var visible = ! map.getLayersByName("AHN2")[0].getVisibility();
   map.getLayersByName("AHN2")[0].setVisibility(visible);
+});
+
+
+$('#submit-button').click(function(){
+  var okay = 1;
+  var email = $('input[name="useremail"]').val();
+  if (email == "") {
+    $(".noemail").text("An email must be provided");
+    okay = 0;
+  }
+  else {
+    $(".noemail").text("");
+  }
+  var fs = boxLayer.features;
+  if (fs.length == 0) {
+    $(".noselection").text("An area on the map must be selected.");
+    okay = 0;
+  }
+  else {
+    $(".noselection").text(""); 
+  }
+
+  if (okay == 1) {
+    var f = fs[0];
+    $.getJSON($SCRIPT_ROOT + '/matahn/_submit', {
+      ll_x:  f.geometry.bounds.left,
+      ll_y:  f.geometry.bounds.bottom,
+      ur_x:  f.geometry.bounds.right,
+      ur_y:  f.geometry.bounds.top,
+      classification: $('select[name="classificationSelector"]').val(), 
+      email: $('input[name="useremail"]').val()
+    }, function(data) {
+      var s = "Thanks, your task (id= "
+      s += data.result
+      s+= ") has been submitted and is being processed. You'll soon get an email with a download link."
+      $(".tasksubmitted").text(s);
+    });
+    // boxLayer.removeAllFeatures();
+    // $(".ptcountest").text("");
+  }
 });
 
 $('#baselayer-button').click(function(){
