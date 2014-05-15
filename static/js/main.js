@@ -128,16 +128,17 @@ $('#draw-rectangle').click(function(event){
 function boxDrawn(box) {
   showPointcountEstimate(box.geometry.bounds.left,box.geometry.bounds.bottom,box.geometry.bounds.right,box.geometry.bounds.top);
   boxControl.deactivate();
-  $('#draw-rectangle').removeClass('pure-button-active')
+  $('#draw-rectangle').removeClass('pure-button-active');
   $('body').addClass('open-menu');
-  $('.menu-link i').removeClass("fa-chevron-right")
-  $('.menu-link i').addClass("fa-chevron-left")
+  $('.menu-link i').removeClass("fa-chevron-right");
+  $('.menu-link i').addClass("fa-chevron-left");
+  $(".noselection").text("");
 }
 
 $('#menuLink').click(function() {
   $('body').toggleClass( "open-menu" );
-  $('.menu-link i').toggleClass("fa-chevron-right")
-  $('.menu-link i').toggleClass("fa-chevron-left")
+  $('.menu-link i').toggleClass("fa-chevron-right");
+  $('.menu-link i').toggleClass("fa-chevron-left");
 });
 
 $('#overlay-button').click(function(){
@@ -147,15 +148,39 @@ $('#overlay-button').click(function(){
 
 
 $('#submit-button').click(function(){
-  $.getJSON($SCRIPT_ROOT + '/matahn/_submit', {
-    ll_x:  boxControl.bounds,
-    // ll_y:  boxControl.bounds.bottom,
-    // ur_x:  boxControl.bounds.right,
-    // ur_y:  boxControl.bounds.top,
-    email: $('input[name="useremail"]').val()
-  }, function(data) {
-    $(".ptcountest").text(data.result);
-  });
+  var okay = 1;
+  var email = $('input[name="useremail"]').val();
+  if (email == "") {
+    $(".noemail").text("An email must be provided");
+    okay = 0;
+  }
+  else {
+    $(".noemail").text("");
+  }
+  var fs = boxLayer.features;
+  if (fs.length == 0) {
+    $(".noselection").text("An area on the map must be selected.");
+    okay = 0;
+  }
+  else {
+    $(".noselection").text(""); 
+  }
+
+  if (okay == 1) {
+    var f = fs[0];
+    $.getJSON($SCRIPT_ROOT + '/matahn/_submit', {
+      ll_x:  f.geometry.bounds.left,
+      ll_y:  f.geometry.bounds.bottom,
+      ur_x:  f.geometry.bounds.right,
+      ur_y:  f.geometry.bounds.top,
+      filtered: $('select[name="classificationSelector"]').val(), 
+      email: $('input[name="useremail"]').val()
+    }, function(data) {
+      $(".tasksubmitted").text("Thanks, your task has been submitted and is being processed. You'll soon get an email with a download link to your LAZ file.");
+    });
+    // boxLayer.removeAllFeatures();
+    // $(".ptcountest").text("");
+  }
 });
 
 $('#baselayer-button').click(function(){

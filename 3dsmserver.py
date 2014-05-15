@@ -44,13 +44,15 @@ def getPointCountEstimate():
     density = 15
     return jsonify(result="You selected about {:.0f} points!".format(d_x*d_y*density))
 
+
 @app.route("/matahn/_submit")
 def submitnewtask():
-    ll_x = request.args.get('ll_x', type=float)
-    ll_y = request.args.get('ll_y', type=float)
-    ur_x = request.args.get('ur_x', type=float)
-    ur_y = request.args.get('ur_y', type=float)
+    ll_x  = request.args.get('ll_x', type=float)
+    ll_y  = request.args.get('ll_y', type=float)
+    ur_x  = request.args.get('ur_x', type=float)
+    ur_y  = request.args.get('ur_y', type=float)
     email = request.args.get('email', '')
+    filtered = request.args.get('filtered', '')
     return jsonify(result="done")
 
 if __name__ == "__main__":

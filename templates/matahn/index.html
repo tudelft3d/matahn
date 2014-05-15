@@ -14,9 +14,6 @@
     <a href="#menu" id="baselayer-button" class="square-button button-right baselayer-button">
         <span><i class="fa fa-retweet"></i></span>
     </a>
-<!--     <a href="#menu" id="overlay-button" class="square-button button-right overlay-button">
-        <span></span>
-    </a> -->
 
     <a href="#menu" id="menuLink" class="square-button menu-link">
         <span><i class="fa fa-chevron-right"></i></span>
@@ -33,11 +30,11 @@
                 <fieldset>
                     <legend>Make your request</legend>
 
-                    <label for="filterTypeSelector">Filter type</label>
-                    <select name="filterTypeSelector">
-                        <option value="g">Gefilterd</option>
-                        <option value="u">Uitgefilterd</option>
-                        <option value="ug">Both</option>
+                    <label for="classificationSelector">Classification</label>
+                    <select name="classificationSelector">
+                        <option value="g">ground (gefilterd)</option>
+                        <option value="u">man-made (uitgefilterd)</option>
+                        <option value="ug">both</option>
                     </select>
                     <!-- <label for="email">Your Email</label> -->
                     <input name="useremail" type=email placeholder="Your Email">
@@ -46,6 +43,10 @@
 
                 </fieldset>
             </form>
+
+            <p class='noemail' style='color:red'></p>
+            <p class='noselection' style='color:red'></p>
+            <p class='tasksubmitted' style='background-color:#b9fa98'></p>
 
         </div>
 
