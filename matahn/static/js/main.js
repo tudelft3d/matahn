@@ -94,7 +94,7 @@ window.onload = function() {
     });
     var geojson_format = new OpenLayers.Format.GeoJSON();
     var downloadarea = new OpenLayers.Layer.Vector("downloadarea", {styleMap: myStyle}); 
-    $.getJSON($SCRIPT_ROOT + '/matahn/_getDownloadArea', {}, 
+    $.getJSON($SCRIPT_ROOT + '/_getDownloadArea', {}, 
       function(data) {
         var fc = data.result;
         downloadarea.addFeatures(geojson_format.read(fc));
@@ -126,7 +126,7 @@ window.onload = function() {
 }
 
 var showPointcountEstimate = function(left, bottom, right, top) {
-  $.getJSON($SCRIPT_ROOT + '/matahn/_getPointCountEstimate', {
+  $.getJSON($SCRIPT_ROOT + '/_getPointCountEstimate', {
     ll_x: left,
     ll_y: bottom,
     ur_x: right,
@@ -168,7 +168,8 @@ $('#overlay-button').click(function(){
 });
 
 
-$('#submit-button').click(function(){
+$('#submit-button').click(function(event){
+  event.preventDefault();
   var okay = 1;
   var email = $('input[name="useremail"]').val();
   if (email == "") {
@@ -189,7 +190,7 @@ $('#submit-button').click(function(){
 
   if (okay == 1) {
     var f = fs[0];
-    $.getJSON($SCRIPT_ROOT + '/matahn/_submit', {
+    $.getJSON($SCRIPT_ROOT + '/_submit', {
       ll_x:  f.geometry.bounds.left,
       ll_y:  f.geometry.bounds.bottom,
       ur_x:  f.geometry.bounds.right,
