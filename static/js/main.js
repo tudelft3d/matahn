@@ -94,14 +94,14 @@ window.onload = function() {
     map.addControl(boxControl);
 
     // map.addControl(new OpenLayers.Control.LayerSwitcher());
-    map.addLayers([tiledLayer_lf, osm_nb_rd_tms_layer, tiledLayer_ahn2, boxLayer]);
+    map.addLayers([osm_nb_rd_tms_layer, tiledLayer_lf, tiledLayer_ahn2, boxLayer]);
     // map.addControl(new OpenLayers.Control.Attribution({div:document.getElementById('map-attribution')}));
 
     // Het kaartbeeld wordt gecentreerd op basis van een locatie die is gedefinieerd in lengte- en breedtegraden (WGS-84):
-    var lonlat = new OpenLayers.LonLat(94194.0138,431587.71576609);
+    var lonlat = new OpenLayers.LonLat(84440.00005662048, 447591.0404369122);
     // var wgs84 = new OpenLayers.Projection("EPSG:4326");
     // lonlat.transform(wgs84, map.baseLayer.projection);
-    map.setCenter(lonlat,8);
+    map.setCenter(lonlat,10);
 }
 
 var showPointcountEstimate = function(left, bottom, right, top) {

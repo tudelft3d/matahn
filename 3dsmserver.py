@@ -42,7 +42,12 @@ def getPointCountEstimate():
     d_x = ur_x - ll_x
     d_y = ur_y - ll_y
     density = 15
-    return jsonify(result="You selected about {:.0f} points!".format(d_x*d_y*density))
+    total = d_x * d_y * density
+    if (total > 1e6):
+        return jsonify(result="You selected about {:.0f}M points!".format(d_x*d_y*density/1e6))
+    else:
+        return jsonify(result="You selected about {:.0f}k points!".format(d_x*d_y*density/1e3))
+
 
 
 @app.route("/matahn/_submit")
