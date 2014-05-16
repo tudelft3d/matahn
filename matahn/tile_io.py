@@ -6,7 +6,7 @@ import json
 from matahn import app
 from matahn.models import Tile
 from matahn.database import db_session
-from matahnself.lastools import *
+from matahn.lastools import *
 
 from sqlalchemy import func
 
