@@ -42,8 +42,8 @@ def getPointCountEstimate():
 
     tiles = db_session.query(   Tile.pointcount \
                                 * \
-                                func.ST_Area( func.ST_Intersection(Tile.geom, ewkt) ) / func.ST_Area( Tile.geom ) \
-                            ).filter(Tile.geom.ST_Intersects(ewkt))
+                                func.ST_Area( Tile.geom.ST_Intersection(ewkt) ) / Tile.geom.ST_Area() \
+                            ).filter(Tile.geom.intersects(ewkt))
     
     total_estimate = sum( [ v[0] for v in tiles ] )
 
