@@ -1,17 +1,29 @@
-webahn
-======
+Download tool for AHN2 that delivers a LAZ file with the points inside a bounding box drawn by the user. Based on Flask and Openlayers 2.
 
-Download tool for AHN2 that delivers a LAZ file with the points inside a bounding box drawn by the user.
+Running
+------
+From terminal:
 
-1. Frontend is built with:
+`pip install -r requirements.txt`
 
-JS:
-Openlayers 2 and proj4js (to be replaced by OL3 when that project is mature)
+`cp example_matahn.cfg matahn.cfg` and edit it
 
-CSS:
-using templates from http://purecss.io
+`export MATAHN_SETTINGS=/path/to/matahn.cfg`
 
-2. Backend uses:
+`python runserver.py`
 
-PYTHON:
-Flask
+Preparing laz files
+------
+in dir with laz files:
+
+`lasinfo -otxt -i *.laz`
+
+`lasindex -append -i *.laz`
+
+Importing tiles into DB
+------
+in (i)python shell
+
+`from matahn.tile_io import load_tiles_into_db`
+
+`load_tiles_into_db('/path/to/*.laz')`
