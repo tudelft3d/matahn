@@ -6,7 +6,9 @@ import json
 from matahn import app
 from matahn.models import Tile
 from matahn.database import db_session
-from matahn.lastools import *
+from matahnself.lastools import *
+
+from sqlalchemy import func
 
 with open(app.config['BLADINDEX_JSON']) as f:
 	BLADINDEX = json.load(f)

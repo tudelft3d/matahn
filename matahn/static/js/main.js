@@ -94,12 +94,14 @@ window.onload = function() {
     });
     var geojson_format = new OpenLayers.Format.GeoJSON();
     var downloadarea = new OpenLayers.Layer.Vector("downloadarea", {styleMap: myStyle}); 
+    map.addLayer(downloadarea);
     $.getJSON($SCRIPT_ROOT + '/_getDownloadArea', {}, 
       function(data) {
-        var fc = data.result;
-        downloadarea.addFeatures(geojson_format.read(fc));
+        var features = geojson_format.read(data.result)
+        downloadarea.addFeatures( features );
+        map.zoomToExtent(downloadarea.getDataExtent(), false);
     });
-    map.addLayer(downloadarea);
+    
   //-- layer download area
 
     boxLayer = new OpenLayers.Layer.Vector("Box layer");
@@ -119,10 +121,8 @@ window.onload = function() {
     // map.addControl(new OpenLayers.Control.Attribution({div:document.getElementById('map-attribution')}));
 
     // Het kaartbeeld wordt gecentreerd op basis van een locatie die is gedefinieerd in lengte- en breedtegraden (WGS-84):
-    var lonlat = new OpenLayers.LonLat(84440.00005662048, 447591.0404369122);
-    // var wgs84 = new OpenLayers.Projection("EPSG:4326");
-    // lonlat.transform(wgs84, map.baseLayer.projection);
-    map.setCenter(lonlat,10);
+    // var lonlat = new OpenLayers.LonLat(84440.00005662048, 447591.0404369122);
+    // map.setCenter(lonlat,10);
 }
 
 var showPointcountEstimate = function(left, bottom, right, top) {

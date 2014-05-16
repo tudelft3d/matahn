@@ -5,6 +5,11 @@ import os
 import uuid
 import time
 
+from matahn.models import Tile
+from matahn.database import db_session
+
+from sqlalchemy import func
+
 # @app.route("/matahn", methods=['GET', 'POST'])
 # def matahn():
 #     if request.method == 'POST':
@@ -20,11 +25,9 @@ def matahn():
 
 @app.route("/_getDownloadArea")
 def getDownloadArea():
-    f = open(app.config['ROOT_FOLDER'] + "downloadarea/area.geojson")
-    s = f.read()
-    # print jsonify(result=f.read())
-    return jsonify(result=s)
-    # return jsonify(result="You selected about {:.0f}k points!".format(d_x*d_y*density/1e3))
+    geojson = db_session.query(func.ST_AsGeoJSON(func.ST_Union(Tile.geom))).one()[0]
+
+    return jsonify(result=geojson)
 
 
 @app.route("/_getPointCountEstimate")

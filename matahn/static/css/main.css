@@ -85,6 +85,11 @@ html, body {
     width: 100%;
 }
 
+#map-canvas-wrapper {
+    height: 100%;
+    margin-left: 300px;
+}
+
 #map-canvas {
     margin: 0;
     padding: 0;
@@ -130,5 +135,12 @@ html, body {
 @media all and (max-width: 420px) {
     .overlay {
         margin-right: 4em;
+    }
+}
+
+@media all and (max-width: 800px) {
+    #map-canvas-wrapper {
+        height: 100%;
+        margin-left: 0px;
     }
 }
