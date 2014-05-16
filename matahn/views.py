@@ -32,37 +32,49 @@ def getDownloadArea():
 
 @app.route("/_getPointCountEstimate")
 def getPointCountEstimate():
-    """Gives an inaccurate estimate of the number of points in the query rectangle"""
-    ll_x = request.args.get('ll_x', type=float)
-    ll_y = request.args.get('ll_y', type=float)
-    ur_x = request.args.get('ur_x', type=float)
-    ur_y = request.args.get('ur_y', type=float)
-    d_x = ur_x - ll_x
-    d_y = ur_y - ll_y
-    density = 15
-    total = d_x * d_y * density
-    if (total > 1e6):
-        return jsonify(result="You selected about {:.0f}M points!".format(d_x*d_y*density/1e6))
+    """Gives an estimate of the number of points in the query rectangle"""
+    left = request.args.get('left', type=float)
+    bottom = request.args.get('bottom', type=float)
+    right = request.args.get('right', type=float)
+    top = request.args.get('top', type=float)
+
+    ewkt = get_ewkt_from_bounds(left, bottom, right, top)
+
+    tiles = db_session.query(   Tile.pointcount \
+                                * \
+                                func.ST_Area( func.ST_Intersection(Tile.geom, ewkt) ) / func.ST_Area( Tile.geom ) \
+                            ).filter(Tile.geom.ST_Intersects(ewkt))
+    
+    total_estimate = sum( [ v[0] for v in tiles ] )
+
+    if total_estimate > 1e6:
+        return jsonify(result="You selected about {:.0f} million points!".format(total_estimate/1e6))
+    elif total_estimate >1e3:
+        return jsonify(result="You selected about {:.0f} thousand points!".format(total_estimate/1e3))
     else:
-        return jsonify(result="You selected about {:.0f}k points!".format(d_x*d_y*density/1e3))
+        return jsonify(result="You selected about {:.0f} points!".format(total_estimate))
 
 
 @app.route("/_submit")
 def submitnewtask():
-    ll_x  = request.args.get('ll_x', type=float)
-    ll_y  = request.args.get('ll_y', type=float)
-    ur_x  = request.args.get('ur_x', type=float)
-    ur_y  = request.args.get('ur_y', type=float)
+    left  = request.args.get('left', type=float)
+    bottom  = request.args.get('bottom', type=float)
+    right  = request.args.get('right', type=float)
+    top  = request.args.get('top', type=float)
     email = request.args.get('email', '')
     classification = request.args.get('classification', '')
     jid = str(uuid.uuid4()).split('-')[0]
     fjob = open("%s%s.txt" % (app.config['TASKS_FOLDER'], jid), 'w')
-    fjob.write("ll_x: %s\n" % ll_x)
-    fjob.write("ll_t: %s\n" % ll_y)
-    fjob.write("ur_x: %s\n" % ur_x)
-    fjob.write("ur_y: %s\n" % ur_y)
+    fjob.write("left: %s\n" % left)
+    fjob.write("ll_t: %s\n" % bottom)
+    fjob.write("right: %s\n" % right)
+    fjob.write("top: %s\n" % top)
     fjob.write("classification: %s\n" % classification)
     fjob.write("%s\n" % email)
     fjob.write("%s\n" % time.asctime())
     fjob.close()
     return jsonify(result=jid)
+
+
+def get_ewkt_from_bounds(x_min, y_min, x_max, y_max):
+    return 'SRID=28992;POLYGON(({0} {1}, {2} {1}, {2} {3}, {0} {3}, {0} {1}))'.format(x_min, y_min, x_max, y_max)

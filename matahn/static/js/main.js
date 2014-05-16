@@ -127,10 +127,10 @@ window.onload = function() {
 
 var showPointcountEstimate = function(left, bottom, right, top) {
   $.getJSON($SCRIPT_ROOT + '/_getPointCountEstimate', {
-    ll_x: left,
-    ll_y: bottom,
-    ur_x: right,
-    ur_y: top
+    left: left,
+    bottom: bottom,
+    right: right,
+    top: top
   }, function(data) {
     $(".ptcountest").text(data.result);
   });
@@ -191,10 +191,10 @@ $('#submit-button').click(function(event){
   if (okay == 1) {
     var f = fs[0];
     $.getJSON($SCRIPT_ROOT + '/_submit', {
-      ll_x:  f.geometry.bounds.left,
-      ll_y:  f.geometry.bounds.bottom,
-      ur_x:  f.geometry.bounds.right,
-      ur_y:  f.geometry.bounds.top,
+      left:  f.geometry.bounds.left,
+      bottom:  f.geometry.bounds.bottom,
+      right:  f.geometry.bounds.right,
+      top:  f.geometry.bounds.top,
       classification: $('select[name="classificationSelector"]').val(), 
       email: $('input[name="useremail"]').val()
     }, function(data) {
