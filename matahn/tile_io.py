@@ -34,7 +34,7 @@ def load_tiles_into_db(glob_expression):
 def get_tile_from_file(path):
 	
 	lasinfo_file = path[:-3]+'txt'
-	if os.path.exists(lasinfo_file):
+	if os.path.isfile(lasinfo_file):
 		info_txt = lasinfo_file 
 	else:
 		info_txt = lasinfotxt(path)

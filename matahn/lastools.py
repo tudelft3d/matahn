@@ -7,6 +7,6 @@ def lasmerge(filenames, x_min, y_min, x_max, y_max, outname):
 	return outname
 
 def lasinfotxt(filename):
-	subprocess.call([app.config['LASINFO_BINARY'], ['-nmm -nv -nc'], filename, '-otxt'])
+	subprocess.call([app.config['LASINFO_BINARY'], '-nmm', '-nv', '-nc', filename, '-otxt'])
 	return filename[:-3]+'txt'
 
