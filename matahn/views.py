@@ -1,6 +1,6 @@
 from matahn import app
 
-from flask import jsonify, render_template, request
+from flask import jsonify, render_template, request, abort, send_from_directory
 import os
 import uuid
 import time
@@ -8,6 +8,8 @@ import time
 from matahn.models import Tile
 from matahn.database import db_session
 from matahn.util import get_ewkt_from_bounds
+
+from matahn import tasks
 
 from sqlalchemy import func
 
@@ -64,14 +66,18 @@ def submitnewtask():
     top  = request.args.get('top', type=float)
     email = request.args.get('email', '')
     classification = request.args.get('classification', '')
-    jid = str(uuid.uuid4()).split('-')[0]
-    fjob = open("%s%s.txt" % (app.config['TASKS_FOLDER'], jid), 'w')
-    fjob.write("left: %s\n" % left)
-    fjob.write("bottom: %s\n" % bottom)
-    fjob.write("right: %s\n" % right)
-    fjob.write("top: %s\n" % top)
-    fjob.write("classification: %s\n" % classification)
-    fjob.write("%s\n" % email)
-    fjob.write("%s\n" % time.asctime())
-    fjob.close()
-    return jsonify(result=jid)
+
+    result = tasks.merge_tiles.delay(left, bottom, right, top, classification)
+
+    return jsonify(result=result.id)
+
+
+@app.route("/request_download/<task_id>")
+def request_download(task_id):    
+    result = tasks.merge_tiles.AsyncResult(task_id)
+
+    # note this is not the way to serve static files! this should really happen outside of flask (ie redirect the user to a path that is handled by a static file server)
+    if result.status == 'SUCCESS':
+        return send_from_directory( app.config['RESULTS_FOLDER'], result.result['filename'] )
+    else:
+        abort(404)
