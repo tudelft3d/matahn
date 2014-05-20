@@ -23,8 +23,9 @@ def merge_tiles_from_taskfile(taskfile):
 		top = float(f.readline().split(':')[-1])
 		ahn2_class = f.readline().split(':')[-1].strip()
 
+	if ahn2_class == 'ug': ahn2_class = 'u|g'
 	ewkt = get_ewkt_from_bounds(left, bottom, right, top)
-	filenames = db_session.query(Tile.path).filter(Tile.ahn2_class==ahn2_class).filter(Tile.geom.intersects(ewkt)).all()
+	filenames = db_session.query(Tile.path).filter(Tile.ahn2_class.match(ahn2_class)).filter(Tile.geom.intersects(ewkt)).all()
 	filenames = [f[0] for f in filenames]
 
 	lasmerge(filenames, left, bottom, right, top, taskfile[:-3]+'laz')
