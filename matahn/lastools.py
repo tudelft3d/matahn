@@ -2,7 +2,7 @@ import subprocess32 as subprocess
 from matahn import app
 
 def lasmerge(filenames, x_min, y_min, x_max, y_max, outname):
-	q = [app.config['LASMERGE_BINARY'], '-inside', x_min, y_min, x_max, y_max, '-olaz', outname, '-i'] + filenames
+	q = [app.config['LASMERGE_BINARY'], '-inside', str(x_min), str(y_min), str(x_max), str(y_max), '-olaz', '-o', outname, '-i'] + filenames
 	subprocess.call(q)
 	return outname
 

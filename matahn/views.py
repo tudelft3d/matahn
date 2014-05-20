@@ -7,6 +7,7 @@ import time
 
 from matahn.models import Tile
 from matahn.database import db_session
+from matahn.util import get_ewkt_from_bounds
 
 from sqlalchemy import func
 
@@ -66,7 +67,7 @@ def submitnewtask():
     jid = str(uuid.uuid4()).split('-')[0]
     fjob = open("%s%s.txt" % (app.config['TASKS_FOLDER'], jid), 'w')
     fjob.write("left: %s\n" % left)
-    fjob.write("ll_t: %s\n" % bottom)
+    fjob.write("bottom: %s\n" % bottom)
     fjob.write("right: %s\n" % right)
     fjob.write("top: %s\n" % top)
     fjob.write("classification: %s\n" % classification)
@@ -74,7 +75,3 @@ def submitnewtask():
     fjob.write("%s\n" % time.asctime())
     fjob.close()
     return jsonify(result=jid)
-
-
-def get_ewkt_from_bounds(x_min, y_min, x_max, y_max):
-    return 'SRID=28992;POLYGON(({0} {1}, {2} {1}, {2} {3}, {0} {3}, {0} {1}))'.format(x_min, y_min, x_max, y_max)

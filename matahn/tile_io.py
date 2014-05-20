@@ -7,6 +7,7 @@ from matahn import app
 from matahn.models import Tile
 from matahn.database import db_session
 from matahn.lastools import *
+from matahn.util import get_ewkt_from_bounds
 
 from sqlalchemy import func
 
@@ -14,11 +15,19 @@ with open(app.config['BLADINDEX_JSON']) as f:
 	BLADINDEX = json.load(f)
 
 
-def get_ewkt_from_pointlist(pointlist):
-	s = 'SRID=28992;POLYGON(('
-	s += ', '.join( str(p[0])+' '+str(p[1]) for p in pointlist )
-	s+= '))'
-	return s
+def merge_tiles_from_taskfile(taskfile):
+	with open(taskfile) as f:
+		left = float(f.readline().split(':')[-1])
+		bottom = float(f.readline().split(':')[-1])
+		right = float(f.readline().split(':')[-1])
+		top = float(f.readline().split(':')[-1])
+		ahn2_class = f.readline().split(':')[-1].strip()
+
+	ewkt = get_ewkt_from_bounds(left, bottom, right, top)
+	filenames = db_session.query(Tile.path).filter(Tile.ahn2_class==ahn2_class).filter(Tile.geom.intersects(ewkt)).all()
+	filenames = [f[0] for f in filenames]
+
+	lasmerge(filenames, left, bottom, right, top, taskfile[:-3]+'laz')
 
 def load_tiles_into_db(glob_expression):
 	tile_files = glob.glob(glob_expression)
