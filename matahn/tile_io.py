@@ -7,7 +7,7 @@ from matahn import app
 from matahn.models import Tile
 from matahn.database import db_session
 from matahn.lastools import *
-from matahn.util import get_ewkt_from_bounds
+from matahn.util import get_ewkt_from_bounds, get_ewkt_from_pointlist
 
 from sqlalchemy import func
 
