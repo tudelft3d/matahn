@@ -7,6 +7,7 @@ import matahn.views
 import matahn.models
 
 from matahn.database import db_session
+from matahn.tasks import celery_app
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
