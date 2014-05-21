@@ -15,7 +15,7 @@ From project root:
 
 Now these processes all need to be started in this order:
 
-`rabbitmq-server`
+`reddis-server`
 
 `celery -A matahn.celery_app worker`
 
@@ -39,18 +39,10 @@ in (i)python shell
 
 `load_tiles_into_db('/path/to/*.laz')`
 
-Setting up rabbitmq (for celery job handling)
+Setting up reddis (for celery job handling)
 ------
 
-`rabbitmqctl add_user <user> <password>`
-
-`rabbitmqctl add_vhost <vhost>`
-
-`rabbitmqctl set_permissions -p <vhost> <user> ".*" ".*" ".*"`
-
-now configure `matahn.cfg`:
-
-`CELERY_BROKER_URL='amqp://<user>:<password>@localhost/<vhost>',`
+just install with apt-get/brew
 
 Postgresql
 ------
