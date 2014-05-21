@@ -5,7 +5,7 @@ Download tool for AHN2 that delivers a LAZ file with the points inside a boundin
 
 Running
 ------
-From terminal:
+From project root:
 
 `pip install -r requirements.txt`
 
@@ -13,13 +13,21 @@ From terminal:
 
 `export MATAHN_SETTINGS=/path/to/matahn.cfg`
 
+Now these processes all need to be started in this order:
+
+`rabbitmq-server`
+
+`celery -A matahn.celery_app worker`
+
 `python runserver.py`
+
+And make sure postgresql is running as wel
 
 Preparing laz files
 ------
 in dir with laz files:
 
-`lasinfo -otxt -i *.laz`
+`lasinfo -nc -nv -nmm -otxt -i *.laz`
 
 `lasindex -append -i *.laz`
 
