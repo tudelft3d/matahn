@@ -10,6 +10,7 @@ application = DispatcherMiddleware( frontend_app, {
     '/matahn':     matahn_app
 })
 
-run_simple('localhost', 5000, application, use_reloader=True)
+if __name__ == '__main__':
+    run_simple('localhost', 5000, application, use_reloader=True)
 
 
