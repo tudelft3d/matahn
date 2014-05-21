@@ -23,32 +23,46 @@
 
     <div class="overlay-wrapper">
         <div class="overlay">
+            <div class="page-submit">
+                <form class="pure-form pure-form-stacked">
+                    
+                    <button class="pure-button pure-button-primary" id="draw-rectangle"><i class="fa fa-crop"></i> Draw selection</button>
+                    <p class='ptcountest'></p>
 
-            <form class="pure-form pure-form-stacked">
-                
-                <button class="pure-button pure-button-primary" id="draw-rectangle"><i class="fa fa-crop"></i> Draw selection</button>
-                <p class='ptcountest'></p>
+                    <fieldset>
+                        <legend>Make your request</legend>
 
+                        <label for="classificationSelector">Classification</label>
+                        <select name="classificationSelector">
+                            <option value="g">ground (gefilterd)</option>
+                            <option value="u">man-made (uitgefilterd)</option>
+                            <option value="ug">both</option>
+                        </select>
+                        <!-- <label for="email">Your Email</label> -->
+                        <input name="useremail" type="email" autocomplete="on" placeholder="Your Email">
+                        <button type="button" id="submit-button" class="pure-button">Submit</button>
+                        <!-- <p><a href=# id="calculate">submit</a></p> -->
+
+                    </fieldset>
+                </form>
+
+                <p class='noemail' style='color:red'></p>
+                <p class='noselection' style='color:red'></p>
+                <p class='tasksubmitted' style='color:green'></p>
+            </div>
+
+            <div class="page-message">
+                <h2>Work in progress</h2>
+                <p>You will receive an email as soon as your download is ready.</p>
+                <p>Your download will be available on this url:</p>
+                <form class="pure-form pure-form-stacked">
                 <fieldset>
-                    <legend>Make your request</legend>
-
-                    <label for="classificationSelector">Classification</label>
-                    <select name="classificationSelector">
-                        <option value="g">ground (gefilterd)</option>
-                        <option value="u">man-made (uitgefilterd)</option>
-                        <option value="ug">both</option>
-                    </select>
-                    <!-- <label for="email">Your Email</label> -->
-                    <input name="useremail" type=email placeholder="Your Email">
-                    <button type="button" id="submit-button" class="pure-button">Submit</button>
-                    <!-- <p><a href=# id="calculate">submit</a></p> -->
-
+                    <input class="download-url" type="text" readonly="readonly" value="http://ylan.nl">
+                    <button type="button" id="back-button" class="pure-button">Go back</button>
                 </fieldset>
-            </form>
+                </form>
 
-            <p class='noemail' style='color:red'></p>
-            <p class='noselection' style='color:red'></p>
-            <p class='tasksubmitted' style='color:green'></p>
+            </div>
 
         </div>
 

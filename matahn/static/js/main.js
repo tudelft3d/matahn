@@ -154,6 +154,8 @@ function boxDrawn(box) {
   $('.menu-link i').removeClass("fa-chevron-right");
   $('.menu-link i').addClass("fa-chevron-left");
   $(".noselection").text("");
+  $('#submit-button').removeAttr("disabled")
+  $('#submit-button').removeClass('pure-button-disabled');
 }
 
 $('#menuLink').click(function() {
@@ -168,7 +170,7 @@ $('#overlay-button').click(function(){
 });
 
 
-$('#submit-button').click(function(event){
+$('#submit-button:enabled').click(function(event){
   event.preventDefault();
   var okay = 1;
   var email = $('input[name="useremail"]').val();
@@ -198,14 +200,25 @@ $('#submit-button').click(function(event){
       classification: $('select[name="classificationSelector"]').val(), 
       email: $('input[name="useremail"]').val()
     }, function(data) {
-      var s = "Thanks, your task (id= "
-      s += data.result
-      s+= ") has been submitted and is being processed. You'll soon get an email with a download link."
-      $(".tasksubmitted").text(s);
+      $('#submit-button').attr("disabled", "disabled")
+      $('#submit-button').addClass('pure-button-disabled');
+      $('input.download-url').val(data.result)
+      $('.page-message').toggle();
+      $('.page-submit').toggle();
+      // var s = "Thanks, your task (id= "
+      // s += data.result
+      // s+= ") has been submitted and is being processed. You'll soon get an email with a download link."
+      // $(".tasksubmitted").text(s);
     });
     // boxLayer.removeAllFeatures();
     // $(".ptcountest").text("");
   }
+});
+
+$('#back-button').click(function(event){
+    event.preventDefault();
+    $('.page-message').toggle();
+    $('.page-submit').toggle();
 });
 
 $('#baselayer-button').click(function(){

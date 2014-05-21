@@ -2,6 +2,11 @@ html, body {
     padding: 0;
     height: 100%;
     font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    color: #444;
+}
+
+h1, h2, h3 {
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .overlay-wrapper {
@@ -83,6 +88,10 @@ html, body {
 .pure-form-stacked fieldset button {
     margin: .7em 0;
     width: 100%;
+}
+
+.page-message {
+    display: none;
 }
 
 #map-canvas-wrapper {
