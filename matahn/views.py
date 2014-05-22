@@ -1,6 +1,6 @@
 from matahn import app
 
-from flask import jsonify, render_template, request, abort, send_from_directory
+from flask import jsonify, render_template, request, abort, redirect, url_for
 import os
 import uuid
 import time
@@ -69,7 +69,7 @@ def submitnewtask():
 
     result = tasks.merge_tiles.delay(left, bottom, right, top, classification)
 
-    return jsonify(result=result.id)
+    return jsonify( result=url_for('request_download', task_id=result.id) )
 
 
 @app.route("/request_download/<task_id>")
@@ -78,6 +78,6 @@ def request_download(task_id):
 
     # note this is not the way to serve static files! this should really happen outside of flask (ie redirect the user to a path that is handled by a static file server)
     if result.status == 'SUCCESS':
-        return send_from_directory( app.config['RESULTS_FOLDER'], result.result['filename'] )
+        return redirect( app.config['DOWNLOAD_URL_PATH']+result.result['filename'] )
     else:
         abort(404)
