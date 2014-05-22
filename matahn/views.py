@@ -64,8 +64,10 @@ def submitnewtask():
     bottom  = request.args.get('bottom', type=float)
     right  = request.args.get('right', type=float)
     top  = request.args.get('top', type=float)
-    email = request.args.get('email', '')
-    classification = request.args.get('classification', '')
+    email = request.args.get('email', type=str)
+    classification = request.args.get('classification', type=str)
+    
+    #TODO: validate string inputs
 
     result = tasks.merge_tiles.delay(left, bottom, right, top, classification)
 

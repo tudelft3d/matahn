@@ -1,7 +1,7 @@
 from flask import Flask
 
 class default_settings(object):
-    DEBUG = True
+    DEBUG = False
     SQLALCHEMY_DATABASE_URI = 'postgresql://matahn:matahn@localhost/matahn'
     RESULTS_FOLDER 	= '/data/matahn/results/'
     BLADINDEX_JSON = '/var/www/webahn/tiles.json'
@@ -10,7 +10,7 @@ class default_settings(object):
     CELERY_BROKER_URL = 'redis://localhost:6379/0',
     CELERY_RESULT_BACKEND = 'db+'+SQLALCHEMY_DATABASE_URI
     
-    DOWNLOAD_URL_PATH = '/matahn/download/'
+    DOWNLOAD_URL_PATH = 'http://3dsm.bk.tudelft.nl/matahn/download/'
 
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object(default_settings)
