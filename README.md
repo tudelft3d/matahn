@@ -46,4 +46,8 @@ just install with apt-get/brew
 
 Postgresql
 ------
-a database is required with postgis extension enabled 
+A database is required with postgis extension enabled. Setting up the `tiles` table required for matahn from a python shell can be done as follows:
+
+`from matah.database import init_db()`
+
+`init_db()`
