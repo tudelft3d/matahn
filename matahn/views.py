@@ -1,6 +1,6 @@
 from matahn import app
 
-from flask import jsonify, render_template, request, abort, redirect, url_for
+from flask import jsonify, render_template, request, abort, redirect, url_for, send_from_directory
 import os
 import uuid
 import time
@@ -29,7 +29,6 @@ def matahn():
 @app.route("/_getDownloadArea")
 def getDownloadArea():
     geojson = db_session.query(func.ST_AsGeoJSON(func.ST_Union(Tile.geom))).one()[0]
-
     return jsonify(result=geojson)
 
 
@@ -70,16 +69,33 @@ def submitnewtask():
     #TODO: validate string inputs
 
     result = tasks.merge_tiles.delay(left, bottom, right, top, classification)
+    taskurl =  url_for('matahn') + ('tasks/%s' % result.id)
+    return jsonify(result = taskurl)
+    # return jsonify( result=url_for('matah'), task_id=result.id) )
 
-    return jsonify( result=url_for('request_download', task_id=result.id) )
+
+@app.route('/tasks/download/<task_id>')
+def tasks_download(task_id):
+    return send_from_directory(app.config['DOWNLOAD_URL_PATH'], '%s.laz' % task_id)
 
 
-@app.route("/request_download/<task_id>")
-def request_download(task_id):    
+@app.route('/hugo/<ledoux>')
+def hugo_page(ledoux): 
+    return render_template("downloadpage.html", taskid = ledoux, success = True)
+
+@app.route('/tasks/<task_id>')
+def tasks_page(task_id): 
+    print "task_id", task_id   
     result = tasks.merge_tiles.AsyncResult(task_id)
-
-    # note this is not the way to serve static files! this should really happen outside of flask (ie redirect the user to a path that is handled by a static file server)
     if result.status == 'SUCCESS':
-        return redirect( app.config['DOWNLOAD_URL_PATH']+result.result['filename'] )
+        print "success"
+        return render_template("downloadpage.html", taskid = task_id, success = True)
     else:
-        abort(404)
+        print "failure"
+        return render_template("downloadpage.html", taskid = task_id, success = False)
+
+
+    # if result.status == 'SUCCESS':
+    #     return redirect( app.config['DOWNLOAD_URL_PATH']+result.result['filename'] )
+    # else:
+    #     abort(404)

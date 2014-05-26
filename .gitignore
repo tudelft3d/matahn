@@ -1,2 +1,6 @@
 tasks
 *.pyc
+results
+matahn.cfg
+example_matahn.cfg
+dump.rdb

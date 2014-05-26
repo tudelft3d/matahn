@@ -13,8 +13,8 @@ class default_settings(object):
     DOWNLOAD_URL_PATH = '/matahn/download/'
 
 app = Flask(__name__, static_url_path='/static')
-app.config.from_object(default_settings)
-# app.config.from_envvar('MATAHN_SETTINGS')
+# app.config.from_object(default_settings)
+app.config.from_envvar('MATAHN_SETTINGS')
 
 import matahn.views
 import matahn.models

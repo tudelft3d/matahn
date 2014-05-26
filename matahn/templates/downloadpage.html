@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="Download tool for the Dutch national LiDAR dataset AHN2.">
+    <title>MATAHN </title>
+</head>
+<body>
+<h1>{{ taskid }}</h1>
+
+{% if success %}
+  <p>Download the file: <a href="{{ url_for('matahn') }}tasks/download/{{ taskid }}">{{ taskid }}.laz</a></p>
+{% else %}
+  <p>Task still in process, you'll get an email when it's done.</p>
+{% endif %}
+
+</body>
+</html>

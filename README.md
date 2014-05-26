@@ -15,7 +15,7 @@ From project root:
 
 Now these processes all need to be started in this order:
 
-`reddis-server`
+`redis-server`
 
 `celery -A matahn.celery_app worker`
 
