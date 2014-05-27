@@ -1,6 +1,6 @@
 from matahn import app
 
-from flask import jsonify, render_template, request, abort, redirect, url_for, send_from_directory
+from flask import jsonify, render_template, request, abort, redirect, url_for, send_from_directory, send_file
 import os
 import uuid
 import time
@@ -74,14 +74,14 @@ def submitnewtask():
     # return jsonify( result=url_for('matah'), task_id=result.id) )
 
 
-@app.route('/tasks/download/<task_id>')
+@app.route('/tasks/download/<task_id>', methods=['GET'])
 def tasks_download(task_id):
-    return send_from_directory(app.config['DOWNLOAD_URL_PATH'], '%s.laz' % task_id)
+    # return send_from_directory(app.config['RESULTS_FOLDER'], '%s.laz' % task_id)
+    thepath = app.config['RESULTS_FOLDER'] + task_id + '.laz'
+    print thepath
+    return send_file(thepath)
 
 
-@app.route('/hugo/<ledoux>')
-def hugo_page(ledoux): 
-    return render_template("downloadpage.html", taskid = ledoux, success = True)
 
 @app.route('/tasks/<task_id>')
 def tasks_page(task_id): 

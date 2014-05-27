@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="description" content="Download tool for the Dutch national LiDAR dataset AHN2.">
-    <title>MATAHN </title>
+    <title>MATAHN: a seamless AHN2 download service</title>
 </head>
 <body>
 <h1>{{ taskid }}</h1>
@@ -12,7 +12,7 @@
 {% if success %}
   <p>Download the file: <a href="{{ url_for('matahn') }}tasks/download/{{ taskid }}">{{ taskid }}.laz</a></p>
 {% else %}
-  <p>Task still in process, you'll get an email when it's done.</p>
+  <p>Task still in process, be patient. You'll get an email when it's ready.</p>
 {% endif %}
 
 </body>

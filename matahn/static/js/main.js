@@ -170,7 +170,7 @@ $('#overlay-button').click(function(){
 });
 
 
-$('#submit-button:enabled').click(function(event){
+$('#submit-button').click(function(event){
   event.preventDefault();
   var okay = 1;
   var email = $('input[name="useremail"]').val();
@@ -193,25 +193,17 @@ $('#submit-button:enabled').click(function(event){
   if (okay == 1) {
     var f = fs[0];
     $.getJSON($SCRIPT_ROOT + '/_submit', {
-      left:  f.geometry.bounds.left,
+      left:    f.geometry.bounds.left,
       bottom:  f.geometry.bounds.bottom,
-      right:  f.geometry.bounds.right,
-      top:  f.geometry.bounds.top,
+      right:   f.geometry.bounds.right,
+      top:     f.geometry.bounds.top,
       classification: $('select[name="classificationSelector"]').val(), 
       email: $('input[name="useremail"]').val()
     }, function(data) {
-      $('#submit-button').attr("disabled", "disabled")
-      $('#submit-button').addClass('pure-button-disabled');
-      $('input.download-url').val(data.result)
+      $("#download-url").attr("href", data.result);
       $('.page-message').toggle();
       $('.page-submit').toggle();
-      // var s = "Thanks, your task (id= "
-      // s += data.result
-      // s+= ") has been submitted and is being processed. You'll soon get an email with a download link."
-      // $(".tasksubmitted").text(s);
     });
-    // boxLayer.removeAllFeatures();
-    // $(".ptcountest").text("");
   }
 });
 

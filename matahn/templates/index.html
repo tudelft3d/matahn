@@ -41,29 +41,22 @@
                         <!-- <label for="email">Your Email</label> -->
                         <input name="useremail" type="email" autocomplete="on" placeholder="Your Email">
                         <button type="button" id="submit-button" class="pure-button">Submit</button>
-                        <!-- <p><a href=# id="calculate">submit</a></p> -->
 
                     </fieldset>
                 </form>
-
                 <p class='noemail' style='color:red'></p>
                 <p class='noselection' style='color:red'></p>
                 <p class='tasksubmitted' style='color:green'></p>
             </div>
 
             <div class="page-message">
-                <h2>Work in progress</h2>
-                <p>You will receive an email as soon as your download is ready.</p>
-                <p>Your download will be available on this url:</p>
-                <form class="pure-form pure-form-stacked">
-                <fieldset>
-                    <input class="download-url" type="text" readonly="readonly" value="http://ylan.nl">
-                    <button type="button" id="back-button" class="pure-button">Go back</button>
-                </fieldset>
-                </form>
-
+                <h2>Your task is being processed.</h2>
+                <p>You will receive an email as soon as your download is ready (a few minutes maximum).</p>
+                <p>The requested file will be available <a href="" id="download-url">there</a>.</p>
+                <!-- <button type="button" id="back-button" class="pure-button"><a href="">Make a new request</a></button> -->
+                <!-- <a type="button" class="pure-button" href="">Go back</a> -->
+                <button class="pure-button"><a href="">Go back</a></button>
             </div>
-
         </div>
 
     </div>
