@@ -1,19 +1,23 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="description" content="Download tool for the Dutch national LiDAR dataset AHN2.">
-    <title>MATAHN: a seamless AHN2 download service</title>
-</head>
+{% extends "layout.html" %}
+{% block body %}
 <body>
-<h1>{{ taskid }}</h1>
 
 {% if success %}
-  <p>Download the file: <a href="{{ url_for('matahn') }}tasks/download/{{ taskid }}">{{ taskid }}.laz</a></p>
+  <img id="fullscreen-bg-image" src="{{ url_for('static', filename='img/bg.jpg') }}" alt=""/>
 {% else %}
-  <p>Task still in process, be patient. You'll get an email when it's ready.</p>
+  <img id="fullscreen-bg-image" src="{{ url_for('static', filename='img/bg_notready.jpg') }}" alt=""/>
 {% endif %}
 
+
+<div class="overlay-download">
+  <div class="overlay">
+{% if success %}
+  <p>Your file is ready, <a href="{{ url_for('matahn') }}tasks/download/{{ taskid }}">download it</a>.</p>
+{% else %}
+  <p>Task still in process, be patient.</p>
+{% endif %}
+  </div>
+</div>
+
 </body>
-</html>
+{% endblock %}

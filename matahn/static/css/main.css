@@ -1,6 +1,7 @@
 html, body {
     padding: 0;
     height: 100%;
+    width: 100%;
     font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     color: #444;
 }
@@ -19,6 +20,22 @@ h1, h2, h3 {
     background-color: #fff;
     overflow: scroll;
     box-shadow: 1px 0px 30px #777;
+}
+
+.overlay-download {
+    width: 400px;
+    height: 80px;
+    margin-top: -40px;
+    margin-left: -200px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 9998;
+    text-align: center;
+    background-color: #fff;
+    opacity:0.7;
+    /*overflow: scroll;*/
+    box-shadow: 1px 0px 10px #777;
 }
 
 
@@ -128,6 +145,17 @@ h1, h2, h3 {
         right: 0px;
         left: auto;
     }
+}
+
+#fullscreen-bg-image {
+  z-index: -999;
+  min-height: 100%;
+  min-width: 1024px;
+  width: 100%;
+  height: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 @media all and (min-width: 420px) and (max-width: 800px){
