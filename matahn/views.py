@@ -85,13 +85,10 @@ def hugo_page(ledoux):
 
 @app.route('/tasks/<task_id>')
 def tasks_page(task_id): 
-    print "task_id", task_id   
     result = tasks.merge_tiles.AsyncResult(task_id)
     if result.status == 'SUCCESS':
-        print "success"
         return render_template("downloadpage.html", taskid = task_id, success = True)
     else:
-        print "failure"
         return render_template("downloadpage.html", taskid = task_id, success = False)
 
 

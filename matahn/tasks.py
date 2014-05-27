@@ -27,8 +27,6 @@ def merge_tiles(left, bottom, right, top, ahn2_class, task_id=None):
     ewkt = get_ewkt_from_bounds(left, bottom, right, top)
     filenames = db_session.query(Tile.path).filter(Tile.ahn2_class.match(ahn2_class)).filter(Tile.geom.intersects(ewkt)).all()
     filenames = [f[0] for f in filenames]
-
     output_laz = app.config['RESULTS_FOLDER'] + str(merge_tiles.request.id)+'.laz'
     lasmerge(filenames, left, bottom, right, top, output_laz)
-
     return {'filename': str(merge_tiles.request.id)+'.laz', 'ahn2_class': ahn2_class, 'geom': ewkt}
