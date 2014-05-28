@@ -24,8 +24,8 @@ h1, h2, h3 {
 
 .overlay-download {
     width: 400px;
-    height: 80px;
-    margin-top: -40px;
+    height: 150px;
+    margin-top: -75px;
     margin-left: -200px;
     position: fixed;
     top: 50%;

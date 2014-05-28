@@ -87,9 +87,9 @@ def tasks_download(task_id):
 def tasks_page(task_id): 
     result = tasks.merge_tiles.AsyncResult(task_id)
     if result.status == 'SUCCESS':
-        return render_template("downloadpage.html", taskid = task_id, success = True)
+        return render_template("downloadpage.html", taskid = task_id, success=True)
     else:
-        return render_template("downloadpage.html", taskid = task_id, success = False)
+        return render_template("downloadpage.html", taskid = task_id, success=False, refresh=True)
 
 
     # if result.status == 'SUCCESS':

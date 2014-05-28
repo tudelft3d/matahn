@@ -12,9 +12,13 @@
 <div class="overlay-download">
   <div class="overlay">
 {% if success %}
-  <p>Your file is ready, <a href="{{ url_for('matahn') }}tasks/download/{{ taskid }}">download it</a>.</p>
+  <i class="fa fa-check-circle fa-2x"></i>
+  <p>Your file is ready, <a href="{{ url_for('matahn') }}tasks/download/{{ taskid }}">download it</a> now.
+  <br>
+  (we will keep it only for 24h)</p>
 {% else %}
-  <p>Task still in process, be patient.</p>
+  <i class="fa fa-exclamation-triangle fa-2x"></i>
+  <p>Task still in process (or it doesn't exist).<br>We'll send you an email when the file is ready.</p>
 {% endif %}
   </div>
 </div>

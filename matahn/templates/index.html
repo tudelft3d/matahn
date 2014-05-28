@@ -38,6 +38,13 @@
                             <option value="u">man-made (uitgefilterd)</option>
                             <option value="ug">both</option>
                         </select>
+
+                        <label for="simplificationSelector" disabled>Simplification (coming soon)</label>
+                        <select name="simplificationSelector" disabled>
+                            <option value="t">thinning</option>
+                            <option value="mat">MAT-based</option>
+                        </select>
+                        <br>
                         <!-- <label for="email">Your Email</label> -->
                         <input name="useremail" type="email" autocomplete="on" placeholder="Your Email">
                         <button type="button" id="submit-button" class="pure-button">Submit</button>
@@ -52,7 +59,7 @@
             <div class="page-message">
                 <h2>Your task is being processed.</h2>
                 <p>You will receive an email as soon as your download is ready (a few minutes maximum).</p>
-                <p>The requested file will be available <a href="" id="download-url">there</a>.</p>
+                <p>The requested file will be available <a href="" target="_blank" id="download-url">there</a>.</p>
                 <a href=""><button class="pure-button">Go back</button></a>
             </div>
         </div>
