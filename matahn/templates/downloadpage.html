@@ -2,7 +2,7 @@
 {% block body %}
 <body>
 
-{% if status == 1 %}
+{% if status == 'okay' %}
   <img id="fullscreen-bg-image" src="{{ url_for('static', filename='img/bg.jpg') }}" alt=""/>
 {% else %}
   <img id="fullscreen-bg-image" src="{{ url_for('static', filename='img/bg_notready.jpg') }}" alt=""/>
@@ -10,12 +10,12 @@
 
 <div class="overlay-download">
   <div class="overlay">
-{% if status == 1 %}
+{% if status == 'okay' %}
   <i class="fa fa-check-circle fa-2x"></i>
   <p>Your file is ready, <a href="{{ url_for('matahn') }}tasks/download/{{ taskid }}">download it</a> now.
   <br>
   (we will keep it only for 24h)</p>
-{% elif status == 0 %}
+{% elif status == 'deleted' %}
   <i class="fa fa-exclamation-triangle fa-2x"></i>
   <p>File has been deleted (>24h).<br>Make a new <a href="{{ url_for('matahn') }}">request</a>.</p>
 {% else %}

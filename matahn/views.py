@@ -81,11 +81,11 @@ def tasks_page(task_id):
     if result.status == 'SUCCESS':
         filename = app.config['RESULTS_FOLDER'] + task_id + '.laz'
         if (os.path.exists(filename)):
-            return render_template("downloadpage.html", taskid = task_id, status=1)
+            return render_template("downloadpage.html", taskid = task_id, status='okay')
         else:
-            return render_template("downloadpage.html", status=0)
+            return render_template("downloadpage.html", status='deleted')
     else:
-        return render_template("downloadpage.html", status=-1, refresh=True)
+        return render_template("downloadpage.html", status='pending', refresh=True)
 
 
 
