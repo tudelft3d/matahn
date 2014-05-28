@@ -45,7 +45,7 @@ def sendemail(o): #-- o is the object returned by new_task(), it is automagicall
 
   your AHN2 file is ready to be downloaded: http://3dsm.bk.tudelft.nl/matahn/tasks/%s
 
-  Notice that we keep only for 24h the file on our server.
+  Notice that we keep the file on our server only for 24h.
 
   Cheers,
   the MATAHN team
