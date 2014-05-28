@@ -2,7 +2,6 @@ from matahn import app
 
 from flask import jsonify, render_template, request, abort, redirect, url_for, send_from_directory, send_file
 import os
-import uuid
 import time
 
 from matahn.models import Tile
@@ -68,10 +67,10 @@ def submitnewtask():
 
 @app.route('/tasks/download/<task_id>', methods=['GET'])
 def tasks_download(task_id):
-    thepath = app.config['RESULTS_FOLDER'] + task_id + '.laz'
-    print thepath # TODO: the extension of the file is not kept, why?
-    return send_file(thepath)
-    # return redirect(thepath)
+    filename = app.config['RESULTS_FOLDER'] + task_id + '.laz'
+    # TODO: the extension of the file is not kept, why?
+    return send_file(filename)
+    # return redirect(filename)
     # return send_from_directory(app.config['RESULTS_FOLDER'], '%s.laz' % task_id)
 
 
@@ -79,8 +78,19 @@ def tasks_download(task_id):
 @app.route('/tasks/<task_id>')
 def tasks_page(task_id): 
     result = tasks.new_task.AsyncResult(task_id)
-    # TODO : also check if file is still there (os.exists())
     if result.status == 'SUCCESS':
-        return render_template("downloadpage.html", taskid = task_id, success=True)
+        filename = app.config['RESULTS_FOLDER'] + task_id + '.laz'
+        if (os.path.exists(filename)):
+            return render_template("downloadpage.html", taskid = task_id, status=1)
+        else:
+            return render_template("downloadpage.html", status=0)
     else:
-        return render_template("downloadpage.html", taskid = task_id, success=False, refresh=True)
+        return render_template("downloadpage.html", status=-1, refresh=True)
+
+
+
+
+
+
+
+
