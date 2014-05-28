@@ -13,13 +13,6 @@ from matahn import tasks
 
 from sqlalchemy import func
 
-# @app.route("/matahn", methods=['GET', 'POST'])
-# def matahn():
-#     if request.method == 'POST':
-#         e = session['useremail']
-#         print e
-#         return redirect(url_for('/matahn'))
-#     return render_template("matahn/index.html")
 
 @app.route("/")
 def matahn():
@@ -65,34 +58,29 @@ def submitnewtask():
     top  = request.args.get('top', type=float)
     email = request.args.get('email', type=str)
     classification = request.args.get('classification', type=str)
-    
-    #TODO: validate string inputs
 
-    result = tasks.merge_tiles.delay(left, bottom, right, top, classification)
-    taskurl =  url_for('matahn') + ('tasks/%s' % result.id)
+    #TODO: validate string inputs, including email to avoid an smtp crash
+
+    re = tasks.new_task.apply_async((left, bottom, right, top, classification, email), link=tasks.sendemail.s())
+    taskurl =  url_for('matahn') + ('tasks/%s' % re.id)
     return jsonify(result = taskurl)
-    # return jsonify( result=url_for('matah'), task_id=result.id) )
 
 
 @app.route('/tasks/download/<task_id>', methods=['GET'])
 def tasks_download(task_id):
-    # return send_from_directory(app.config['RESULTS_FOLDER'], '%s.laz' % task_id)
     thepath = app.config['RESULTS_FOLDER'] + task_id + '.laz'
-    print thepath
+    print thepath # TODO: the extension of the file is not kept, why?
     return send_file(thepath)
+    # return redirect(thepath)
+    # return send_from_directory(app.config['RESULTS_FOLDER'], '%s.laz' % task_id)
 
 
 
 @app.route('/tasks/<task_id>')
 def tasks_page(task_id): 
-    result = tasks.merge_tiles.AsyncResult(task_id)
+    result = tasks.new_task.AsyncResult(task_id)
+    # TODO : also check if file is still there (os.exists())
     if result.status == 'SUCCESS':
         return render_template("downloadpage.html", taskid = task_id, success=True)
     else:
         return render_template("downloadpage.html", taskid = task_id, success=False, refresh=True)
-
-
-    # if result.status == 'SUCCESS':
-    #     return redirect( app.config['DOWNLOAD_URL_PATH']+result.result['filename'] )
-    # else:
-    #     abort(404)
