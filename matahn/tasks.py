@@ -25,14 +25,14 @@ def make_celery(app):
 celery_app = make_celery(app)
 
 @celery_app.task
-def new_task(left, bottom, right, top, ahn2_class, emailto, task_id=None):
+def new_task(left, bottom, right, top, ahn2_class, emailto):
     if ahn2_class == 'ug': ahn2_class = 'u|g'
     ewkt = get_ewkt_from_bounds(left, bottom, right, top)
     filenames = db_session.query(Tile.path).filter(Tile.ahn2_class.match(ahn2_class)).filter(Tile.geom.intersects(ewkt)).all()
     filenames = [f[0] for f in filenames]
     output_laz = app.config['RESULTS_FOLDER'] + str(new_task.request.id)+'.laz'
     lasmerge(filenames, left, bottom, right, top, output_laz)
-    return {'downloadlink': str(new_task.request.id), 'emailto': emailto}
+    return {'taskid': str(new_task.request.id), 'emailto': emailto, 'ahn2_class': ahn2_class, 'geom': ewkt}
     # return {'filename': str(new_task.request.id)+'.laz', 'ahn2_class': ahn2_class, 'geom': ewkt}
 
 
@@ -41,16 +41,16 @@ def sendemail(o): #-- o is the object returned by new_task(), it is automagicall
   sender = '***REMOVED***'
   receiver = o['emailto']
   core = """
-  Greetings, 
+  Greetings AHN2-enthusiast, 
 
-  your AHN2 file is ready to be downloaded: http://3dsm.bk.tudelft.nl/matahn/tasks/%s
+  your file is ready to be downloaded: http://3dsm.bk.tudelft.nl/matahn/tasks/%s
 
   Notice that we keep the file on our server only for 24h.
 
   Cheers,
   the MATAHN team
   http://3dsm.bk.tudelft.nl/matahn
-  """ % (o['downloadlink'])
+  """ % (o['taskid'])
   msg = MIMEText(core)
   msg['Subject'] = 'Your AHN2 file is ready'
   msg['From'] = sender
