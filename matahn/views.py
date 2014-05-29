@@ -3,7 +3,7 @@ from matahn import app
 from flask import jsonify, render_template, request, abort, redirect, url_for, send_from_directory, send_file
 import os
 import time
-impor re
+import re
 
 from matahn.models import Tile
 from matahn.database import db_session
@@ -59,15 +59,17 @@ def submitnewtask():
     email = request.args.get('email', type=str)
     classification = request.args.get('classification', type=str)
 
-    # email
-    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-        return jsonify(bad = email)
-    # classification
-    if not re.match(r"[g|u|b]", classification):
-        return jsonify(bad = classification)
+    # TODO: area selected: define a max value here?
 
-    re = tasks.new_task.apply_async((left, bottom, right, top, classification, email), link=tasks.sendemail.s())
-    taskurl =  url_for('matahn') + ('tasks/%s' % re.id)
+    # email validation
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        return jsonify(wronginput = "email is not valid")
+    # classification validation
+    if not re.match(r"^(?=\w{1,2}$)([ug]).*", classification):
+        return jsonify(wronginput = "wrong AHN2 classification")
+
+    result = tasks.new_task.apply_async((left, bottom, right, top, classification, email), link=tasks.sendemail.s())
+    taskurl =  url_for('matahn') + ('tasks/%s' % result.id)
     return jsonify(result = taskurl)
 
 
