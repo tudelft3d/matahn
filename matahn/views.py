@@ -67,6 +67,9 @@ def submitnewtask():
     # classification validation
     if not re.match(r"^(?=\w{1,2}$)([ug]).*", classification):
         return jsonify(wronginput = "wrong AHN2 classification")
+    # selection bounds validation
+    if 0 == db_session.query(Tile).filter( Tile.geom.intersects( get_ewkt_from_bounds(left, bottom, right, top) ) ).count():
+        return jsonify(wronginput = "selection is empty")
 
     result = tasks.new_task.apply_async((left, bottom, right, top, classification, email), link=tasks.sendemail.s())
     taskurl =  url_for('matahn') + ('tasks/%s' % result.id)

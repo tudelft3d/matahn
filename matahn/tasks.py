@@ -38,7 +38,7 @@ def new_task(left, bottom, right, top, ahn2_class, emailto):
 
 @celery_app.task
 def sendemail(o): #-- o is the object returned by new_task(), it is automagically passed by Celery's chain
-  sender = 'r.y.peters@tudelft.nl'
+  sender = '***REMOVED***'
   receiver = o['emailto']
   core = """
   Greetings AHN2-enthusiast, 
