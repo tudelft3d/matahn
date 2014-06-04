@@ -107,10 +107,6 @@ h1, h2, h3 {
     width: 100%;
 }
 
-.page-message {
-    display: none;
-}
-
 #map-canvas-wrapper {
     height: 100%;
     margin-left: 300px;

@@ -6,3 +6,7 @@ def get_ewkt_from_pointlist(pointlist):
 
 def get_ewkt_from_bounds(x_min, y_min, x_max, y_max):
     return 'SRID=28992;POLYGON(({0} {1}, {2} {1}, {2} {3}, {0} {3}, {0} {1}))'.format(x_min, y_min, x_max, y_max)
+
+def get_geojson_from_bounds(x_min, y_min, x_max, y_max):
+	b=[x_min, y_min, x_max, y_max]
+	return {"type":"Polygon","coordinates":[[[b[0], b[1]], [b[2], b[1]], [b[2], b[3]], [b[0], b[3]], [b[0], b[1]]]]}

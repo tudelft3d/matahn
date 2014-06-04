@@ -5,7 +5,7 @@ import os
 import time
 import re
 
-from matahn.models import Tile
+from matahn.models import Tile, Task
 from matahn.database import db_session
 from matahn.util import get_ewkt_from_bounds
 
@@ -22,6 +22,13 @@ def matahn():
 @app.route("/_getDownloadArea")
 def getDownloadArea():
     geojson = db_session.query(func.ST_AsGeoJSON(func.ST_Union(Tile.geom))).one()[0]
+    return jsonify(result=geojson)
+
+@app.route("/_getTaskArea")
+def getTaskArea():
+    #should prob validate this
+    task_id = request.args.get('task_id', type=str)
+    geojson = db_session.query(func.ST_AsGeoJSON(Task.geom)).filter(Task.id==task_id).one()[0]
     return jsonify(result=geojson)
 
 
@@ -71,8 +78,13 @@ def submitnewtask():
     if 0 == db_session.query(Tile).filter( Tile.geom.intersects( get_ewkt_from_bounds(left, bottom, right, top) ) ).count():
         return jsonify(wronginput = "selection is empty")
 
-    result = tasks.new_task.apply_async((left, bottom, right, top, classification, email), link=tasks.sendemail.s())
-    taskurl =  url_for('matahn') + ('tasks/%s' % result.id)
+    
+    result = tasks.new_task.apply_async((left, bottom, right, top, classification))
+    task = Task(id=result.id, ahn2_class=classification, emailto=email, geom=get_ewkt_from_bounds(left, bottom, right, top) )
+    db_session.add(task)
+    db_session.commit()
+
+    taskurl = url_for('tasks_page', task_id=result.id)
     return jsonify(result = taskurl)
 
 
@@ -92,11 +104,11 @@ def tasks_page(task_id):
     if result.status == 'SUCCESS':
         filename = app.config['RESULTS_FOLDER'] + task_id + '.laz'
         if (os.path.exists(filename)):
-            return render_template("downloadpage.html", taskid = task_id, status='okay')
+            return render_template("index.html", task_id = task_id, status='okay')
         else:
-            return render_template("downloadpage.html", status='deleted')
+            return render_template("index.html", task_id = task_id, status='deleted')
     else:
-        return render_template("downloadpage.html", status='pending', refresh=True)
+        return render_template("index.html", task_id = task_id, status='pending', refresh=True)
 
 
 

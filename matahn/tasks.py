@@ -5,9 +5,9 @@ from email.mime.text import MIMEText
 
 from matahn import app
 from matahn.database import db_session
-from matahn.models import Tile
+from matahn.models import Tile, Task
 from matahn.lastools import lasmerge
-from matahn.util import get_ewkt_from_bounds
+from matahn.util import get_geojson_from_bounds, get_ewkt_from_bounds
 
 
 def make_celery(app):
@@ -24,15 +24,17 @@ def make_celery(app):
 
 celery_app = make_celery(app)
 
-@celery_app.task
-def new_task(left, bottom, right, top, ahn2_class, emailto):
+@celery_app.task(ignore_result=True)
+def new_task(left, bottom, right, top, ahn2_class):
     if ahn2_class == 'ug': ahn2_class = 'u|g'
     ewkt = get_ewkt_from_bounds(left, bottom, right, top)
+    # geojson = get_geojson_from_bounds(left, bottom, right, top)
     filenames = db_session.query(Tile.path).filter(Tile.ahn2_class.match(ahn2_class)).filter(Tile.geom.intersects(ewkt)).all()
     filenames = [f[0] for f in filenames]
+    
     output_laz = app.config['RESULTS_FOLDER'] + str(new_task.request.id)+'.laz'
     lasmerge(filenames, left, bottom, right, top, output_laz)
-    return {'taskid': str(new_task.request.id), 'emailto': emailto, 'ahn2_class': ahn2_class, 'geom': ewkt}
+    # return {'taskid': str(new_task.request.id), 'emailto': emailto, 'ahn2_class': ahn2_class, 'geom': geojson}
     # return {'filename': str(new_task.request.id)+'.laz', 'ahn2_class': ahn2_class, 'geom': ewkt}
 
 

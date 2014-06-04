@@ -23,6 +23,15 @@
 
     <div class="overlay-wrapper">
         <div class="overlay">
+
+            {% if task_id is defined %}
+            <div class="page-message">
+                <h2>Your task is being processed.</h2>
+                <p>You will receive an email as soon as your download is ready (a few minutes maximum).</p>
+                <p>The requested file will be available <a href="" target="_blank" id="download-url">there</a>.</p>
+                <!-- <a href=""><button class="pure-button">Go back</button></a> -->
+            </div>
+            {% else %}
             <div class="page-submit">
                 <form class="pure-form pure-form-stacked">
                     
@@ -54,18 +63,17 @@
                 <p class='wronginput' style='color:red'></p>
                 <p class='tasksubmitted' style='color:green'></p>
             </div>
-
-            <div class="page-message">
-                <h2>Your task is being processed.</h2>
-                <p>You will receive an email as soon as your download is ready (a few minutes maximum).</p>
-                <p>The requested file will be available <a href="" target="_blank" id="download-url">there</a>.</p>
-                <a href=""><button class="pure-button">Go back</button></a>
-            </div>
+            {% endif %}
         </div>
 
     </div>
     <script type=text/javascript>
       $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+      {% if task_id is defined %}
+      $TASK_ID = '{{task_id}}';
+      {% else %}
+      $TASK_ID = undefined;
+      {% endif %}
     </script>
     <script src="http://tiles.geocoders.nl/api/ol/2.12/OpenLayers.js"></script>
     <script src="http://tiles.geocoders.nl/lib/proj4js/proj4js-compressed.js"></script>

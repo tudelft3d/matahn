@@ -15,3 +15,13 @@ class Tile(Base):
 
     def __repr__(self):
     	return "tile {}_{}".format(self.ahn2_bladnr, self.ahn2_class)
+
+class Task(Base):
+    __tablename__ = 'tasks'
+    id = Column(String, primary_key=True)
+    ahn2_class = Column(String(2))
+    emailto = Column(String)
+    geom = Column(Geometry('POLYGON', srid=28992))
+
+    def __repr__(self):
+        return "task {}".format(self.uuid)
