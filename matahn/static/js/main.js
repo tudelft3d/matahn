@@ -193,9 +193,6 @@ $('#submit-task').submit(function(event){
     $(".wronginput").text("An area on the map must be selected.");
     okay = 0;
   }
-  // else {
-    // $(".wronginput").text(""); 
-  // }
 
   if (okay == 1) {
     var f = fs[0];
@@ -208,61 +205,17 @@ $('#submit-task').submit(function(event){
       email: $('input[name="useremail"]').val()
     }, function(data) {
       if(data.hasOwnProperty('wronginput')) {
+        $("#errorBox").show();
         $(".wronginput").text(data["wronginput"]);
         okay = 0;
       }
       else {
-        // $("#download-url").attr("href", data.result);
-        // $('.page-message').toggle();
-        // $('.page-submit').toggle();
         window.location.href = data.result;
       }
     });
   }
 });
 
-// $('#submit-button').click(function(event){
-//   event.preventDefault();
-//   var okay = 1;
-//   var email = $('input[name="useremail"]').val();
-//   if (email == "") {
-//     $(".noemail").text("An email must be provided");
-//     okay = 0;
-//   }
-//   else {
-//     $(".noemail").text("");
-//   }
-//   var fs = boxLayer.features;
-//   if (fs.length == 0) {
-//     $(".noselection").text("An area on the map must be selected.");
-//     okay = 0;
-//   }
-//   else {
-//     $(".noselection").text(""); 
-//   }
-
-//   if (okay == 1) {
-//     var f = fs[0];
-//     $.getJSON($SCRIPT_ROOT + '/_submit', {
-//       left:    f.geometry.bounds.left,
-//       bottom:  f.geometry.bounds.bottom,
-//       right:   f.geometry.bounds.right,
-//       top:     f.geometry.bounds.top,
-//       classification: $('select[name="classificationSelector"]').val(), 
-//       email: $('input[name="useremail"]').val()
-//     }, function(data) {
-//       $("#download-url").attr("href", data.result);
-//       $('.page-message').toggle();
-//       $('.page-submit').toggle();
-//     });
-//   }
-// });
-
-// $('#back-button').click(function(event){
-//     event.preventDefault();
-//     $('.page-message').toggle();
-//     $('.page-submit').toggle();
-// });
 
 $('#baselayer-button').click(function(){
   var baseLayers = map.getLayersBy('isBaseLayer',true);

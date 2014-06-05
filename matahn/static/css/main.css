@@ -6,10 +6,6 @@ html, body {
     color: #444;
 }
 
-h1, h2, h3 {
-    border-bottom: 1px solid #e5e5e5;
-}
-
 .overlay-wrapper {
     width: 300px;
     height: 100%;
@@ -44,6 +40,14 @@ h1, h2, h3 {
 
 .task-status {
     font-size: 1.4em;
+}
+
+#errorBox {
+    /*background-color: #EB726C;*/
+    color: rgb(202, 60, 60);
+}
+.wronginput {
+    font-style: italic;
 }
 
 .button-download {

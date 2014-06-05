@@ -77,10 +77,10 @@ def submitnewtask():
 
     # email validation
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-        return jsonify(wronginput = "email is not valid")
+        return jsonify(wronginput = "Invalid email address")
     # classification validation
     if not re.match(r"^(?=\w{1,2}$)([ug]).*", classification):
-        return jsonify(wronginput = "wrong AHN2 classification")
+        return jsonify(wronginput = "Wrong AHN2 classification")
     # selection bounds validation
     ewkt = get_ewkt_from_bounds(left, bottom, right, top)
     if 0 == db_session.query(Tile).filter( Tile.geom.intersects( ewkt ) ).count():

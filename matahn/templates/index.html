@@ -67,7 +67,10 @@
                         <button type="submit" id="submit-button" class="pure-button">Submit</button>
                     </fieldset>
                 </form>
-                <p class='wronginput' style='color:red'></p>
+                <div id="errorBox" style="display:none">
+                    <p><i class="fa fa-exclamation-triangle"></i> Form can not be submitted</p>
+                    <p class='wronginput'></p>
+                </div>
             {% endif %}
         </div>
 
