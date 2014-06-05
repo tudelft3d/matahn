@@ -185,7 +185,7 @@ $('#overlay-button').click(function(){
 });
 
 
-$('#submit-button').click(function(event){
+$('#submit-task').submit(function(event){
   event.preventDefault();
   var okay = 1;
   var fs = boxLayer.features;

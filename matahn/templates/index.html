@@ -25,21 +25,29 @@
         <div class="overlay">
 
             {% if task_id is defined %}
-            <div class="page-message">
-                <h2>Your task is being processed.</h2>
-                <p>You will receive an email as soon as your download is ready (a few minutes maximum).</p>
-                <p>The requested file will be available <a href="" target="_blank" id="download-url">there</a>.</p>
-                <!-- <a href=""><button class="pure-button">Go back</button></a> -->
-            </div>
+                {% if status == 'okay' %}
+                    <p class='task-status'><i class="fa fa-check-circle"></i> Ready to download</p>
+                    <p>Please note that your file will be deleted after 24 hours.</p>
+                    <a class="pure-button button-download" href="{{download_url}}">
+                        <i class="fa fa-download"></i>
+                        Download
+                    </a>
+                {% elif status == 'deleted' %}
+                    <p class='task-status'><i class="fa fa-exclamation-triangle"></i> File not found</p>
+                    <p>Your file has probably been deleted automatically after 24 hours. You can make a new <a href="{{ url_for('matahn') }}">request</a>.</p>
+                {% else %}
+                    <p class='task-status'><i class="fa fa-cog fa-spin"></i> Processing...</p>
+                    <p>You'll receive an email when your file is ready.</p>
+                {% endif %}
+
             {% else %}
-            <div class="page-submit">
-                <form class="pure-form pure-form-stacked">
+                <form id="submit-task" class="pure-form pure-form-stacked">
                     
-                    <button class="pure-button pure-button-primary" id="draw-rectangle"><i class="fa fa-crop"></i> Draw selection</button>
+                    <button type="button" class="pure-button pure-button-primary" id="draw-rectangle"><i class="fa fa-crop"></i> Draw selection</button>
                     <p class='ptcountest'></p>
 
                     <fieldset>
-                        <legend>Make your request</legend>
+                        <!-- <legend>Make your request</legend> -->
 
                         <label for="classificationSelector">Classification</label>
                         <select name="classificationSelector">
@@ -48,21 +56,18 @@
                             <option value="ug">both</option>
                         </select>
 
-                        <label for="simplificationSelector" disabled>Simplification (coming soon)</label>
+                        <label for="simplificationSelector" disabled>Thinning (coming soon)</label>
                         <select name="simplificationSelector" disabled>
-                            <option value="t">thinning</option>
+                            <option value="t">nth point</option>
                             <option value="mat">MAT-based</option>
                         </select>
-                        <br>
-                        <!-- <label for="email">Your Email</label> -->
+                        
+                        <label for="email">Email</label>
                         <input name="useremail" type="email" autocomplete="on" placeholder="Your Email">
-                        <button type="button" id="submit-button" class="pure-button">Submit</button>
-
+                        <button type="submit" id="submit-button" class="pure-button">Submit</button>
                     </fieldset>
                 </form>
                 <p class='wronginput' style='color:red'></p>
-                <p class='tasksubmitted' style='color:green'></p>
-            </div>
             {% endif %}
         </div>
 

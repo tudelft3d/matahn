@@ -38,6 +38,21 @@ h1, h2, h3 {
     box-shadow: 1px 0px 10px #777;
 }
 
+.task-status {
+    font-size: 1.4em;
+}
+
+.button-download {
+    color: white;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background: rgb(28, 184, 65); /* this is a green */
+    display: block;
+}
+
+#draw-rectangle {
+    width: 100%;
+}
+
 
 .square-button {
     position: absolute;
@@ -97,7 +112,6 @@ h1, h2, h3 {
 .overlay .pure-button {
     font-size: 120%;
     padding: 0.5em 0.7em;
-    width: 100%;
 }
 .pure-form-stacked fieldset input,
 .pure-form-stacked fieldset select, 

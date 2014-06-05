@@ -9,9 +9,10 @@ from matahn.models import Tile, Task
 from matahn.database import db_session
 from matahn.util import get_ewkt_from_bounds
 
-from matahn import tasks
+from matahn.tasks import new_task
 
 from sqlalchemy import func
+from sqlalchemy.orm.exc import NoResultFound
 
 
 @app.route("/")
@@ -78,8 +79,9 @@ def submitnewtask():
     if 0 == db_session.query(Tile).filter( Tile.geom.intersects( get_ewkt_from_bounds(left, bottom, right, top) ) ).count():
         return jsonify(wronginput = "selection is empty")
 
-    
-    result = tasks.new_task.apply_async((left, bottom, right, top, classification))
+    # new celery task
+    result = new_task.apply_async((left, bottom, right, top, classification))
+    # store task parameters in db
     task = Task(id=result.id, ahn2_class=classification, emailto=email, geom=get_ewkt_from_bounds(left, bottom, right, top) )
     db_session.add(task)
     db_session.commit()
@@ -88,27 +90,30 @@ def submitnewtask():
     return jsonify(result = taskurl)
 
 
-@app.route('/tasks/download/<task_id>', methods=['GET'])
-def tasks_download(task_id):
-    filename = app.config['RESULTS_FOLDER'] + task_id + '.laz'
-    # TODO: the extension of the file is not kept, why?
-    return send_file(filename)
-    # return redirect(filename)
-    # return send_from_directory(app.config['RESULTS_FOLDER'], '%s.laz' % task_id)
-
+@app.route('/tasks/download/<filename>', methods=['GET'])
+def tasks_download(filename):
+    if app.debug:
+        return send_file(app.config['RESULTS_FOLDER'] + filename)
 
 
 @app.route('/tasks/<task_id>')
-def tasks_page(task_id): 
-    result = tasks.new_task.AsyncResult(task_id)
-    if result.status == 'SUCCESS':
+def tasks_page(task_id):
+    if not re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', task_id):
+        return abort(400)
+    try:
+        task = db_session.query(Task).filter(Task.id==task_id).one()
+    except NoResultFound:
+        return abort(404)
+
+    status = task.get_status()
+    if status == 'SUCCESS':
         filename = app.config['RESULTS_FOLDER'] + task_id + '.laz'
         if (os.path.exists(filename)):
-            return render_template("index.html", task_id = task_id, status='okay')
+            return render_template("index.html", task_id = task.id, status='okay', download_url=task.get_relative_url())
         else:
-            return render_template("index.html", task_id = task_id, status='deleted')
+            return render_template("index.html", task_id = task.id, status='deleted')
     else:
-        return render_template("index.html", task_id = task_id, status='pending', refresh=True)
+        return render_template("index.html", task_id = task.id, status='pending', refresh=True)
 
 
 

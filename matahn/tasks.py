@@ -1,8 +1,5 @@
 from celery import Celery
 
-import smtplib
-from email.mime.text import MIMEText
-
 from matahn import app
 from matahn.database import db_session
 from matahn.models import Tile, Task
@@ -24,7 +21,7 @@ def make_celery(app):
 
 celery_app = make_celery(app)
 
-@celery_app.task(ignore_result=True)
+@celery_app.task()
 def new_task(left, bottom, right, top, ahn2_class):
     if ahn2_class == 'ug': ahn2_class = 'u|g'
     ewkt = get_ewkt_from_bounds(left, bottom, right, top)
@@ -33,33 +30,8 @@ def new_task(left, bottom, right, top, ahn2_class):
     filenames = [f[0] for f in filenames]
     
     output_laz = app.config['RESULTS_FOLDER'] + str(new_task.request.id)+'.laz'
+    # this will cause an exception if something goes wrong while calling lasmerge executable
     lasmerge(filenames, left, bottom, right, top, output_laz)
-    # return {'taskid': str(new_task.request.id), 'emailto': emailto, 'ahn2_class': ahn2_class, 'geom': geojson}
-    # return {'filename': str(new_task.request.id)+'.laz', 'ahn2_class': ahn2_class, 'geom': ewkt}
 
-
-@celery_app.task
-def sendemail(o): #-- o is the object returned by new_task(), it is automagically passed by Celery's chain
-  sender = '***REMOVED***'
-  receiver = o['emailto']
-  core = """
-  Greetings AHN2-enthusiast, 
-
-  your file is ready to be downloaded: http://3dsm.bk.tudelft.nl/matahn/tasks/%s
-
-  Notice that we keep the file on our server only for 24h.
-
-  Cheers,
-  the MATAHN team
-  http://3dsm.bk.tudelft.nl/matahn
-  """ % (o['taskid'])
-  msg = MIMEText(core)
-  msg['Subject'] = 'Your AHN2 file is ready'
-  msg['From'] = sender
-  msg['To'] = receiver
-  # s = smtplib.SMTP_SSL('smtp-a.tudelft.nl')
-  # s.login('hledoux', '***REMOVED***')
-  s = smtplib.SMTP_SSL('***REMOVED***')
-  s.login('***REMOVED***', '***REMOVED***')
-  s.sendmail(sender, [receiver], msg.as_string())
-  s.quit()
+    t = db_session.query(Task).filter(Task.id==str(new_task.request.id)).one()
+    t.send_email()
