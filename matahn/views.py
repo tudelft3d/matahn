@@ -32,14 +32,22 @@ def getTaskArea():
     geojson = db_session.query(func.ST_AsGeoJSON(Task.geom)).filter(Task.id==task_id).one()[0]
     return jsonify(result=geojson)
 
-# this is a helper function that is maybe a bit out of place here
+# these are helper functions that are maybe a bit out of place here
 def get_point_count_estimate_from_ewkt(ewkt):
     tiles = db_session.query(   Tile.pointcount \
                                 * \
                                 func.ST_Area( Tile.geom.ST_Intersection(ewkt) ) / Tile.geom.ST_Area() \
                             ).filter(Tile.geom.intersects(ewkt))
-
     return sum( [ v[0] for v in tiles ] )
+def format_big_number(bignumber):
+    if bignumber > 1e9:
+        return "{:.0f} billion".format(bignumber/1e9)
+    elif bignumber > 1e6:
+        return "{:.0f} million".format(bignumber/1e6)
+    elif bignumber >1e3:
+        return "{:.0f} thousand".format(bignumber/1e3)
+    else:
+        return "{:.0f}".format(bignumber)
 
 @app.route("/_getPointCountEstimate")
 def getPointCountEstimate():
@@ -53,12 +61,7 @@ def getPointCountEstimate():
     
     total_estimate = get_point_count_estimate_from_ewkt(ewkt)
 
-    if total_estimate > 1e6:
-        return jsonify(result="You selected about {:.0f} million points!".format(total_estimate/1e6))
-    elif total_estimate >1e3:
-        return jsonify(result="You selected about {:.0f} thousand points!".format(total_estimate/1e3))
-    else:
-        return jsonify(result="You selected about {:.0f} points!".format(total_estimate))
+    return jsonify(result="You selected about {} points!".format(format_big_number(total_estimate)))
 
 
 @app.route("/_submit")
@@ -83,7 +86,7 @@ def submitnewtask():
     if 0 == db_session.query(Tile).filter( Tile.geom.intersects( ewkt ) ).count():
         return jsonify(wronginput = "Selection is empty")
     if get_point_count_estimate_from_ewkt(ewkt) > app.config['MAX_POINT_QUERY_SIZE']:
-        return jsonify(wronginput = "At this time we don't accept requests large than {} points. Draw a smaller selection to continue.".format(app.config['MAX_POINT_QUERY_SIZE']))
+        return jsonify(wronginput = "At this time we don't accept requests larger than {} points. Draw a smaller selection to continue.".format(format_big_number(app.config['MAX_POINT_QUERY_SIZE'])))
 
     # new celery task
     result = new_task.apply_async((left, bottom, right, top, classification))
