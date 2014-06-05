@@ -35,3 +35,5 @@ def new_task(left, bottom, right, top, ahn2_class):
 
     t = db_session.query(Task).filter(Task.id==str(new_task.request.id)).one()
     t.send_email()
+
+    # could also use this to do the mailing http://stackoverflow.com/questions/12526606/callback-for-celery-apply-async
