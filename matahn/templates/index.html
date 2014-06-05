@@ -23,14 +23,31 @@
 
     <div class="overlay-wrapper">
         <div class="overlay">
-            <div class="page-submit">
-                <form class="pure-form pure-form-stacked">
+
+            {% if task_id is defined %}
+                {% if status == 'okay' %}
+                    <p class='task-status'><i class="fa fa-check-circle"></i> Ready to download</p>
+                    <p>Please note that your file will be deleted after 24 hours.</p>
+                    <a class="pure-button button-download" href="{{download_url}}">
+                        <i class="fa fa-download"></i>
+                        Download
+                    </a>
+                {% elif status == 'deleted' %}
+                    <p class='task-status'><i class="fa fa-exclamation-triangle"></i> File not found</p>
+                    <p>Your file has probably been deleted automatically after 24 hours. You can make a new <a href="{{ url_for('matahn') }}">request</a>.</p>
+                {% else %}
+                    <p class='task-status'><i class="fa fa-cog fa-spin"></i> Processing...</p>
+                    <p>You'll receive an email when your file is ready.</p>
+                {% endif %}
+
+            {% else %}
+                <form id="submit-task" class="pure-form pure-form-stacked">
                     
-                    <button class="pure-button pure-button-primary" id="draw-rectangle"><i class="fa fa-crop"></i> Draw selection</button>
+                    <button type="button" class="pure-button pure-button-primary" id="draw-rectangle"><i class="fa fa-crop"></i> Draw selection</button>
                     <p class='ptcountest'></p>
 
                     <fieldset>
-                        <legend>Make your request</legend>
+                        <!-- <legend>Make your request</legend> -->
 
                         <label for="classificationSelector">Classification</label>
                         <select name="classificationSelector">
@@ -38,37 +55,30 @@
                             <option value="u">man-made (uitgefilterd)</option>
                             <option value="ug">both</option>
                         </select>
-                        <!-- <label for="email">Your Email</label> -->
-                        <input name="useremail" type="email" autocomplete="on" placeholder="Your Email">
-                        <button type="button" id="submit-button" class="pure-button">Submit</button>
-                        <!-- <p><a href=# id="calculate">submit</a></p> -->
 
+                        <label for="simplificationSelector" disabled>Thinning (coming soon)</label>
+                        <select name="simplificationSelector" disabled>
+                            <option value="t">nth point</option>
+                            <option value="mat">MAT-based</option>
+                        </select>
+                        
+                        <label for="email">Email</label>
+                        <input name="useremail" type="email" autocomplete="on" placeholder="Your Email">
+                        <button type="submit" id="submit-button" class="pure-button">Submit</button>
                     </fieldset>
                 </form>
-
-                <p class='noemail' style='color:red'></p>
-                <p class='noselection' style='color:red'></p>
-                <p class='tasksubmitted' style='color:green'></p>
-            </div>
-
-            <div class="page-message">
-                <h2>Work in progress</h2>
-                <p>You will receive an email as soon as your download is ready.</p>
-                <p>Your download will be available on this url:</p>
-                <form class="pure-form pure-form-stacked">
-                <fieldset>
-                    <input class="download-url" type="text" readonly="readonly" value="http://ylan.nl">
-                    <button type="button" id="back-button" class="pure-button">Go back</button>
-                </fieldset>
-                </form>
-
-            </div>
-
+                <p class='wronginput' style='color:red'></p>
+            {% endif %}
         </div>
 
     </div>
     <script type=text/javascript>
       $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+      {% if task_id is defined %}
+      $TASK_ID = '{{task_id}}';
+      {% else %}
+      $TASK_ID = undefined;
+      {% endif %}
     </script>
     <script src="http://tiles.geocoders.nl/api/ol/2.12/OpenLayers.js"></script>
     <script src="http://tiles.geocoders.nl/lib/proj4js/proj4js-compressed.js"></script>

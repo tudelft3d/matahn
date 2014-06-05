@@ -10,7 +10,7 @@ class default_settings(object):
     CELERY_BROKER_URL = 'redis://localhost:6379/0',
     CELERY_RESULT_BACKEND = 'db+'+SQLALCHEMY_DATABASE_URI
     
-    DOWNLOAD_URL_PATH = '/matahn/download/'
+    STATIC_DOWNLOAD_URL = '/matahn/tasks/download/'
 
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object(default_settings)
@@ -18,6 +18,7 @@ app.config.from_envvar('MATAHN_SETTINGS', silent=True)
 
 import matahn.views
 import matahn.models
+import matahn.tasks
 
 from matahn.database import db_session
 from matahn.tasks import celery_app

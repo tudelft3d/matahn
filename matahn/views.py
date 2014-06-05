@@ -1,25 +1,19 @@
 from matahn import app
 
-from flask import jsonify, render_template, request, abort, redirect, url_for
+from flask import jsonify, render_template, request, abort, redirect, url_for, send_from_directory, send_file
 import os
-import uuid
 import time
+import re
 
-from matahn.models import Tile
+from matahn.models import Tile, Task
 from matahn.database import db_session
 from matahn.util import get_ewkt_from_bounds
 
-from matahn import tasks
+from matahn.tasks import new_task
 
 from sqlalchemy import func
+from sqlalchemy.orm.exc import NoResultFound
 
-# @app.route("/matahn", methods=['GET', 'POST'])
-# def matahn():
-#     if request.method == 'POST':
-#         e = session['useremail']
-#         print e
-#         return redirect(url_for('/matahn'))
-#     return render_template("matahn/index.html")
 
 @app.route("/")
 def matahn():
@@ -29,7 +23,13 @@ def matahn():
 @app.route("/_getDownloadArea")
 def getDownloadArea():
     geojson = db_session.query(func.ST_AsGeoJSON(func.ST_Union(Tile.geom))).one()[0]
+    return jsonify(result=geojson)
 
+@app.route("/_getTaskArea")
+def getTaskArea():
+    #should prob validate this
+    task_id = request.args.get('task_id', type=str)
+    geojson = db_session.query(func.ST_AsGeoJSON(Task.geom)).filter(Task.id==task_id).one()[0]
     return jsonify(result=geojson)
 
 
@@ -66,20 +66,59 @@ def submitnewtask():
     top  = request.args.get('top', type=float)
     email = request.args.get('email', type=str)
     classification = request.args.get('classification', type=str)
-    
-    #TODO: validate string inputs
 
-    result = tasks.merge_tiles.delay(left, bottom, right, top, classification)
+    # TODO: area selected: define a max value here?
 
-    return jsonify( result=url_for('request_download', task_id=result.id) )
+    # email validation
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        return jsonify(wronginput = "email is not valid")
+    # classification validation
+    if not re.match(r"^(?=\w{1,2}$)([ug]).*", classification):
+        return jsonify(wronginput = "wrong AHN2 classification")
+    # selection bounds validation
+    if 0 == db_session.query(Tile).filter( Tile.geom.intersects( get_ewkt_from_bounds(left, bottom, right, top) ) ).count():
+        return jsonify(wronginput = "selection is empty")
+
+    # new celery task
+    result = new_task.apply_async((left, bottom, right, top, classification))
+    # store task parameters in db
+    task = Task(id=result.id, ahn2_class=classification, emailto=email, geom=get_ewkt_from_bounds(left, bottom, right, top) )
+    db_session.add(task)
+    db_session.commit()
+
+    taskurl = url_for('tasks_page', task_id=result.id)
+    return jsonify(result = taskurl)
 
 
-@app.route("/request_download/<task_id>")
-def request_download(task_id):    
-    result = tasks.merge_tiles.AsyncResult(task_id)
+@app.route('/tasks/download/<filename>', methods=['GET'])
+def tasks_download(filename):
+    if app.debug:
+        return send_file(app.config['RESULTS_FOLDER'] + filename)
 
-    # note this is not the way to serve static files! this should really happen outside of flask (ie redirect the user to a path that is handled by a static file server)
-    if result.status == 'SUCCESS':
-        return redirect( app.config['DOWNLOAD_URL_PATH']+result.result['filename'] )
+
+@app.route('/tasks/<task_id>')
+def tasks_page(task_id):
+    if not re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', task_id):
+        return abort(400)
+    try:
+        task = db_session.query(Task).filter(Task.id==task_id).one()
+    except NoResultFound:
+        return abort(404)
+
+    status = task.get_status()
+    if status == 'SUCCESS':
+        filename = app.config['RESULTS_FOLDER'] + task_id + '.laz'
+        if (os.path.exists(filename)):
+            return render_template("index.html", task_id = task.id, status='okay', download_url=task.get_relative_url())
+        else:
+            return render_template("index.html", task_id = task.id, status='deleted')
     else:
-        abort(404)
+        return render_template("index.html", task_id = task.id, status='pending', refresh=True)
+
+
+
+
+
+
+
+

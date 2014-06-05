@@ -85,8 +85,8 @@ window.onload = function() {
     {
       "default": new OpenLayers.Style(
       {
-        fillColor: "#32c137",
-        strokeColor: "#32c137",
+        fillColor: "#0078e7",
+        strokeColor: "#0078e7",
         fillOpacity: 0.05,
         strokeWidth: 5
       }
@@ -95,7 +95,14 @@ window.onload = function() {
     var geojson_format = new OpenLayers.Format.GeoJSON();
     var downloadarea = new OpenLayers.Layer.Vector("downloadarea", {styleMap: myStyle}); 
     map.addLayer(downloadarea);
-    $.getJSON($SCRIPT_ROOT + '/_getDownloadArea', {}, 
+
+    var getArea = '/_getDownloadArea';
+    var submit_data = {}
+    if (!($TASK_ID === undefined))
+      getArea = '/_getTaskArea';
+      submit_data = {task_id: $TASK_ID}
+
+    $.getJSON($SCRIPT_ROOT + getArea, submit_data, 
       function(data) {
         var features = geojson_format.read(data.result)
         downloadarea.addFeatures( features );
@@ -138,16 +145,24 @@ var showPointcountEstimate = function(left, bottom, right, top) {
 
 $('#draw-rectangle').click(function(event){
   event.preventDefault();
-  boxLayer.removeAllFeatures();
-  $(this).toggleClass('pure-button-active');
-  $('body').removeClass('open-menu');
-  $('.menu-link i').addClass("fa-chevron-right")
-  $('.menu-link i').removeClass("fa-chevron-left")
-  boxControl.activate();
+  if (!boxControl.active) {
+    boxLayer.removeAllFeatures();
+    $(this).toggleClass('pure-button-active');
+    $('body').removeClass('open-menu');
+    $('.menu-link i').addClass("fa-chevron-right")
+    $('.menu-link i').removeClass("fa-chevron-left")
+    boxControl.activate();
+  } else {
+    deactivateBox()
+  }
 });
 
 function boxDrawn(box) {
   showPointcountEstimate(box.geometry.bounds.left,box.geometry.bounds.bottom,box.geometry.bounds.right,box.geometry.bounds.top);
+  deactivateBox()
+}
+
+function deactivateBox() {
   boxControl.deactivate();
   $('#draw-rectangle').removeClass('pure-button-active');
   $('body').addClass('open-menu');
@@ -170,56 +185,84 @@ $('#overlay-button').click(function(){
 });
 
 
-$('#submit-button:enabled').click(function(event){
+$('#submit-task').submit(function(event){
   event.preventDefault();
   var okay = 1;
-  var email = $('input[name="useremail"]').val();
-  if (email == "") {
-    $(".noemail").text("An email must be provided");
-    okay = 0;
-  }
-  else {
-    $(".noemail").text("");
-  }
   var fs = boxLayer.features;
   if (fs.length == 0) {
-    $(".noselection").text("An area on the map must be selected.");
+    $(".wronginput").text("An area on the map must be selected.");
     okay = 0;
   }
-  else {
-    $(".noselection").text(""); 
-  }
+  // else {
+    // $(".wronginput").text(""); 
+  // }
 
   if (okay == 1) {
     var f = fs[0];
     $.getJSON($SCRIPT_ROOT + '/_submit', {
-      left:  f.geometry.bounds.left,
+      left:    f.geometry.bounds.left,
       bottom:  f.geometry.bounds.bottom,
-      right:  f.geometry.bounds.right,
-      top:  f.geometry.bounds.top,
+      right:   f.geometry.bounds.right,
+      top:     f.geometry.bounds.top,
       classification: $('select[name="classificationSelector"]').val(), 
       email: $('input[name="useremail"]').val()
     }, function(data) {
-      $('#submit-button').attr("disabled", "disabled")
-      $('#submit-button').addClass('pure-button-disabled');
-      $('input.download-url').val(data.result)
-      $('.page-message').toggle();
-      $('.page-submit').toggle();
-      // var s = "Thanks, your task (id= "
-      // s += data.result
-      // s+= ") has been submitted and is being processed. You'll soon get an email with a download link."
-      // $(".tasksubmitted").text(s);
+      if(data.hasOwnProperty('wronginput')) {
+        $(".wronginput").text(data["wronginput"]);
+        okay = 0;
+      }
+      else {
+        // $("#download-url").attr("href", data.result);
+        // $('.page-message').toggle();
+        // $('.page-submit').toggle();
+        window.location.href = data.result;
+      }
     });
-    // boxLayer.removeAllFeatures();
-    // $(".ptcountest").text("");
   }
 });
 
-$('#back-button').click(function(event){
-    event.preventDefault();
-    $('.page-message').toggle();
-    $('.page-submit').toggle();
-});
+// $('#submit-button').click(function(event){
+//   event.preventDefault();
+//   var okay = 1;
+//   var email = $('input[name="useremail"]').val();
+//   if (email == "") {
+//     $(".noemail").text("An email must be provided");
+//     okay = 0;
+//   }
+//   else {
+//     $(".noemail").text("");
+//   }
+//   var fs = boxLayer.features;
+//   if (fs.length == 0) {
+//     $(".noselection").text("An area on the map must be selected.");
+//     okay = 0;
+//   }
+//   else {
+//     $(".noselection").text(""); 
+//   }
+
+//   if (okay == 1) {
+//     var f = fs[0];
+//     $.getJSON($SCRIPT_ROOT + '/_submit', {
+//       left:    f.geometry.bounds.left,
+//       bottom:  f.geometry.bounds.bottom,
+//       right:   f.geometry.bounds.right,
+//       top:     f.geometry.bounds.top,
+//       classification: $('select[name="classificationSelector"]').val(), 
+//       email: $('input[name="useremail"]').val()
+//     }, function(data) {
+//       $("#download-url").attr("href", data.result);
+//       $('.page-message').toggle();
+//       $('.page-submit').toggle();
+//     });
+//   }
+// });
+
+// $('#back-button').click(function(event){
+//     event.preventDefault();
+//     $('.page-message').toggle();
+//     $('.page-submit').toggle();
+// });
 
 $('#baselayer-button').click(function(){
   var baseLayers = map.getLayersBy('isBaseLayer',true);

@@ -2,9 +2,9 @@ from celery import Celery
 
 from matahn import app
 from matahn.database import db_session
-from matahn.models import Tile
+from matahn.models import Tile, Task
 from matahn.lastools import lasmerge
-from matahn.util import get_ewkt_from_bounds
+from matahn.util import get_geojson_from_bounds, get_ewkt_from_bounds
 
 
 def make_celery(app):
@@ -21,14 +21,19 @@ def make_celery(app):
 
 celery_app = make_celery(app)
 
-@celery_app.task
-def merge_tiles(left, bottom, right, top, ahn2_class, task_id=None):
+@celery_app.task()
+def new_task(left, bottom, right, top, ahn2_class):
     if ahn2_class == 'ug': ahn2_class = 'u|g'
     ewkt = get_ewkt_from_bounds(left, bottom, right, top)
+    # geojson = get_geojson_from_bounds(left, bottom, right, top)
     filenames = db_session.query(Tile.path).filter(Tile.ahn2_class.match(ahn2_class)).filter(Tile.geom.intersects(ewkt)).all()
     filenames = [f[0] for f in filenames]
-
-    output_laz = app.config['RESULTS_FOLDER']+str(merge_tiles.request.id)+'.laz'
+    
+    output_laz = app.config['RESULTS_FOLDER'] + str(new_task.request.id)+'.laz'
+    # this will cause an exception if something goes wrong while calling lasmerge executable
     lasmerge(filenames, left, bottom, right, top, output_laz)
 
-    return {'filename': str(merge_tiles.request.id)+'.laz', 'ahn2_class': ahn2_class, 'geom': ewkt}
+    t = db_session.query(Task).filter(Task.id==str(new_task.request.id)).one()
+    t.send_email()
+
+    # could also use this to do the mailing http://stackoverflow.com/questions/12526606/callback-for-celery-apply-async

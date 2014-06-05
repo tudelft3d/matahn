@@ -73,3 +73,4 @@ def read_lasinfotxt(filename):
 				result['max_xyz'] = [ float(v) for v in line.split()[-3:] ]
 
 	return result
+	
