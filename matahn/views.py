@@ -99,11 +99,11 @@ def tasks_download(filename):
 @app.route('/tasks/<task_id>')
 def tasks_page(task_id):
     if not re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', task_id):
-        return abort(400)
+        return render_template("tasknotfound.html"), 404
     try:
         task = db_session.query(Task).filter(Task.id==task_id).one()
     except NoResultFound:
-        return abort(404)
+        return render_template("tasknotfound.html"), 404
 
     status = task.get_status()
     if status == 'SUCCESS':

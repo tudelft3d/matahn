@@ -22,20 +22,24 @@ h1, h2, h3 {
     box-shadow: 1px 0px 30px #777;
 }
 
-.overlay-download {
-    width: 400px;
+.overlay-download-wrapper {
+    width: 150px;
     height: 150px;
     margin-top: -75px;
-    margin-left: -200px;
+    margin-left: -75px;
     position: fixed;
     top: 50%;
     left: 50%;
     z-index: 9998;
     text-align: center;
     background-color: #fff;
+    color: #000;
     opacity:0.7;
     /*overflow: scroll;*/
     box-shadow: 1px 0px 10px #777;
+}
+.overlay-download {
+    margin: 2em;
 }
 
 .task-status {

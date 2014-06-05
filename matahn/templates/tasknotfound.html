@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block body %}
+<body>
+
+  <img id="fullscreen-bg-image" src="{{ url_for('static', filename='img/bg_notready.jpg') }}" alt=""/>
+
+<div class="overlay-download-wrapper">
+  <div class="overlay-download">
+  <i class="fa fa-exclamation-triangle fa-4x"></i>
+  <p>Invalid task</p>
+  </div>
+</div>
+
+</body>
+{% endblock %}
