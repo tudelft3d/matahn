@@ -190,6 +190,7 @@ $('#submit-task').submit(function(event){
   var okay = 1;
   var fs = boxLayer.features;
   if (fs.length == 0) {
+    $("#errorBox").show();
     $(".wronginput").text("An area on the map must be selected.");
     okay = 0;
   }
