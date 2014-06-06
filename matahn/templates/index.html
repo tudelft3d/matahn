@@ -27,7 +27,7 @@
             {% if task is defined %}
                 {% if status == 'okay' %}
                     <p class='task-status'><i class="fa fa-check-circle"></i> Ready to download</p>
-                    <p>Please note that your file will be deleted after 24 hours.</p>
+                    <p>Please note that your file will be deleted after 24 hours. But, you can always make a <a href="{{ url_for('matahn') }}">new request</a>.</p>
                     <a class="pure-button button-download" href="{{download_url}}">
                         <i class="fa fa-download"></i>
                         Download
@@ -37,7 +37,8 @@
                     <p>Your file has probably been deleted automatically after 24 hours. You can make a new <a href="{{ url_for('matahn') }}">request</a>.</p>
                 {% else %}
                     <p class='task-status'><i class="fa fa-cog fa-spin"></i> Processing...</p>
-                    <p>You'll receive an email when your file is ready. You can safely close this window.</p>
+                    <p>We succesfully received you request and it is being processed now. You'll receive an email when your file is ready.</p>
+                    <p>You can safely leave this window, maybe to make a <a href="{{ url_for('matahn') }}">new request</a>.</p>
                 {% endif %}
                     <p class='task-status'><i class="fa fa-info-circle"></i> Task summary</p>
                     <form class="pure-form pure-form-stacked">
@@ -55,7 +56,7 @@
 
             {% else %}
                 <div id='intro'>
-                    <p>Through this system you can easily download square pieces of <a href='http://www.ahn.nl'>AHN2</a>. Please take the follwing remarks into considerations:</p>
+                    <p>Download rectangular pieces of <a href='http://www.ahn.nl'>AHN2</a> with this system. Please consider the follwing:</p>
                     <ul>
                      <li>currently only queries of up to ~{{max_point_query_size}} points are allowed.</li>
                      <li>the blue regions indicate what part of AHN2 is currently available through this system.</li>

@@ -10,6 +10,7 @@ class default_settings(object):
     CELERY_BROKER_URL = 'redis://localhost:6379/0',
     CELERY_RESULT_BACKEND = 'db+'+SQLALCHEMY_DATABASE_URI
     
+    SERVER_NAME = '3dsm.bk.tudelft.nl'
     STATIC_DOWNLOAD_URL = '/matahn/tasks/download/'
     MAX_POINT_QUERY_SIZE = 400e6
 

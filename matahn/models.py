@@ -1,3 +1,4 @@
+from flask import render_template, url_for
 from sqlalchemy import Column, Integer, String, Boolean, Float
 from geoalchemy2 import Geometry
 
@@ -46,18 +47,8 @@ class Task(Base):
 
         sender = '***REMOVED***'
         receiver = self.emailto
-        core = """
-        Greetings AHN2-enthusiast, 
-
-        your file is ready to be downloaded: http://3dsm.bk.tudelft.nl%s
-
-        Notice that we keep the file on our server only for 24h.
-
-        Cheers,
-        the MATAHN team
-        http://3dsm.bk.tudelft.nl/matahn
-        """ % (self.get_relative_url())
-        msg = MIMEText(core)
+        body = render_template('mail_download_notification.html', task_url='http://'+app.config['SERVER_NAME']+'/matahn/tasks/'+self.id)
+        msg = MIMEText(body)
         msg['Subject'] = 'Your AHN2 file is ready'
         msg['From'] = sender
         msg['To'] = receiver
