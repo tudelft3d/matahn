@@ -173,7 +173,8 @@ function deactivateBox() {
   $('#submit-button').removeClass('pure-button-disabled');
 }
 
-$('#menuLink').click(function() {
+$('#menuLink').click(function(event) {
+  event.preventDefault();
   $('body').toggleClass( "open-menu" );
   $('.menu-link i').toggleClass("fa-chevron-right");
   $('.menu-link i').toggleClass("fa-chevron-left");
@@ -218,7 +219,8 @@ $('#submit-task').submit(function(event){
 });
 
 
-$('#baselayer-button').click(function(){
+$('#baselayer-button').click(function(event){
+  event.preventDefault();
   var baseLayers = map.getLayersBy('isBaseLayer',true);
   var index;
   $.each(baseLayers, function(i){

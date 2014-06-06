@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, Float
 from geoalchemy2 import Geometry
 
 import matahn
@@ -24,6 +24,8 @@ class Task(Base):
     ahn2_class = Column(String(2))
     emailto = Column(String)
     geom = Column(Geometry('POLYGON', srid=28992))
+    log_execution_time = Column(Float)
+    log_actual_point_count = Column(Integer)
 
     def __repr__(self):
         return "task {}".format(self.uuid)

@@ -42,6 +42,11 @@ html, body {
     font-size: 1.4em;
 }
 
+#intro {
+    font-size: 0.96em;
+    margin-bottom: 2em;
+}
+
 #errorBox {
     /*background-color: #EB726C;*/
     color: rgb(202, 60, 60);

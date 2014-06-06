@@ -6,25 +6,25 @@
     <div id="map-canvas"></div>
     </div>
 
-    <a href="#menu" id="olZoomInLink" class="square-button button-right zoomin-button">
+    <a href="#" id="olZoomInLink" class="square-button button-right zoomin-button">
         <span><i class="fa fa-plus"></i></span>
     </a>
-    <a href="#menu" id="olZoomOutLink" class="square-button button-right zoomout-button">
+    <a href="#" id="olZoomOutLink" class="square-button button-right zoomout-button">
         <span><i class="fa fa-minus"></i></span>
     </a>
 
-    <a href="#menu" id="baselayer-button" class="square-button button-right baselayer-button">
+    <a href="#" id="baselayer-button" class="square-button button-right baselayer-button">
         <span><i class="fa fa-retweet"></i></span>
     </a>
 
-    <a href="#menu" id="menuLink" class="square-button menu-link">
+    <a href="#" id="menuLink" class="square-button menu-link">
         <span><i class="fa fa-chevron-right"></i></span>
     </a>
 
     <div class="overlay-wrapper">
         <div class="overlay">
 
-            {% if task_id is defined %}
+            {% if task is defined %}
                 {% if status == 'okay' %}
                     <p class='task-status'><i class="fa fa-check-circle"></i> Ready to download</p>
                     <p>Please note that your file will be deleted after 24 hours.</p>
@@ -39,8 +39,29 @@
                     <p class='task-status'><i class="fa fa-cog fa-spin"></i> Processing...</p>
                     <p>You'll receive an email when your file is ready. You can safely close this window.</p>
                 {% endif %}
+                    <p class='task-status'><i class="fa fa-info-circle"></i> Task summary</p>
+                    <form class="pure-form pure-form-stacked">
+                        Geometry (EWKT)
+                        <input type="text" value="{{task['ewkt']}}" readonly>
+                        AHN2 class
+                        <input type="text" value="{{task['ahn2_class']}}" readonly>
+                        {% if status == 'okay' %}
+                        Execution time (s)
+                        <input type="text" value="{{task['log_execution_time']}}" readonly>
+                        Actual point count
+                        <input type="text" value="{{task['log_actual_point_count']}}" readonly>
+                        {% endif %}
+                    </form>
 
             {% else %}
+                <div id='intro'>
+                    <p>Through this system you can easily download square pieces of <a href='http://www.ahn.nl'>AHN2</a>. Please take the follwing remarks into considerations:</p>
+                    <ul>
+                     <li>currently only queries of up to ~{{max_point_query_size}} points are allowed.</li>
+                     <li>the blue regions indicate what part of AHN2 is currently available through this system.</li>
+                     <li>your points will be delivered in the <a href='http://www.laszip.org'>laz format</a>.</li>
+                    </ul>
+                </div>
                 <form id="submit-task" class="pure-form pure-form-stacked">
                     
                     <button type="button" class="pure-button pure-button-primary" id="draw-rectangle"><i class="fa fa-crop"></i> Draw selection</button>
@@ -77,8 +98,8 @@
     </div>
     <script type=text/javascript>
       $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-      {% if task_id is defined %}
-      $TASK_ID = '{{task_id}}';
+      {% if task is defined %}
+      $TASK_ID = '{{task['id']}}';
       {% else %}
       $TASK_ID = undefined;
       {% endif %}

@@ -17,7 +17,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 @app.route("/")
 def matahn():
-    return render_template("index.html")
+    return render_template("index.html", max_point_query_size=format_big_number(app.config['MAX_POINT_QUERY_SIZE']))
 
 
 @app.route("/_getDownloadArea")
@@ -110,7 +110,13 @@ def tasks_page(task_id):
     if not re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', task_id):
         return render_template("tasknotfound.html"), 404
     try:
-        task = db_session.query(Task).filter(Task.id==task_id).one()
+        task = db_session.query(Task).filter(Task.id == task_id).one()
+        task_dict = db_session.query(Task.id, \
+                                Task.log_actual_point_count, \
+                                Task.log_execution_time, \
+                                func.ST_AsEWKT(Task.geom).label('ewkt'), \
+                                Task.ahn2_class \
+                                ).filter(Task.id==task_id).one().__dict__
     except NoResultFound:
         return render_template("tasknotfound.html"), 404
 
@@ -118,11 +124,11 @@ def tasks_page(task_id):
     if status == 'SUCCESS':
         filename = app.config['RESULTS_FOLDER'] + task_id + '.laz'
         if (os.path.exists(filename)):
-            return render_template("index.html", task_id = task.id, status='okay', download_url=task.get_relative_url())
+            return render_template("index.html", task = task_dict, status='okay', download_url=task.get_relative_url())
         else:
-            return render_template("index.html", task_id = task.id, status='deleted')
+            return render_template("index.html", task = task_dict, status='deleted')
     else:
-        return render_template("index.html", task_id = task.id, status='pending', refresh=True)
+        return render_template("index.html", task = task_dict, status='pending', refresh=True)
 
 
 

@@ -45,6 +45,8 @@ def new_task(left, bottom, right, top, ahn2_class):
     infotxt = lastools.lasinfotxt(output_laz)
     info = tile_io.read_lasinfotxt(infotxt)
 
-    return {'execution_time':t1-t0, 'actual_point_count': info['pointcount']}
+    t.log_execution_time = t1-t0
+    t.log_actual_point_count = info['pointcount']
+    db_session.commit()
 
     # could also use this to do the mailing http://stackoverflow.com/questions/12526606/callback-for-celery-apply-async

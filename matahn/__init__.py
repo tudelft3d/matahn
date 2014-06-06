@@ -11,7 +11,7 @@ class default_settings(object):
     CELERY_RESULT_BACKEND = 'db+'+SQLALCHEMY_DATABASE_URI
     
     STATIC_DOWNLOAD_URL = '/matahn/tasks/download/'
-    MAX_POINT_QUERY_SIZE = 200e6
+    MAX_POINT_QUERY_SIZE = 400e6
 
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object(default_settings)
