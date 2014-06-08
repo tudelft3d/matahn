@@ -13,6 +13,10 @@ class default_settings(object):
     SERVER_NAME = '3dsm.bk.tudelft.nl'
     STATIC_DOWNLOAD_URL = '/matahn/tasks/download/'
     MAX_POINT_QUERY_SIZE = 400e6
+    
+    MAIL_SERVER = '***REMOVED***'
+    MAIL_USERNAME = '***REMOVED***'
+    MAIL_PASSWORD = ''
 
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object(default_settings)

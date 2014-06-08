@@ -52,9 +52,8 @@ class Task(Base):
         msg['Subject'] = 'Your AHN2 file is ready'
         msg['From'] = sender
         msg['To'] = receiver
-        # s = smtplib.SMTP_SSL('smtp-a.tudelft.nl')
-        # s.login('hledoux', '***REMOVED***')
-        s = smtplib.SMTP_SSL('***REMOVED***')
-        s.login('***REMOVED***', '***REMOVED***')
+        
+        s = smtplib.SMTP_SSL( app.config['MAIL_SERVER'] )
+        s.login(app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
         s.sendmail(sender, [receiver], msg.as_string())
         s.quit()
