@@ -15,8 +15,8 @@ class default_settings(object):
     MAX_POINT_QUERY_SIZE = 400e6
     
     MAIL_SERVER = '***REMOVED***'
-    MAIL_USERNAME = '***REMOVED***'
-    MAIL_PASSWORD = ''
+    MAIL_USERNAME = 'matahn.tudelft'
+    MAIL_PASSWORD = '***REMOVED***'
 
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object(default_settings)
