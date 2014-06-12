@@ -232,3 +232,21 @@ $('#baselayer-button').click(function(event){
   map.setBaseLayer(baseLayers[index]);
 });
 
+// prevent ios rubberband scrolling of main page
+$('body').on('touchmove', function(e) {
+    // this is the node the touchmove event fired on
+    // in this example it would be the </p> element
+    target = e.target;
+
+    // we need to find the parent container
+    // we get it like so; assumes div as parent
+    parent = $(e.target).closest('div');
+
+    // check if the parent is a scroll window by class //
+    if ($(parent).hasClass('scroll')){
+        // ignore as we want the scroll to happen
+    } else {
+        e.preventDefault();
+    }
+});
+

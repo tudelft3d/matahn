@@ -21,47 +21,49 @@
         <span><i class="fa fa-chevron-right"></i></span>
     </a>
 
-    <div class="overlay-wrapper">
+    <div class="overlay-wrapper scroll">
         <div class="overlay">
 
             {% if task is defined %}
                 {% if status == 'okay' %}
-                    <p class='task-status'><i class="fa fa-check-circle"></i> Ready to download</p>
-                    <p>Please note that your file will be deleted after 24 hours. But, you can always make a <a href="{{ url_for('matahn') }}">new request</a>.</p>
+                    <h2 class='task-status'><i class="fa fa-check-circle"></i> Ready to download</h2>
+                    <p>Your is kept for 24 hours. But, you can always make a <a href="{{ url_for('matahn') }}">new request</a>.</p>
                     <a class="pure-button button-download" href="{{download_url}}">
                         <i class="fa fa-download"></i>
                         Download
                     </a>
                 {% elif status == 'deleted' %}
-                    <p class='task-status'><i class="fa fa-exclamation-triangle"></i> File not found</p>
+                    <h2 class='task-status'><i class="fa fa-exclamation-triangle"></i> File not found</h2>
                     <p>Your file has probably been deleted automatically after 24 hours. You can make a new <a href="{{ url_for('matahn') }}">request</a>.</p>
                 {% else %}
-                    <p class='task-status'><i class="fa fa-cog fa-spin"></i> Processing...</p>
+                    <h2 class='task-status'><i class="fa fa-cog fa-spin"></i> Processing...</h2>
                     <p>We succesfully received you request and it is being processed now. You'll receive an email when your file is ready.</p>
                     <p>You can safely leave this window, maybe to make a <a href="{{ url_for('matahn') }}">new request</a>.</p>
                 {% endif %}
-                    <p class='task-status'><i class="fa fa-info-circle"></i> Task summary</p>
+                    <h2 class='task-status'><i class="fa fa-info-circle"></i> Task summary</h2>
                     <form class="pure-form pure-form-stacked">
-                        Geometry (EWKT)
-                        <input type="text" value="{{task['ewkt']}}" readonly>
+                        Geometry of selection (WKT)
+                        <input type="text" value="{{task['wkt']}}" readonly>
+                        
                         AHN2 class
-                        <input type="text" value="{{task['ahn2_class']}}" readonly>
+                        {% if task['ahn2_class'] == 'g' %}
+                        <input type="text" value="gefilterd" readonly>
+                        {% elif task['ahn2_class'] == 'u' %}
+                        <input type="text" value="uitgefilterd" readonly>
+                        {% else %}
+                        <input type="text" value="gefilterd + uitgefilterd" readonly>
+                        {% endif %}
+                        
                         {% if status == 'okay' %}
-                        Execution time (s)
-                        <input type="text" value="{{task['log_execution_time']}}" readonly>
-                        Actual point count
+                        Number of points
                         <input type="text" value="{{task['log_actual_point_count']}}" readonly>
                         {% endif %}
                     </form>
 
             {% else %}
-                <div id='intro'>
-                    <p>Download rectangular pieces of <a href='http://www.ahn.nl'>AHN2</a> with this system. Please consider the follwing:</p>
-                    <ul>
-                     <li>currently only queries of up to ~{{max_point_query_size}} points are allowed.</li>
-                     <li>the blue regions indicate what part of AHN2 is currently available through this system.</li>
-                     <li>your points will be delivered in the <a href='http://www.laszip.org'>laz format</a>.</li>
-                    </ul>
+                <div id="errorBox" style="display:none">
+                    <p><i class="fa fa-exclamation-triangle"></i> Form can not be submitted</p>
+                    <p class='wronginput'></p>
                 </div>
                 <form id="submit-task" class="pure-form pure-form-stacked">
                     
@@ -69,8 +71,6 @@
                     <p class='ptcountest'></p>
 
                     <fieldset>
-                        <!-- <legend>Make your request</legend> -->
-
                         <label for="classificationSelector">Classification</label>
                         <select name="classificationSelector">
                             <option value="g">ground (gefilterd)</option>
@@ -89,9 +89,14 @@
                         <button type="submit" id="submit-button" class="pure-button">Submit</button>
                     </fieldset>
                 </form>
-                <div id="errorBox" style="display:none">
-                    <p><i class="fa fa-exclamation-triangle"></i> Form can not be submitted</p>
-                    <p class='wronginput'></p>
+                <h2 class="task-status"><i class="fa fa-info-circle"></i> Notes</h2>
+                <div id='intro'>
+                    <ul>
+                        <li>Only raw <a href='http://www.ahn.nl'>AHN2</a> points-clouds can be downloaded, no grids</li>
+                        <li>Blue regions indicate what parts of AHN2 we currently offer</li>
+                        <li>~{{max_point_query_size}} points per request are allowed</li>
+                        <li>Output in <a href='http://www.laszip.org'>LAZ format</a></li>
+                    </ul>
                 </div>
             {% endif %}
         </div>

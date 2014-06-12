@@ -114,7 +114,12 @@ def tasks_page(task_id):
         task_dict = db_session.query(Task.id, \
                                 Task.log_actual_point_count, \
                                 Task.log_execution_time, \
-                                func.ST_AsEWKT(Task.geom).label('ewkt'), \
+                                func.ST_AsText(Task.geom).label('wkt'), \
+                                func.ST_XMin(Task.geom).label('minx'), \
+                                func.ST_YMin(Task.geom).label('miny'), \
+                                func.ST_XMax(Task.geom).label('maxx'), \
+                                func.ST_YMax(Task.geom).label('maxy'), \
+                                (Task.log_actual_point_count/func.ST_Area(Task.geom)).label('density'), \
                                 Task.ahn2_class \
                                 ).filter(Task.id==task_id).one().__dict__
     except NoResultFound:

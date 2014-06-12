@@ -3,7 +3,7 @@ html, body {
     height: 100%;
     width: 100%;
     font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-    color: #444;
+    color: #333;
 }
 
 .overlay-wrapper {
@@ -40,6 +40,8 @@ html, body {
 
 .task-status {
     font-size: 1.4em;
+    /*margin-bottom: 1em;*/
+    font-weight: normal;
 }
 
 #intro {
@@ -47,10 +49,17 @@ html, body {
     margin-bottom: 2em;
 }
 
+#intro ul {
+    padding-left: 1.3em;
+    list-style-type: decimal;
+}
+
 #errorBox {
     /*background-color: #EB726C;*/
     color: rgb(202, 60, 60);
+    font-weight: 500;
 }
+
 .wronginput {
     font-style: italic;
 }
