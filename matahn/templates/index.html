@@ -27,7 +27,7 @@
             {% if task is defined %}
                 {% if status == 'okay' %}
                     <h2 class='task-status'><i class="fa fa-check-circle"></i> Ready to download</h2>
-                    <p>Your is kept for 24 hours. But, you can always make a <a href="{{ url_for('matahn') }}">new request</a>.</p>
+                    <p>Your file is kept for 24 hours. But, you can always make a <a href="{{ url_for('matahn') }}">new request</a>.</p>
                     <a class="pure-button button-download" href="{{download_url}}">
                         <i class="fa fa-download"></i>
                         Download
@@ -90,7 +90,7 @@
                     </fieldset>
                 </form>
                 <h2 class="task-status"><i class="fa fa-info-circle"></i> Notes</h2>
-                <div id='intro'>
+                <div id='intro' class="scroll">
                     <ul>
                         <li>Only raw <a href='http://www.ahn.nl'>AHN2</a> points-clouds can be downloaded, no grids</li>
                         <li>Blue regions indicate what parts of AHN2 we currently offer</li>
