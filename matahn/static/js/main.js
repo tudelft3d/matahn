@@ -14,7 +14,8 @@ window.onload = function() {
         // Resoluties (pixels per meter) van de zoomniveaus:
         resolutions: [3440.64, 1720.32, 860.16, 430.08, 215.04, 107.52, 53.76, 26.88, 13.44, 6.72, 3.36, 1.68, 0.84, 0.42],
         units: 'm',
-        projection: new OpenLayers.Projection("EPSG:28992")
+        projection: new OpenLayers.Projection("EPSG:28992"),
+        controls: [ new OpenLayers.Control.Navigation(), new OpenLayers.Control.Zoom(),  new OpenLayers.Control.Attribution({div:document.getElementById('map-attribution')} ) ]
     });
 
     // Er zijn 15 (0 tot 14) zoomniveaus beschikbaar van de WMTS-service voor de BRT-Achtergrondkaart:
@@ -38,6 +39,7 @@ window.onload = function() {
         }
     );
     var tiledLayer_ahn2 = new OpenLayers.Layer.WMTS({
+        attribution: 'Map layer: <a href="http://www.nationaalgeoregister.nl/geonetwork/srv/search/?uuid=3ffbf101-75f9-479f-8d45-5d87ac61b2ce">AHN2 WMTS</a>',
         name: 'AHN2',
         visibility: false,
         url: 'http://geodata.nationaalgeoregister.nl/tiles/service/wmts/ahn2',
@@ -47,13 +49,12 @@ window.onload = function() {
         matrixIds: epsg28992matrixids,
         format: 'image/png8',
         isBaseLayer: true,
-        // attribution: 'Kaartgegevens: &copy; <a href="http://www.cbs.nl">CBS</a>, <a href="http://www.kadaster.nl">Kadaster</a>, <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         transitionEffect: 'resize'
         }
     );
     var osm_nb_rd_tms_layer = new OpenLayers.Layer.TMS( "OSM",
         "http://www.openbasiskaart.nl/mapcache/tms/",
-        { //attribution: 'Kaartgegevens: &copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        { attribution: 'Map layer: <a href="http://www.openbasiskaart.nl">Openbasiskaart</a>',
           layername: 'osm@rd', type: "png", serviceVersion:"1.0.0",
           gutter:0,buffer:0,isBaseLayer:true,transitionEffect:'resize',
           tileOrigin: new OpenLayers.LonLat(-285401.920000,22598.080000),
@@ -68,6 +69,7 @@ window.onload = function() {
     var tiledLayer_lf = new OpenLayers.Layer.TMS( "Luchtfoto",
         "http://geodata1.nationaalgeoregister.nl/luchtfoto/tms/",
         {
+          attribution: 'Map layer: <a href="http://www.nationaalgeoregister.nl/geonetwork/srv/search/?uuid=5bda5b66-ae22-4a12-9236-13ad2c4d0730">PDOK-achtergrond luchtfoto</a>',
           layername: 'luchtfoto_EPSG28992', type: "jpeg",
           gutter:0,buffer:0,isBaseLayer:true,transitionEffect:'resize',
           tileOrigin: new OpenLayers.LonLat(-285401.920000,22598.080000),
@@ -125,12 +127,7 @@ window.onload = function() {
 
     // map.addControl(new OpenLayers.Control.LayerSwitcher());
     map.addLayers([osm_nb_rd_tms_layer, tiledLayer_lf, tiledLayer_ahn2, boxLayer]);
-    // map.addControl(new OpenLayers.Control.Attribution({div:document.getElementById('map-attribution')}));
-
-    // Het kaartbeeld wordt gecentreerd op basis van een locatie die is gedefinieerd in lengte- en breedtegraden (WGS-84):
-    // var lonlat = new OpenLayers.LonLat(84440.00005662048, 447591.0404369122);
-    // map.setCenter(lonlat,10);
-}
+  }
 
 var showPointcountEstimate = function(left, bottom, right, top) {
   $.getJSON($SCRIPT_ROOT + '/_getPointCountEstimate', {

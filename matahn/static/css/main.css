@@ -157,6 +157,16 @@ html, body {
     z-index: 0;
 }
 
+#map-attribution {
+    position: absolute;
+    padding: 0.3em;
+    right: 0;
+    bottom: 0;
+    z-index: 9998;
+    background-color: rgba(255, 255, 255, 0.7);
+    font-size: 0.8em;
+}
+
 @media all and (max-width: 800px) {
     .overlay-wrapper {
         left: -300px;
