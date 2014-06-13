@@ -29,7 +29,7 @@ class Task(Base):
     log_actual_point_count = Column(Integer)
 
     def __repr__(self):
-        return "task {}".format(self.uuid)
+        return "task {}".format(self.id)
 
     def get_status(self):
         async_result = matahn.tasks.new_task.AsyncResult(self.id)
@@ -38,8 +38,20 @@ class Task(Base):
     def get_filename(self):
         return self.id + '.laz'
 
+    def get_absolute_path(self):
+        return app.config['RESULTS_FOLDER'] + self.get_filename()
+
     def get_relative_url(self):
         return app.config['STATIC_DOWNLOAD_URL'] + self.get_filename()
+
+    # def relaunch(self):
+    #     # new celery task
+    #     result = matahn.tasks.new_task.apply_async((left, bottom, right, top, classification))
+    #     # store task parameters in db
+    #     task = Task(id=result.id, ahn2_class=self.ahn2_class, emailto=self.emailto, geom=get_ewkt_from_bounds(left, bottom, right, top) )
+    #     db_session.add(task)
+    #     db_session.commit()
+    #     return task
 
     def send_email(self):
         import smtplib

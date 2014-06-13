@@ -37,6 +37,9 @@
                 {% elif status == 'deleted' %}
                     <h2 class='task-status'><i class="fa fa-exclamation-triangle"></i> File not found</h2>
                     <p>Your file has probably been deleted automatically after 24 hours. You can make a new <a href="{{ url_for('matahn') }}">request</a>.</p>
+                {% elif status == 'failure' %}
+                    <h2 class='task-status'><i class="fa fa-bug"></i> Bug!</h2>
+                    <p>An unexpected error occured. It seems that we are currently unable to complete your request. Our sincere apologies.</p>
                 {% else %}
                     <h2 class='task-status'><i class="fa fa-cog fa-spin"></i> Processing...</h2>
                     <p>We succesfully received you request and it is being processed now. You'll receive an email when your file is ready.</p>

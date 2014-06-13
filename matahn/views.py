@@ -132,8 +132,10 @@ def tasks_page(task_id):
             return render_template("index.html", task = task_dict, status='okay', download_url=task.get_relative_url())
         else:
             return render_template("index.html", task = task_dict, status='deleted')
-    else:
+    elif status == 'PENDING' or status == 'RETRY':
         return render_template("index.html", task = task_dict, status='pending', refresh=True)
+    else:
+        return render_template("index.html", task = task_dict, status='failure')
 
 
 
