@@ -7,9 +7,7 @@ from matahn import lastools
 from matahn import tile_io
 from matahn.util import get_geojson_from_bounds, get_ewkt_from_bounds
 
-import time
-
-
+import os, glob, time
 
 def make_celery(app):
     celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
@@ -50,3 +48,10 @@ def new_task(left, bottom, right, top, ahn2_class):
     db_session.commit()
 
     # could also use this to do the mailing http://stackoverflow.com/questions/12526606/callback-for-celery-apply-async
+
+@celery_app.task()
+def remove_old_laz_files():
+    for f in glob.glob(os.path.join(app.config['RESULTS_FOLDER'], '*')):
+        if time.time() - os.path.getmtime(f) > (app.config['MAX_HOURS'] * 60 * 60): #-- older than 1h
+            os.remove(f)
+            print "file", f, "deleted."

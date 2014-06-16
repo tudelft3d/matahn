@@ -13,6 +13,18 @@ class default_settings(object):
     SERVER_NAME = '3dsm.bk.tudelft.nl'
     STATIC_DOWNLOAD_URL = '/matahn/tasks/download/'
     MAX_POINT_QUERY_SIZE = 400e6
+    
+    from celery.schedules import crontab
+    CELERY_IMPORTS = ("matahn.tasks", )
+    CELERYBEAT_SCHEDULE = {
+    'rm-old-task-files': {
+        'task': 'matahn.tasks.remove_old_laz_files',
+        'schedule': crontab(hour=1, minute=1)
+        }
+    }
+    CELERY_TIMEZONE = 'Europe/Amsterdam'
+    MAX_HOURS = 24
+
 
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object(default_settings)
