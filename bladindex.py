@@ -10,7 +10,10 @@ original_bladindex = requests.get(BLADINDEX_JSON_URL).json()
 my_bladindex = {}
 for f in original_bladindex['features']:
 	f['properties']['bladnr']
-	my_bladindex[ f['properties']['bladnr'] ] = f['geometry']['coordinates'][0][0]
+	pointlist = f['geometry']['coordinates'][0][0]
+
+	# round coordinates, since they are weirdly rounded in source
+	my_bladindex[ f['properties']['bladnr'] ] = [ [round(p[0]),round(p[1])] for p in pointlist ]
 
 
 with open(OUTFILE, 'w') as f:

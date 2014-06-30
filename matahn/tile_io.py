@@ -41,7 +41,7 @@ def load_tiles_into_db(glob_expression):
 	db_session.add_all(tiles)
 	db_session.commit()
 
-def get_tile_from_file(path):
+def get_tile_from_file(path, use_bladindex=True):
 	
 	lasinfo_file = path[:-3]+'txt'
 	if os.path.isfile(lasinfo_file):
@@ -55,7 +55,12 @@ def get_tile_from_file(path):
 	ahn2_class = filename[0]
 	ahn2_bladnr = filename[1:6]
 
-	ewkt = get_ewkt_from_pointlist( BLADINDEX[ahn2_bladnr] )
+	if use_bladindex:
+		ewkt = get_ewkt_from_pointlist( BLADINDEX[ahn2_bladnr] )
+	else:
+		x_max, y_max, z_max = info_dict['max_xyz']
+		x_min, y_min, z_min = info_dict['min_xyz']
+		ewkt = get_ewkt_from_bounds(x_min, y_min, x_max, y_max)
 
 	tile = Tile(path=path, active=True, pointcount=info_dict['pointcount'], ahn2_bladnr=ahn2_bladnr, ahn2_class=ahn2_class, geom=ewkt)
 
