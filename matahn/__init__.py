@@ -25,6 +25,8 @@ class default_settings(object):
     CELERY_TIMEZONE = 'Europe/Amsterdam'
     MAX_HOURS = 24
 
+    SPECIAL_IPS = ['131.180.101.65', '127.0.0.1']
+
 
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object(default_settings)

@@ -74,6 +74,7 @@ def submitnewtask():
     classification = request.args.get('classification', type=str)
 
     # TODO: area selected: define a max value here?
+    print request.remote_addr, request.remote_addr in app.config['SPECIAL_IPS']
 
     # email validation
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
@@ -85,7 +86,7 @@ def submitnewtask():
     ewkt = get_ewkt_from_bounds(left, bottom, right, top)
     if 0 == db_session.query(Tile).filter( Tile.geom.intersects( ewkt ) ).count():
         return jsonify(wronginput = "Selection is empty")
-    if get_point_count_estimate_from_ewkt(ewkt) > app.config['MAX_POINT_QUERY_SIZE']:
+    if not request.remote_addr in app.config['SPECIAL_IPS'] and get_point_count_estimate_from_ewkt(ewkt) > app.config['MAX_POINT_QUERY_SIZE']:
         return jsonify(wronginput = "At this time we don't accept requests larger than {} points. Draw a smaller selection to continue.".format(format_big_number(app.config['MAX_POINT_QUERY_SIZE'])))
 
     # new celery task
