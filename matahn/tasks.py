@@ -38,7 +38,10 @@ def new_task(left, bottom, right, top, ahn2_class):
     t1 = time.time()
 
     t = db_session.query(Task).filter(Task.id==str(new_task.request.id)).one()
-    t.send_email()
+    try:
+        t.send_email()
+    except:
+        pass
 
     infotxt = lastools.lasinfotxt(output_laz)
     info = tile_io.read_lasinfotxt(infotxt)
