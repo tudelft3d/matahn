@@ -57,15 +57,14 @@ class Task(Base):
         import smtplib
         from email.mime.text import MIMEText
 
-        sender = '***REMOVED***'
         receiver = self.emailto
         body = render_template('mail_download_notification.html', task_url='http://'+app.config['SERVER_NAME']+'/matahn/tasks/'+self.id)
         msg = MIMEText(body)
         msg['Subject'] = 'Your AHN2 file is ready'
-        msg['From'] = sender
+        msg['From'] = app.config['MAIL_FROM']
         msg['To'] = receiver
         
         s = smtplib.SMTP_SSL( app.config['MAIL_SERVER'] )
         s.login(app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
-        s.sendmail(sender, [receiver], msg.as_string())
+        s.sendmail(app.config['MAIL_FROM'], [receiver], msg.as_string())
         s.quit()

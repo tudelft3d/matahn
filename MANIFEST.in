@@ -1,2 +1,2 @@
-recursive-include mathan/templates *
-recursive-include mathan/static *
+recursive-include matahn/templates *
+recursive-include matahn/static *
