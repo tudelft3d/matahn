@@ -1,0 +1,2 @@
+recursive-include mathan/templates *
+recursive-include mathan/static *
