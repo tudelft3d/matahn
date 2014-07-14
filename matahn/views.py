@@ -1,9 +1,7 @@
 from matahn import app
 
 from flask import jsonify, render_template, request, abort, redirect, url_for, send_from_directory, send_file
-import os
-import time
-import re
+import os, re, datetime
 
 from matahn.models import Tile, Task
 from matahn.database import db_session
@@ -89,7 +87,8 @@ def submitnewtask():
     # new celery task
     result = new_task.apply_async((left, bottom, right, top, classification))
     # store task parameters in db
-    task = Task(id=result.id, ahn2_class=classification, emailto=email, geom=get_ewkt_from_bounds(left, bottom, right, top) )
+    task = Task(id=result.id, ahn2_class=classification, emailto=email, geom=get_ewkt_from_bounds(left, bottom, right, top),\
+            time_stamp=datetime.datetime.now(), ip_address=request.remote_addr )
     db_session.add(task)
     db_session.commit()
 

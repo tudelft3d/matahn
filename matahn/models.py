@@ -1,5 +1,5 @@
 from flask import render_template, url_for
-from sqlalchemy import Column, Integer, String, Boolean, Float
+from sqlalchemy import Column, Integer, String, Boolean, Float, DateTime
 from geoalchemy2 import Geometry
 
 import matahn
@@ -24,6 +24,8 @@ class Task(Base):
     id = Column(String, primary_key=True)
     ahn2_class = Column(String(2))
     emailto = Column(String)
+    ip_address = Column(String)
+    time_stamp = Column(DateTime)
     geom = Column(Geometry('POLYGON', srid=28992))
     log_execution_time = Column(Float)
     log_actual_point_count = Column(Integer)
