@@ -5,9 +5,8 @@ Download tool for AHN2 that delivers a LAZ file with the points inside a boundin
 
 Running
 ------
-From project root:
 
-`pip install -r requirements.txt`
+`pip install git+https://github.com/tudelft-gist/webahn.git`
 
 `cp example_matahn.cfg matahn.cfg` and edit it
 
@@ -19,7 +18,7 @@ Now these processes all need to be started in this order:
 
 `celery -A matahn.celery_app worker`
 
-`python runserver.py`
+`python -c 'import matahn; matahn.app.run(use_reloader=False)'`
 
 And make sure postgresql is running as wel
 
