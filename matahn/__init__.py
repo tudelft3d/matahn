@@ -2,21 +2,6 @@ from flask import Flask
 
 class default_settings(object):
     DEBUG = False
-
-    SERVER_NAME = '3dsm.bk.tudelft.nl'
-    STATIC_DOWNLOAD_URL = '/matahn/tasks/download/'
-    MAX_POINT_QUERY_SIZE = 400e6
-
-
-    LASINFO_BINARY = '/usr/local/bin/lasinfo'
-    LASMERGE_BINARY = '/usr/local/bin/lasmerge'
-
-    SQLALCHEMY_DATABASE_URI = 'postgresql://user:pass@localhost/matahn'
-
-    CELERY_BROKER_URL = 'redis://localhost:6379/0',
-    CELERY_RESULT_BACKEND = 'db+'+SQLALCHEMY_DATABASE_URI
-    
-    RESULTS_FOLDER  = '/data/matahn/results/'
     
     from celery.schedules import crontab
     CELERY_IMPORTS = ("matahn.tasks", )
