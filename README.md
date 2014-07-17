@@ -3,50 +3,61 @@ MATAHN
 
 Download tool for AHN2 that delivers a LAZ file with the points inside a bounding box drawn by the user. Based on Flask and Openlayers 2.
 
-Running
+Installation
 ------
+MATAHN currently requires redis (http://redis.io) and postgres (http://www.postgresql.org) with postgis and the LAStools (http://rapidlasso.com/). These need to be installed first.
 
-`pip install git+https://github.com/tudelft-gist/webahn.git`
+#### setting up MATAHN
+The recommended way to install MATAHN is using `virtualenv` and `pip`. Assuming you have working python (2.7) installation with these utilities, run these commands:
 
-`cp example_matahn.cfg matahn.cfg` and edit it
+`virtualenv venv`
+
+`source venv/bin/activate`
+
+`pip install git+https://github.com/tudelft-gist/matahn.git`
+
+Now you need to create a MATAHN configuration file for you server:
+
+`wget https://raw.githubusercontent.com/tudelft-gist/matahn/master/example_matahn.cfg`
+
+`mv example_matahn.cfg matahn.cfg`
+
+edit this file to match you server setup. Then create an environment variable that points to this file:
 
 `export MATAHN_SETTINGS=/path/to/matahn.cfg`
 
-Now these processes all need to be started in this order:
-
-`redis-server`
-
-`celery -A matahn.celery_app worker`
-
-`python -c 'import matahn; matahn.app.run(use_reloader=False)'`
-
-And make sure postgresql is running as wel
-
-Preparing laz files
-------
-in dir with laz files:
-
-`lasinfo -nc -nv -nmm -otxt -i *.laz`
-
-`lasindex -append -i *.laz`
-
-Postgresql
-------
-A database is required with postgis extension enabled. Setting up the `tiles` table required for matahn from a python shell can be done as follows:
+#### creating Postgresql tables
+A postgresql database is required with postgis extension enabled. To create the tables required for matahn run these statements from a python shell:
 
 `from matahn.database import init_db`
 
 `init_db()`
 
-Importing tiles into DB
-------
-in (i)python shell
+
+#### Preparing laz files
+In directory with laz files:
+
+`lasinfo -nc -nv -nmm -otxt -i *.laz`
+
+`lasindex -append -i *.laz`
+
+
+#### Importing tiles
+in python shell
 
 `from matahn.tile_io import load_tiles_into_db`
 
 `load_tiles_into_db('/path/to/*.laz')`
 
-Setting up redis (for celery job handling)
+
+Running
 ------
 
-just install with apt-get/brew
+Assuming both redis and postgresql are up and running. Run these commands to quickly start MATAHN:
+
+`celery -A matahn.celery_app worker`
+
+`python -c 'import matahn; matahn.app.run(use_reloader=False)'`
+
+Although for production use, you should use a proper WSGI server such as gunicorn.
+
