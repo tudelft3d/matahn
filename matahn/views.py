@@ -1,3 +1,20 @@
+# This file is part of MATAHN.
+
+# MATAHN is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# MATAHN is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with MATAHN.  If not, see <http://www.gnu.org/licenses/>.
+
+# Copyright 2014 Ravi Peters, Hugo Ledoux
+
 from matahn import app
 
 from flask import jsonify, render_template, request, abort, redirect, url_for, send_from_directory, send_file
