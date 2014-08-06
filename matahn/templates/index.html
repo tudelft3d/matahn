@@ -24,28 +24,27 @@
     </a>
 
     <div class="overlay-wrapper scroll">
-        <div class="overlay scroll">
-
             {% if task is defined %}
+            <div class="overlay scroll">
                 {% if status == 'okay' %}
-                    <h2 class='task-status'><i class="fa fa-check-circle"></i> Ready to download</h2>
+                    <h2 class='top'><i class="fa fa-check-circle"></i> Ready to download</h2>
                     <p>Your file is kept for 24 hours. But, you can always make a <a href="{{ url_for('matahn') }}">new request</a>.</p>
                     <a class="pure-button button-download" href="{{download_url}}">
                         <i class="fa fa-download"></i>
                         Download
                     </a>
                 {% elif status == 'deleted' %}
-                    <h2 class='task-status'><i class="fa fa-exclamation-triangle"></i> File not found</h2>
+                    <h2 class='top'><i class="fa fa-exclamation-triangle"></i> File not found</h2>
                     <p>Your file has probably been deleted automatically after 24 hours. You can make a new <a href="{{ url_for('matahn') }}">request</a>.</p>
                 {% elif status == 'failure' %}
-                    <h2 class='task-status'><i class="fa fa-bug"></i> Bug!</h2>
+                    <h2 class='top'><i class="fa fa-bug"></i> Bug!</h2>
                     <p>An unexpected error occured. It seems that we are currently unable to complete your request. Our sincere apologies.</p>
                 {% else %}
-                    <h2 class='task-status'><i class="fa fa-cog fa-spin"></i> Processing...</h2>
+                    <h2 class='top'><i class="fa fa-cog fa-spin"></i> Processing...</h2>
                     <p>We succesfully received you request and it is being processed now. You'll receive an email when your file is ready.</p>
                     <p>You can safely leave this window, maybe to make a <a href="{{ url_for('matahn') }}">new request</a>.</p>
                 {% endif %}
-                    <h2 class='task-status'><i class="fa fa-info-circle"></i> Task summary</h2>
+                    <h2><i class="fa fa-info-circle"></i> Task summary</h2>
                     <form class="pure-form pure-form-stacked">
                         Geometry of selection (WKT)
                         <input type="text" value="{{task['wkt']}}" readonly>
@@ -64,12 +63,14 @@
                         <input type="text" value="{{task['log_actual_point_count']}}" readonly>
                         {% endif %}
                     </form>
-
+            </div>
             {% else %}
-                <div id="errorBox" style="display:none">
-                    <p><i class="fa fa-exclamation-triangle"></i> Form can not be submitted</p>
-                    <p class='wronginput'></p>
-                </div>
+
+            <div class="overlay scroll" id="errorBox" style="display:none">
+                <p><i class="fa fa-exclamation-triangle"></i> Form can not be submitted</p>
+                <p class='wronginput'></p>
+            </div>
+            <div class="overlay scroll">
                 <form id="submit-task" class="pure-form pure-form-stacked">
                     
                     <button type="button" class="pure-button pure-button-primary" id="draw-rectangle"><i class="fa fa-crop"></i> Draw selection</button>
@@ -94,17 +95,26 @@
                         <button type="submit" id="submit-button" class="pure-button">Submit</button>
                     </fieldset>
                 </form>
-                <h2 class="task-status"><i class="fa fa-info-circle"></i> Notes</h2>
+            </div>
+            <div class="overlay scroll faq">
+                <h2 class='top'>FAQ</h2>
                 <div id='intro' class="scroll">
-                    <ul>
-                        <li>Only raw <a href='http://www.ahn.nl'>AHN2</a> points-clouds can be downloaded, no grids</li>
-                        <li>Blue regions indicate what parts of AHN2 we currently offer</li>
-                        <li>~{{max_point_query_size}} points per request are allowed</li>
-                        <li>Output in <a href='http://www.laszip.org'>LAZ format</a></li>
-                    </ul>
+                    <h3>What is AHN2?</h3>
+                    <a href='http://www.ahn.nl'>AHN2</a> is an  airborne LiDAR point cloud of the Netherlands.
+                    <h3>What are the blue regions on the map?</h3>
+                    These indicate what parts of AHN2 we currently offer.
+                    <h3>How many points can I download?</h3>
+                    Up to ~{{max_point_query_size}} points per request are allowed.
+                    <h3>What is the output format?</h3>
+                    We offer only raw points in the <a href='http://www.laszip.org'>LAZ format</a>. We don't offer any grids.
+                    <h3>Is this an open source project?</h3>
+                    Yes, see our code on <a href='http://github.com/tudelft-gist/matahn'>github</a>.
+                    <h3>I found a bug. How can I tell you?</h3>
+                    Please open an issue <a href='https://github.com/tudelft-gist/matahn/issues'>here</a>.
                 </div>
+            </div>
             {% endif %}
-        </div>
+        
 
     </div>
     <script type=text/javascript>
