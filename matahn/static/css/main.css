@@ -51,7 +51,6 @@ h2 {
 
 h3 {
     font-size: 1.1em;
-    font-style: italic;
     font-weight: normal;
     margin: 0.8em 0 0 0;
     color: #000;
@@ -60,11 +59,10 @@ h3 {
 .faq {
     font-size: 0.96em;
     background-color: #f5f5f5;
-    margin-bottom: 2em;
 }
 
 #errorBox {
-    background-color:rgb(202, 60, 60);
+    background-color: #FF1300;
     color: #fff;
     font-weight: 500;
 }
