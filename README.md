@@ -35,15 +35,18 @@ A postgresql database is required with postgis extension enabled. To create the 
 
 
 #### Preparing laz files
-In directory with laz files:
+In directory with laz files.
 
-adding gound class to filtered points (optional)
+* adding gound class to filtered points (optional): 
+
 `las2las -i g*.laz -set_classification 2 -olaz -odix _ground`
 
-retrieve metadata
+* retrieve metadata: 
+
 `lasinfo -nc -nv -nmm -otxt -i *.laz`
 
-add index (optional)
+* add index (optional): 
+
 `lasindex -append -i *.laz`
 
 
