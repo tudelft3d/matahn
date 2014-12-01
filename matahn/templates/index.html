@@ -129,8 +129,8 @@
       $TASK_ID = undefined;
       {% endif %}
     </script>
-    <script src="http://tiles.geocoders.nl/api/ol/2.12/OpenLayers.js"></script>
-    <script src="http://tiles.geocoders.nl/lib/proj4js/proj4js-compressed.js"></script>
+    <script src="{{ url_for('static', filename='js/third_party/OpenLayers.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/third_party/proj4.js') }}"></script>
     <script src="{{ url_for('static', filename='js/third_party/jquery-1.11.0.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
