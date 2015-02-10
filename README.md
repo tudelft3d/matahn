@@ -14,11 +14,11 @@ The recommended way to install MATAHN is using `virtualenv` and `pip`. Assuming 
 
 `source venv/bin/activate`
 
-`pip install git+https://github.com/tudelft-gist/matahn.git`
+`pip install git+https://github.com/tudelft3d/matahn.git`
 
 Now you need to create a MATAHN configuration file for you server:
 
-`wget https://raw.githubusercontent.com/tudelft-gist/matahn/master/example_matahn.cfg`
+`wget https://raw.githubusercontent.com/tudelft3d/matahn/master/example_matahn.cfg`
 
 `mv example_matahn.cfg matahn.cfg`
 
