@@ -82,6 +82,17 @@ h3 {
     width: 100%;
 }
 
+.pure-menu-horizontal {
+    background-color: #eee; 
+}
+
+.pure-menu-selected, .pure-menu-selected .pure-menu-link:hover {
+    background-color: #ffffff;
+}
+
+.pure-menu-link:hover {
+    background-color: #f5f5f5;
+}
 
 .square-button {
     position: absolute;
@@ -142,12 +153,17 @@ h3 {
     font-size: 120%;
     padding: 0.5em 0.7em;
 }
-.pure-form-stacked input,
+.pure-form-stacked input[type="email"],
 .pure-form-stacked select, 
 .pure-form-stacked label,
 .pure-form-stacked button {
     margin: .7em 0;
     width: 100%;
+}
+
+.pure-form-stacked label.fieldtitle {
+    font-size: 1.1em;
+    margin-top: 1em;
 }
 
 #map-canvas-wrapper {

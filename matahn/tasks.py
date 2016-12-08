@@ -41,17 +41,16 @@ def make_celery(app):
 celery_app = make_celery(app)
 
 @celery_app.task()
-def new_task(left, bottom, right, top, ahn2_class):
-    if ahn2_class == 'ug': ahn2_class = 'u|g'
+def new_task(left, bottom, right, top, dataset_id, classes):
     ewkt = get_ewkt_from_bounds(left, bottom, right, top)
     # geojson = get_geojson_from_bounds(left, bottom, right, top)
-    filenames = db_session.query(Tile.path).filter(Tile.ahn2_class.match(ahn2_class)).filter(Tile.geom.intersects(ewkt)).all()
+    filenames = db_session.query(Tile.path).filter(Tile.dataset_id==dataset_id).filter(Tile.geom.intersects(ewkt)).all()
     filenames = [f[0] for f in filenames]
     
     output_laz = app.config['RESULTS_FOLDER'] + str(new_task.request.id)+'.laz'
     # this will cause an exception if something goes wrong while calling lasmerge executable
     t0 = time.time()
-    lastools.lasmerge(filenames, left, bottom, right, top, output_laz)
+    lastools.lasmerge(filenames, left, bottom, right, top, classes, output_laz)
     t1 = time.time()
 
     t = db_session.query(Task).filter(Task.id==str(new_task.request.id)).one()

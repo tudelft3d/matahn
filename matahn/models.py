@@ -16,22 +16,53 @@
 # Copyright 2014 Ravi Peters, Hugo Ledoux
 
 from flask import render_template, url_for
-from sqlalchemy import Column, Integer, String, Boolean, Float, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, Float, DateTime, ForeignKey
+import sqlalchemy.types as types
+from sqlalchemy.orm import relationship
 from geoalchemy2 import Geometry
 
 import matahn
 from matahn import app
 from matahn.database import Base
 
+class ClassificationsType(types.TypeDecorator):
+    impl = String
+
+    lasclass_lookup = {1:'unclassified', 2:'ground', 6:'building', 9:'water', 26:'artefact'}
+
+    def __init__(self, length=None, **kwargs):
+        super(ClassificationsType, self).__init__(length, **kwargs)
+
+    def process_bind_param(self, value, dialect):
+        if type(value) is list:
+            return ",".join([str(c) for c in value])
+        else:
+            return value
+
+    def process_result_value(self, value, dialect):
+        return [(int(c), self.lasclass_lookup[int(c)]) for c in value.split(',')]
+
+
+class Dataset(Base):
+    __tablename__ = 'datasets'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50))
+    classes = Column(ClassificationsType(50)) # a comma separated list of ASPRS LAS classification codes that are available for this dataset
+
+    def __repr__(self):
+        return "dataset {} [{}]".format(self.name, self.classes)
+
 class Tile(Base):
     __tablename__ = 'tiles'
     id = Column(Integer, primary_key=True)
     path = Column(String, unique=True)
-    ahn2_bladnr = Column(String(5))
-    ahn2_class = Column(String(1))
+    name = Column(String(50))
     active = Column(Boolean)
     pointcount = Column(Integer)
     geom = Column(Geometry('POLYGON', srid=28992))
+    
+    dataset_id = Column(Integer, ForeignKey('datasets.id'))
+    dataset = relationship('Dataset', backref='tiles')
 
     def __repr__(self):
     	return "tile {}_{}".format(self.ahn2_bladnr, self.ahn2_class)
@@ -39,13 +70,16 @@ class Tile(Base):
 class Task(Base):
     __tablename__ = 'tasks'
     id = Column(String, primary_key=True)
-    ahn2_class = Column(String(2))
+    classes = Column(String(50))
     emailto = Column(String)
     ip_address = Column(String)
     time_stamp = Column(DateTime)
     geom = Column(Geometry('POLYGON', srid=28992))
     log_execution_time = Column(Float)
     log_actual_point_count = Column(Integer)
+
+    dataset_id = Column(Integer, ForeignKey('datasets.id'))
+    dataset = relationship('Dataset', backref='tasks')
 
     def __repr__(self):
         return "task {}".format(self.id)

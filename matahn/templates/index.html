@@ -49,14 +49,11 @@
                         Geometry of selection (WKT)
                         <input type="text" value="{{task['wkt']}}" readonly>
                         
-                        AHN2 class
-                        {% if task['ahn2_class'] == 'g' %}
-                        <input type="text" value="gefilterd" readonly>
-                        {% elif task['ahn2_class'] == 'u' %}
-                        <input type="text" value="uitgefilterd" readonly>
-                        {% else %}
-                        <input type="text" value="gefilterd + uitgefilterd" readonly>
-                        {% endif %}
+                        Dataset
+                        <input type="text" value="{{datasets[active_dataset_i].name}}" readonly>
+
+                        Classes
+                        <input type="text" value="{{task['classes']}}" readonly>
                         
                         {% if status == 'okay' %}
                         Number of points
@@ -65,10 +62,16 @@
                     </form>
             </div>
             {% else %}
-
             <div class="overlay scroll" id="errorBox" style="display:none">
                 <p><i class="fa fa-exclamation-triangle"></i> Form can not be submitted</p>
                 <p class='wronginput'></p>
+            </div>
+            <div class="pure-menu pure-menu-horizontal ">
+                <ul class="pure-menu-list">
+                    {% for dataset in datasets %}
+                    <li class="pure-menu-item {%if active_dataset_i==loop.index0 %}pure-menu-selected{% endif %}"><a href="/{{dataset.name}}" class="pure-menu-link">{{dataset.name}}</a></li>
+                    {% endfor %}
+                </ul>
             </div>
             <div class="overlay scroll">
                 <form id="submit-task" class="pure-form pure-form-stacked">
@@ -77,20 +80,28 @@
                     <p class='ptcountest'></p>
 
                     <fieldset>
-                        <label for="classificationSelector">Classification</label>
+                        <label class='fieldtitle'>Classes</label>
+                        {% for code, name in datasets[active_dataset_i].classes %}
+                        <label for="{{code}}" class="pure-checkbox">
+                            <input id="{{code}}" type="checkbox" class="class-code" value="" checked>
+                            {{name}}
+                        </label>
+                        {% endfor %}
+
+                        <!--<label for="classificationSelector">Classification</label>
                         <select name="classificationSelector">
                             <option value="g">ground (gefilterd)</option>
                             <option value="u">man-made (uitgefilterd)</option>
                             <option value="ug">both</option>
-                        </select>
+                        </select>-->
 
-                        <label for="simplificationSelector" disabled>Thinning (coming soon)</label>
+                        <label class='fieldtitle' for="simplificationSelector" disabled>Thinning (coming soon)</label>
                         <select name="simplificationSelector" disabled>
                             <option value="t">nth point</option>
                             <option value="mat">MAT-based</option>
                         </select>
                         
-                        <label for="email">Email</label>
+                        <label class='fieldtitle' for="email">Email</label>
                         <input name="useremail" type="email" autocomplete="on" placeholder="Your Email">
                         <button type="submit" id="submit-button" class="pure-button">Submit</button>
                     </fieldset>
@@ -99,12 +110,12 @@
             <div class="overlay scroll faq">
                 <h2 class='top'>FAQ</h2>
                 <div id='intro' class="scroll">
-                    <h3>What is AHN2?</h3>
-                    <a href='http://www.ahn.nl'>AHN2</a> is an  airborne LiDAR point cloud of the Netherlands.
+                    <h3>What is AHN?</h3>
+                    <a href='http://www.ahn.nl'>AHN</a> is an  airborne LiDAR point cloud of the Netherlands.
                     <h3>Why this tool?</h3>
-                    While AHN2 is <a href="http://www.ahn.nl/nieuws/2014/03/gratis-gebruik-van-actuele-digitale-hoogtekaart-van-nederland.html">open data</a>, the current official download procedure is rather involved and non-trivial. With MATAHN we offer a tool that dramatically simplifies that download experience. For more information have a look at this <a href="http://3dgeoinfo.bk.tudelft.nl/pdfs/3dsm/matahn_3dbgt-dag_2014.pdf">presentation</a>.
+                    While AHN is <a href="http://www.ahn.nl/nieuws/2014/03/gratis-gebruik-van-actuele-digitale-hoogtekaart-van-nederland.html">open data</a>, the current official download procedure is rather involved and non-trivial. With MATAHN we offer a tool that dramatically simplifies that download experience. For more information have a look at this <a href="http://3dgeoinfo.bk.tudelft.nl/pdfs/3dsm/matahn_3dbgt-dag_2014.pdf">presentation</a>.
                     <h3>What are the blue regions on the map?</h3>
-                    These indicate what parts of AHN2 we currently offer.
+                    These indicate what parts of the active dataset we currently offer.
                     <h3>How many points can I download?</h3>
                     Up to ~{{max_point_query_size}} points per request are allowed.
                     <h3>What is the output format?</h3>
@@ -128,6 +139,7 @@
       {% else %}
       $TASK_ID = undefined;
       {% endif %}
+      $ACTIVE_DATASET_ID = {{datasets[active_dataset_i].id}};
     </script>
     <script src="{{ url_for('static', filename='js/third_party/OpenLayers.js') }}"></script>
     <script src="{{ url_for('static', filename='js/third_party/proj4.js') }}"></script>

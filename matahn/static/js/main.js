@@ -24,6 +24,18 @@ OpenLayers.Util.onImageLoadErrorColor = "transparent";
 // Juiste projectieparameters voor Rijksdriehoekstelsel (EPSG:28992):
 proj4.defs["EPSG:28992"] = "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000  +ellps=bessel  +towgs84=565.040,49.910,465.840,-0.40939,0.35971,-1.86849,4.0772 +units=m +no_defs";
 
+var getSelectedClasses = function(){
+  var classString = "";
+  $('input[type="checkbox"].class-code').each(function(i) {
+    if (this.checked){
+      if (classString.length!=0)
+        classString += ',';
+      classString += this.id;
+    }
+  });
+  return classString;
+}
+
 window.onload = function() {
     map = new OpenLayers.Map ('map-canvas',{
         theme: null,
@@ -108,7 +120,7 @@ window.onload = function() {
         fillColor: "#0078e7",
         strokeColor: "#0078e7",
         fillOpacity: 0.05,
-        strokeWidth: 5
+        strokeWidth: 1 
       }
       )
     });
@@ -117,14 +129,14 @@ window.onload = function() {
     map.addLayer(downloadarea);
 
     var getArea = '/_getDownloadArea';
-    var submit_data = {}
-    if (!($TASK_ID === undefined))
+    var submit_data = {dataset_id: $ACTIVE_DATASET_ID};
+    if (!($TASK_ID === undefined)){
       getArea = '/_getTaskArea';
-      submit_data = {task_id: $TASK_ID}
-
+      submit_data = {task_id: $TASK_ID};
+    }
     $.getJSON($SCRIPT_ROOT + getArea, submit_data, 
       function(data) {
-        var features = geojson_format.read(data.result)
+        var features = geojson_format.read(data.result);
         downloadarea.addFeatures( features );
         map.zoomToExtent(downloadarea.getDataExtent(), false);
     });
@@ -152,7 +164,8 @@ var showPointcountEstimate = function(left, bottom, right, top) {
     left: left,
     bottom: bottom,
     right: right,
-    top: top
+    top: top,
+    dataset_id: $ACTIVE_DATASET_ID
   }, function(data) {
     $(".ptcountest").text(data.result);
   });
@@ -205,6 +218,13 @@ $('#submit-task').submit(function(event){
   event.preventDefault();
   var okay = 1;
   var fs = boxLayer.features;
+
+  var classes = getSelectedClasses();
+  if (classes.length == 0) {
+    $("#errorBox").show();
+    $(".wronginput").text("At least one class should be selected.");
+    okay = 0;
+  }
   if (fs.length == 0) {
     $("#errorBox").show();
     $(".wronginput").text("An area on the map must be selected.");
@@ -218,8 +238,9 @@ $('#submit-task').submit(function(event){
       bottom:  f.geometry.bounds.bottom,
       right:   f.geometry.bounds.right,
       top:     f.geometry.bounds.top,
-      classification: $('select[name="classificationSelector"]').val(), 
-      email: $('input[name="useremail"]').val()
+      classification: classes, 
+      email: $('input[name="useremail"]').val(),
+      dataset_id: $ACTIVE_DATASET_ID
     }, function(data) {
       if(data.hasOwnProperty('wronginput')) {
         $("#errorBox").show();
