@@ -81,7 +81,7 @@
 
                     <fieldset>
                         <label class='fieldtitle'>Classes</label>
-                        {% for code, name in datasets[active_dataset_i].classes %}
+                        {% for code, name in datasets[active_dataset_i].get_classes_with_names() %}
                         <label for="{{code}}" class="pure-checkbox">
                             <input id="{{code}}" type="checkbox" class="class-code" value="" checked>
                             {{name}}

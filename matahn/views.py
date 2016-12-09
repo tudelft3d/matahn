@@ -112,6 +112,7 @@ def submitnewtask():
     # classification validation
     if not re.match(r"^([1-9][0-9]?)(,[1-9][0-9]?)*$", classification):
         return jsonify(wronginput = "Invalid classification string")
+    classification = classification.split(',')
     # dataset validation
     dataset = Dataset.query.get(dataset_id)
     if dataset is None:

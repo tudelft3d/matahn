@@ -25,10 +25,10 @@ import matahn
 from matahn import app
 from matahn.database import Base
 
+lasclass_lookup = {1:'unclassified', 2:'ground', 6:'building', 9:'water', 26:'artefact'}
+
 class ClassificationsType(types.TypeDecorator):
     impl = String
-
-    lasclass_lookup = {1:'unclassified', 2:'ground', 6:'building', 9:'water', 26:'artefact'}
 
     def __init__(self, length=None, **kwargs):
         super(ClassificationsType, self).__init__(length, **kwargs)
@@ -40,8 +40,7 @@ class ClassificationsType(types.TypeDecorator):
             return value
 
     def process_result_value(self, value, dialect):
-        return [(int(c), self.lasclass_lookup[int(c)]) for c in value.split(',')]
-
+        return [int(c) for c in value.split(',')]
 
 class Dataset(Base):
     __tablename__ = 'datasets'
@@ -51,6 +50,9 @@ class Dataset(Base):
 
     def __repr__(self):
         return "dataset {} [{}]".format(self.name, self.classes)
+
+    def get_classes_with_names(self):
+        return [(c, lasclass_lookup[c]) for c in self.classes]
 
 class Tile(Base):
     __tablename__ = 'tiles'
@@ -70,7 +72,7 @@ class Tile(Base):
 class Task(Base):
     __tablename__ = 'tasks'
     id = Column(String, primary_key=True)
-    classes = Column(String(50))
+    classes = Column(ClassificationsType(50))
     emailto = Column(String)
     ip_address = Column(String)
     time_stamp = Column(DateTime)
@@ -121,3 +123,6 @@ class Task(Base):
         s.login(app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
         s.sendmail(app.config['MAIL_FROM'], [receiver], msg.as_string())
         s.quit()
+
+    def get_classes_with_names(self):
+        return [(c, lasclass_lookup[c]) for c in self.classes]

@@ -18,12 +18,22 @@
 import subprocess32 as subprocess
 from matahn import app
 
-def lasmerge(filenames, x_min, y_min, x_max, y_max, classes, outname):
-    q = [app.config['LASMERGE_BINARY'], '-keep_class', ' '.join([str(c) for c in classes]), '-inside', str(x_min), str(y_min), str(x_max), str(y_max), '-olaz', '-o', outname, '-i'] + filenames
+def run_command(q):
+    if app.debug:
+        print(' '.join(q))
     subprocess.check_call(q)
+
+def lasmerge(filenames, x_min, y_min, x_max, y_max, classes, outname):
+    q = [app.config['LASMERGE_BINARY']]
+    q += ['-keep_class'] + [str(c) for c in classes]
+    q += ['-inside'] + [str(x_min), str(y_min), str(x_max), str(y_max)]
+    q += ['-olaz', '-o'] + [outname]
+    q += ['-i'] + filenames
+    run_command(q)
     return outname
 
 def lasinfotxt(filename):
-    subprocess.check_call([app.config['LASINFO_BINARY'], '-nmm', '-nv', '-nc', filename, '-otxt'])
+    q = [app.config['LASINFO_BINARY'], '-nmm', '-nv', '-nc', filename, '-otxt']
+    run_command(q)
     return filename[:-3]+'txt'
 
