@@ -15,7 +15,7 @@
 
 # Copyright 2014 Ravi Peters, Hugo Ledoux
 
-import subprocess32 as subprocess
+import subprocess
 from matahn import app
 
 def run_command(q):

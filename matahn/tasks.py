@@ -73,4 +73,4 @@ def remove_old_laz_files():
     for f in glob.glob(os.path.join(app.config['RESULTS_FOLDER'], '*')):
         if time.time() - os.path.getmtime(f) > (app.config['MAX_HOURS'] * 60 * 60): #-- older than 1h
             os.remove(f)
-            print "file", f, "deleted."
+            print("file", f, "deleted.")
