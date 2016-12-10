@@ -43,19 +43,19 @@ def merge_tiles_from_taskfile(taskfile):
 
 	lasmerge(filenames, left, bottom, right, top, taskfile[:-3]+'laz')
 
-def load_tiles_into_db(dataset, glob_expression):
+def load_tiles_into_db(dataset, glob_expression, bounds=None):
 	tile_files = glob.glob(glob_expression)
 
 	tiles = []
 	for tile_file in tile_files:
-		t = get_tile_from_file(tile_file)
+		t = get_tile_from_file(tile_file, bounds)
 		t.dataset = dataset
 		tiles.append(t)
 
 	db_session.add_all(tiles)
 	db_session.commit()
 
-def get_tile_from_file(path, use_bladindex=False):
+def get_tile_from_file(path, bounds=None):
 	
 	lasinfo_file = path[:-3]+'txt'
 	if os.path.isfile(lasinfo_file):
@@ -68,10 +68,18 @@ def get_tile_from_file(path, use_bladindex=False):
 	filename = os.path.basename(path)
 	name = filename.split('.')[0]
 
-	x_max, y_max, z_max = info_dict['max_xyz']
-	x_min, y_min, z_min = info_dict['min_xyz']
-	ewkt = get_ewkt_from_bounds(x_min, y_min, x_max, y_max)
-
+	if bounds is None:
+		x_max, y_max, z_max = info_dict['max_xyz']
+		x_min, y_min, z_min = info_dict['min_xyz']
+		ewkt = get_ewkt_from_bounds(x_min, y_min, x_max, y_max)
+	else:
+		try:
+			ewkt = get_ewkt_from_pointlist( bounds[name] )
+		except:
+			x_max, y_max, z_max = info_dict['max_xyz']
+			x_min, y_min, z_min = info_dict['min_xyz']
+			ewkt = get_ewkt_from_bounds(x_min, y_min, x_max, y_max)
+	
 	tile = Tile(path=path, active=True, pointcount=info_dict['pointcount'], name=name, geom=ewkt)
 
 	return tile

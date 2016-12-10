@@ -1,7 +1,5 @@
 # see http://flask.pocoo.org/docs/patterns/appdispatch/
 
-from werkzeug.serving import run_simple
-from werkzeug.wsgi import DispatcherMiddleware
 
 from matahn import app as matahn_app
 

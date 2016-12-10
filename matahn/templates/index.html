@@ -69,7 +69,7 @@
             <div class="pure-menu pure-menu-horizontal ">
                 <ul class="pure-menu-list">
                     {% for dataset in datasets %}
-                    <li class="pure-menu-item {%if active_dataset_i==loop.index0 %}pure-menu-selected{% endif %}"><a href="/{{dataset.name}}" class="pure-menu-link">{{dataset.name}}</a></li>
+                    <li class="pure-menu-item {%if active_dataset_i==loop.index0 %}pure-menu-selected{% endif %}"><a href="{{ url_for('matahn', dataset_name=dataset.name) }}" class="pure-menu-link">{{dataset.name}}</a></li>
                     {% endfor %}
                 </ul>
             </div>

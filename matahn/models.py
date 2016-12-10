@@ -25,7 +25,19 @@ import matahn
 from matahn import app
 from matahn.database import Base
 
-lasclass_lookup = {1:'unclassified', 2:'ground', 6:'building', 9:'water', 26:'artefact'}
+lasclass_lookup = {
+0:'Created, never classified',
+1:'Unclassified',
+2:'Ground', 
+3:'Low Vegetation',
+4:'Medium Vegetation',
+5:'High Vegetation',
+6:'building', 
+7:'Low Point (noise)',
+8:'Model Key-point (mass point)',
+9:'Water', 
+12:'Overlap Points',
+26:'Artefact'}
 
 class ClassificationsType(types.TypeDecorator):
     impl = String
@@ -113,7 +125,7 @@ class Task(Base):
         from email.mime.text import MIMEText
 
         receiver = self.emailto
-        body = render_template('mail_download_notification.html', task_url='http://'+app.config['SERVER_NAME']+'/matahn/tasks/'+self.id)
+        body = render_template('mail_download_notification.html', task_url='http://'+app.config['SERVER_NAME']+app.config['SERVER_LOCATION']+'/tasks/'+self.id)
         msg = MIMEText(body)
         msg['Subject'] = 'Your AHN2 file is ready'
         msg['From'] = app.config['MAIL_FROM']
