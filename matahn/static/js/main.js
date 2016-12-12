@@ -82,6 +82,20 @@ window.onload = function() {
         transitionEffect: 'resize'
         }
     );
+    var tiledLayer_ahn3 = new OpenLayers.Layer.WMTS({
+        attribution: 'Map layer: <a href="http://www.nationaalgeoregister.nl/geonetwork/srv/search/?uuid=74a455a3-0cf2-422a-b756-f5b014f5d983">AHN3 WMTS</a>',
+        name: 'AHN3',
+        visibility: false,
+        url: 'https://geodata.nationaalgeoregister.nl/tiles/service/wmts/ahn3?',
+        layer: 'ahn3_05m_dsm',
+        style: 'default',
+        matrixSet: 'EPSG:28992',
+        matrixIds: epsg28992matrixids,
+        format: 'image/png8',
+        isBaseLayer: true,
+        transitionEffect: 'resize'
+        }
+    );
     var osm_nb_rd_tms_layer = new OpenLayers.Layer.TMS( "OSM",
         "http://www.openbasiskaart.nl/mapcache/tms/",
         { attribution: 'Map layer: <a href="http://www.openbasiskaart.nl">Openbasiskaart</a>',
@@ -156,7 +170,12 @@ window.onload = function() {
     map.addControl(boxControl);
 
     // map.addControl(new OpenLayers.Control.LayerSwitcher());
-    map.addLayers([osm_nb_rd_tms_layer, tiledLayer_lf, tiledLayer_ahn2, boxLayer]);
+    map.addLayers([osm_nb_rd_tms_layer, tiledLayer_lf]);
+    if($ACTIVE_DATASET_NAME == 'AHN2')
+      map.addLayers([tiledLayer_ahn2]);
+    else if($ACTIVE_DATASET_NAME == 'AHN3')
+      map.addLayers([tiledLayer_ahn3]);
+    map.addLayers([boxLayer]);
   }
 
 var showPointcountEstimate = function(left, bottom, right, top) {

@@ -111,9 +111,9 @@
                 <h2 class='top'>FAQ</h2>
                 <div id='intro' class="scroll">
                     <h3>What is AHN?</h3>
-                    <a href='http://www.ahn.nl'>AHN</a> is an  airborne LiDAR point cloud of the Netherlands.
+                    <a href='http://www.ahn.nl'>AHN</a> is an  airborne LiDAR point cloud of the Netherlands. It is <a href="http://www.ahn.nl/nieuws/2014/03/gratis-gebruik-van-actuele-digitale-hoogtekaart-van-nederland.html">open data</a>.
                     <h3>Why this tool?</h3>
-                    While AHN is <a href="http://www.ahn.nl/nieuws/2014/03/gratis-gebruik-van-actuele-digitale-hoogtekaart-van-nederland.html">open data</a>, the current official download procedure is rather involved and non-trivial. With MATAHN we offer a tool that dramatically simplifies that download experience. For more information have a look at this <a href="http://3dgeoinfo.bk.tudelft.nl/pdfs/3dsm/matahn_3dbgt-dag_2014.pdf">presentation</a>.
+                    With MATAHN we offer a tool that simplifies the download experience of large tiled point cloud datasets. Based on you region of interest, tiles are automatically selected, merged and cropped. For more information have a look at this <a href="http://3dgeoinfo.bk.tudelft.nl/pdfs/3dsm/matahn_3dbgt-dag_2014.pdf">presentation</a>.
                     <h3>What are the blue regions on the map?</h3>
                     These indicate what parts of the active dataset we currently offer.
                     <h3>How many points can I download?</h3>
@@ -140,6 +140,7 @@
       $TASK_ID = undefined;
       {% endif %}
       $ACTIVE_DATASET_ID = {{datasets[active_dataset_i].id}};
+      $ACTIVE_DATASET_NAME = "{{datasets[active_dataset_i].name}}";
     </script>
     <script src="{{ url_for('static', filename='js/third_party/OpenLayers.js') }}"></script>
     <script src="{{ url_for('static', filename='js/third_party/proj4.js') }}"></script>
