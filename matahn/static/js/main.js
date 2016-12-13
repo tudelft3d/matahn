@@ -138,8 +138,14 @@ window.onload = function() {
       }
       )
     });
+    var tilesLayerListeners = {
+      featureclick: function(e) {
+          console.log(e.feature.data.name);
+          return false;
+      }
+    }; 
     var geojson_format = new OpenLayers.Format.GeoJSON();
-    var downloadarea = new OpenLayers.Layer.Vector("downloadarea", {styleMap: myStyle}); 
+    var downloadarea = new OpenLayers.Layer.Vector("downloadarea", {styleMap: myStyle, eventListeners: tilesLayerListeners}); 
     map.addLayer(downloadarea);
 
     var getArea = '/_getDownloadArea';
@@ -156,7 +162,6 @@ window.onload = function() {
     });
     
   //-- layer download area
-
     boxLayer = new OpenLayers.Layer.Vector("Box layer");
     boxControl =  new OpenLayers.Control.DrawFeature(boxLayer,
                         OpenLayers.Handler.RegularPolygon, {
