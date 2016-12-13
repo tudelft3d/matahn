@@ -15,7 +15,7 @@
 
 # Copyright 2014 Ravi Peters, Hugo Ledoux
 
-from flask import render_template, url_for
+from flask import render_template, url_for, current_app
 from sqlalchemy import Column, Integer, String, Boolean, Float, DateTime, ForeignKey
 import sqlalchemy.types as types
 from sqlalchemy.orm import relationship
@@ -61,10 +61,11 @@ class Dataset(Base):
     classes = Column(ClassificationsType(50)) # a comma separated list of ASPRS LAS classification codes that are available for this dataset
 
     def __repr__(self):
-        return "dataset {} [{}]".format(self.name, self.classes)
+        return "Dataset {} [{}]".format(self.name, self.classes)
 
     def get_classes_with_names(self):
         return [(c, lasclass_lookup[c]) for c in self.classes]
+
 
 class Tile(Base):
     __tablename__ = 'tiles'
@@ -79,7 +80,7 @@ class Tile(Base):
     dataset = relationship('Dataset', backref='tiles')
 
     def __repr__(self):
-    	return "tile {}_{}".format(self.ahn2_bladnr, self.ahn2_class)
+    	return "Tile {} [{}]".format(self.name, self.dataset.name)
 
 class Task(Base):
     __tablename__ = 'tasks'
@@ -124,17 +125,29 @@ class Task(Base):
         import smtplib
         from email.mime.text import MIMEText
 
+        # with app.app_context():
         receiver = self.emailto
-        body = render_template('mail_download_notification.html', task_url='http://'+app.config['SERVER_NAME']+app.config['SERVER_LOCATION']+'/tasks/'+self.id)
+        base_url = 'http://'+app.config['SERVER_NAME']+app.config['SERVER_LOCATION']
+        body = render_template('mail_download_notification.html', 
+            task_url=base_url+'/tasks/'+self.id,
+            base_url=base_url
+            )
         msg = MIMEText(body)
         msg['Subject'] = 'Your AHN2 file is ready'
         msg['From'] = app.config['MAIL_FROM']
         msg['To'] = receiver
         
-        s = smtplib.SMTP_SSL( app.config['MAIL_SERVER'] )
+        s = smtplib.SMTP( app.config['MAIL_SERVER'], app.config['MAIL_PORT'] )
+        s.starttls()
         s.login(app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
         s.sendmail(app.config['MAIL_FROM'], [receiver], msg.as_string())
         s.quit()
 
     def get_classes_with_names(self):
         return [(c, lasclass_lookup[c]) for c in self.classes]
+
+    def get_classnames(self):
+        return [lasclass_lookup[c] for c in self.classes]
+
+    def __repr__(self):
+        return "Task #{} [{}]".format(self.id, self.dataset.name)

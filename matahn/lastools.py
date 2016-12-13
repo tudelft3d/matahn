@@ -28,6 +28,7 @@ def lasmerge(filenames, x_min, y_min, x_max, y_max, classes, outname):
     q += ['-keep_class'] + [str(c) for c in classes]
     q += ['-inside'] + [str(x_min), str(y_min), str(x_max), str(y_max)]
     q += ['-olaz', '-o'] + [outname]
+    q += ['-rescale'] + ['0.01', '0.01', '0.01']
     q += ['-i'] + filenames
     run_command(q)
     return outname

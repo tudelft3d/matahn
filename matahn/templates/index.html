@@ -53,7 +53,7 @@
                         <input type="text" value="{{datasets[active_dataset_i].name}}" readonly>
 
                         Classes
-                        <input type="text" value="{{task['classes']}}" readonly>
+                        <input type="text" value="{{ ', '.join(task['classes']) }}" readonly>
                         
                         {% if status == 'okay' %}
                         Number of points

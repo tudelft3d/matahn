@@ -155,9 +155,9 @@ def tasks_page(task_id):
                                 func.ST_XMax(Task.geom).label('maxx'), \
                                 func.ST_YMax(Task.geom).label('maxy'), \
                                 (Task.log_actual_point_count/func.ST_Area(Task.geom)).label('density'), \
-                                Task.classes \
                                 ).filter(Task.id==task_id).one()
         task_dict = task_info._asdict()
+        task_dict['classes'] = task.get_classnames()
     except NoResultFound:
         return render_template("tasknotfound.html"), 404
 
