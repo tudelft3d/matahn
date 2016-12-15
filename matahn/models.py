@@ -133,7 +133,7 @@ class Task(Base):
             base_url=base_url
             )
         msg = MIMEText(body)
-        msg['Subject'] = 'Your AHN2 file is ready'
+        msg['Subject'] = 'Your point cloud file is ready'
         msg['From'] = app.config['MAIL_FROM']
         msg['To'] = receiver
         

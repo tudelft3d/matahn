@@ -19,8 +19,8 @@ import subprocess
 from matahn import app
 
 def run_command(q):
-    if app.debug:
-        print(' '.join(q))
+    #if app.debug:
+    print(' '.join(q))
     subprocess.check_call(q)
 
 def lasmerge(filenames, x_min, y_min, x_max, y_max, classes, outname):
